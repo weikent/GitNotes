@@ -1,0 +1,28 @@
+#+TITLE: English 难点
+
+#+OPTIONS: \n:t
+
+* 名词
+** 可数名词
+*** 不规则变化
+
+**** 单复数同型
+- Chinese
+- Japanese
+- deer   鹿
+- sheep  羊
+- fish   鱼 
+**** 合成名词
+@<font color="#ff0000">
+ 只将其主体词变为复数形式
+@</font>
+
+- girl student -->  girl students
+- pencil-box --> pencil-boxes
+**** 姓氏是专有名词， 姓氏后面加 s ，表示“一家”
+- the Blacks 布莱克一家
+- the Smiths 史密斯一家
+
+** 不可数名词
+不可数名词一般只用单数， 不能和 a an 及数量词搭配使用，
+不可数名词表示数量时，使用量词

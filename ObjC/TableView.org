@@ -1,0 +1,88 @@
+#+TITLE: Xcode  TableView 
+
+
+
+* ViewController中添加一个TableView
+需要在类定义中指定遵守 UITableViewDataSource, UITableViewDelegate 两个协议
+
+而且必须实现 下面的方法。  其他方法为optional
+
+#+BEGIN_SRC C
+    // UITableViewDataSource Methods
+    func numberOfSectionsInTableView(tableView: UITableView!) -> Int
+    {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int
+    {
+        return self.tableViewItems.count
+    }
+    
+    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell!
+    {
+        tableView.registerNib(UINib(nibName: "MyTableCellTableViewCell", bundle: nil), forCellReuseIdentifier: "myCell")
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("myCell", forIndexPath: indexPath) as MyTableCellTableViewCell!
+        //cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+        //cell.textLabel.text = self.tableViewItems[indexPath.row] as String
+        let rightString = "\(indexPath.row)"
+        cell.setupCell(self.tableViewItems[indexPath.row], middle: indexPath.row, right: rightString)
+        return cell
+    }
+#+END_SRC
+
+
+
+
+* TableView 中如何滑动删除
+要实现滑动删除需要实现如下方法
+- commitEditingStyle   ： 增加此方法后，可以在滑动的时候出现 delete按钮，并且实际的delete操作是在此函数中实现的
+- willBeginEditingRowAtIndexPath   ： 此方法是在出现delete按钮之前执行的
+- didEndEditingRowAtIndexPath    :  此方法是在执行delete操作之后执行的代码
+
+
+
+* TableViewCell
+
+** IOS中为tableViewCell增加右侧标记（选中或者更多）
+修改cell的accessoryType 属性
+
+
+** TableViewCell 的重用 
+在使用Table Cell 时， 有一个cell 复用的问题。 当TableView要展示某一行时，会自动调用 DataSource method： 
+#+BEGIN_SRC C
+- (UITableViewCell *)tableView:(UITableView *)tableView  cellForRowAtIndexPath:(NSIndexPath *)indexPath
+#+END_SRC
+
+第二个参数 indexPath 是 一个 NSIndexPath 实例，indexPath 将section 和 row 封装到一个单独的对象中。 也就是说， indexPath包含 section 和 row 两个property。 通过访问 indexPath 的section 和 row，从而得到具体的section 和row。 
+
+接下来，看看 cell 的复用问题。 通过以下代码，为cell指定一个类型。当然，你也可以为cell 指定多个类型。 
+#+BEGIN_SRC C
+
+static NSString *SimpleTableIdentifier = @"SimpleTableIdentifier";
+
+#+END_SRC
+
+在iPhone这个小小的屏幕上，即使Table 由多个行组成，当同一时间只能显示有限的行数。 每个行对应一个UITableViewCell实例（instance）。 既然UITableViewCell 是UIView的一个子类。那么一个cell 就可以包含多个 subview。 比如： 在cell上添加一个 Label、以 image等。试想一下，如果为每个cell都分配一个instance（也就是说，为每个cell都分配一块儿内存），当一个Table 有几百上千行时，那得占用多大的内存啊。 这个内存开销实在不可小觑。 有没有一个更好的解决方案呢？
+
+我们可以从用户体验上寻求解决方法。想象一下使用场景吧。 用户对Table的操作是上下滑动，当滑动时，如果某一行滑出了屏幕，就把滑出屏幕的这一行对应的instance放到一个固定的 Queue （队列）中，新显示的那一行就可以重用滑出的那一行的instance。这就是说， 在TableView中，要维护一个Queue，专门用来存放 Cell的instance，至于存放多少个，由系统决定。 当系统的内存够多时，就多存放些； 当内存吃紧时，就少存放些。  
+
+最为理想的情况是，新显示的行正好重用滑出的行。 这样就避免了Cell 频繁地创建和释放。 要想这样，就得为曾经使用的cell分配一个标识符（identifier）， 然后根据这个标识符，找到可重用的cell。
+#+BEGIN_SRC C
+
+static NSString *SimpleTableIdentifier = @"SimpleTableIdentifier";
+UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: SimpleTableIdentifier];
+#+END_SRC
+
+这种获取 重用cell 的方法，在某种条件下是获取不到的。 比如： Queue 中已没有可用的cell； 另一种情况是： 第一次显示Cell时，是必须要创建的 cell instance的。 只有先创建cell instance，才能重用。 当cell 获取不到时，就得通过代码来创建了。在创建cell时，一定要为新创建的cell 标上可重用的 标识符 （比如： SimpleTableIdentifier）。 代码如下：
+#+BEGIN_SRC C
+
+if (cell == nil) {
+cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier: SimpleTableIdentifier];
+}
+#+END_SRC
+
+小结： 
+TableView是iOS一个极为强大的功能， 只要是海量数据的展示，都离不开TableView的使用。 对开发者来说，并没有感觉到有多么复杂。 是的， 因为 UITableView 都帮我们做了。  iOS SDK 几度更新， 冗余的代码量越来越少。 就上面这几行代码来说， SDK本身完全可以再优化， 用户无需判断cell是否nil。  不错，当你用到 storyboard 框架时， TableView的使用变得更加简单， 无需再判断cell 是否为nil， 直接重用，没什么问题的。
+ 

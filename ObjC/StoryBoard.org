@@ -1,0 +1,36 @@
+#+TITLE: StoryBoard 笔记
+
+
+
+* 在storyboard中设计 barButtonItem 的 Exit 功能
+
+
+当一个ViewController（A）中的按钮 push 另一个ViewController（B)之后，
+如何从 B 返回 A，
+
+这时就需要用到 B 页面的 Exit 功能
+
+1. 需要为A创建一个头文件 
+    在头文件中添加如下代码
+    #+BEGIN_SRC C
+    @interface ToDoListTableViewController (Workaround)
+    -(IBAction)unwindToList : (UIStoryboardSegue *)segue;
+
+    @end
+    #+END_SRC
+
+1. 修改A的定义 在Class 前面添加
+    #+BEGIN_SRC C
+    class ToDoListTableViewController: UITableViewController {
+    改为
+    @objc(ToDoListTableViewController) class ToDoListTableViewController: UITableViewController 
+    #+END_SRC
+
+1. 在A中实现 这个方法
+    #+BEGIN_SRC C
+    @IBAction func unwindToList(segue:UIStoryboardSegue)
+    {}
+    函数体为空即可
+    #+END_SRC
+
+1. 在B实现prepareForSegue，此方法是执行Exit之前的准备

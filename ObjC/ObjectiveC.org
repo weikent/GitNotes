@@ -1,0 +1,33 @@
+#+TITLE:  OBJC 笔记
+
+
+* NSLog
+  1. %@ 对象
+  2. %d, %i 整数
+  3. %u   无符整形
+  4. %f 浮点/双字
+  5. %x, %X 二进制整数
+  6. %o 八进制整数
+  7. %zu size_t
+  8. %p 指针
+  9. %e   浮点/双字 （科学计算）
+  10. %g   浮点/双字
+  11. %s C 字符串
+  12. %.*s Pascal字符串
+  13. %c 字符
+  14. %C unichar
+  15. %lld 64位长整数（long long）
+  16. %llu   无符64位长整数
+  17. %Lf 64位双字
+
+
+
+
+
+* 如何创建一个UIPageViewController
+
+** UIPageViewController的逻辑，
+- UIPageViewController 必须作为一个ChildViewController加入到另一个ViewController中。
+    这个viewController就是  父ViewController。这个父ViewController必须实现  UIPageViewControllerDataSource
+- 同时需要有一个ViewController来存放需要显示的内容。
+    这个ViewController的View 

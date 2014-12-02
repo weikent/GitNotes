@@ -1,0 +1,912 @@
+#+TITLE:  XCODE
+
+* 关于xib
+  用xib文件添加视图的时候，在4.2版本的xcode中，程序会报错。需要把view按住control键拖到文件里面。生成一下自动代码，并删除自动代码之后就正常了。
+** Xcode4.2 
+   Xcode4.2 中清理xib缓存
+   1. option + product menu    ->  Clean Build Folder
+   2. iOS Simulator -> Reset Content and settings
+
+* Xcode 调试
+在project-setting中找到 “Run Static Analyzer” 键，然后把值修改为“YES”.这样在编码的时候，xcode就可以自动为我们检查内存泄露了
+* ios 10.8 xcode 4.5 添加的view 默认是iphone样式。
+可以在选中view之后，选择attributes inspector --> size。 可以改变样式。
+
+* ios6 之后添加了 auto layout 功能。 需要关闭的时候可以如下操作
+使用Xcode 4.5 创建App时，Auto Layout功能在所有nib或Storyboard 文件中，默认是enable（开启的）
+需要关闭storyboard或xib界面文件的Use Auto Layout 选项，这是因为Auto Layout特性是iOS 6 新增加的，在之前的 5.0/5.1 Simulator模拟器中不支持。
+1 open user interface document
+2 choose view --> Utilities --> show file inspector --> interface Builder Document 下。 uncheck “use auto layout".
+
+* 编程技巧
+** 点击界面空白出隐藏keyboard。 也可以做其他事情。
+#+begin_src objc
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    
+    [name resignFirstResponder];
+    [password resignFirstResponder];
+    
+}
+#+end_src
+
+** TextField 输入完毕后 隐藏 keyboard
+实现textField 的 didEndonExit 事件。在方法里面写上 
+
+#+begin_src objc
+[textfiel resignFirstResponder];
+#+end_src
+
+
+** 使控件不可用
+设置控件的 userinterfaceEnabled
+
+#+begin_src objc
+[control setUserInteractionEnabled:YES];
+#+end_src
+
+
+** xcode 调试 EXC_BAD_ACCESS  
+1. 第一种方法：在程序 crash 之后，在控制台输入 bt，就可以显示 crash 堆栈：
+
+2. 为工程运行时加入 NSZombieEnabled、 MallocStackLogging环境变量，并设为启用。 produce-->edit schema-->run (environment variables)中
+
+3. MallocStackLogging 启用
+
+4. 为工程运行时加入 NSZombieEnabled 环境变量，并设为启用。
+
+* 获取IOS设备的类型和系统版本
+#+begin_src objc
+//  DeviceHelper.m   
+//  DeviceUtil   
+//   
+//  Created by LUOYL on 12-4-9.   
+//  Copyright (c) 2012年 http://luoyl.info. All rights reserved.   
+//   
+  
+#import "DeviceHelper.h"   
+#import "sys/utsname.h"   
+  
+@implementation DeviceHelper   
+  
+/*  
+ *功能：获取设备类型  
+ *  
+ *  AppleTV2,1    AppleTV(2G)  
+ *  i386          simulator  
+ *  
+ *  iPod1,1       iPodTouch(1G)  
+ *  iPod2,1       iPodTouch(2G)  
+ *  iPod3,1       iPodTouch(3G)  
+ *  iPod4,1       iPodTouch(4G)  
+ *  
+ *  iPhone1,1     iPhone  
+ *  iPhone1,2     iPhone 3G  
+ *  iPhone2,1     iPhone 3GS  
+ *  
+ *  iPhone3,1     iPhone 4  
+ *  iPhone3,3     iPhone4 CDMA版(iPhone4(vz))  
+ 
+ *  iPhone4,1     iPhone 4S  
+ *  
+ *  iPad1,1       iPad  
+ *  iPad2,1       iPad2 Wifi版  
+ *  iPad2,2       iPad2 GSM3G版  
+ *  iPad2,3       iPad2 CDMA3G版  
+ *  @return null  
+ */  
++ (NSString *)getDeviceVersion   
+{   
+    struct utsname systemInfo;   
+    uname(&systemInfo);   
+    //get the device model and the system version   
+    NSString *machine =[NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];    
+    return machine;   
+}   
+  
+/** 获取IOS系统的版本号 */  
++ (NSString*)getOSVersion   
+{   
+    return [[UIDevice currentDevice]systemVersion];   
+}   
+  
+/** 判断当前设备是否ipad */  
++ (BOOL)isIpad   
+{   
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;   
+}   
+  
+/** 判断当前设备是否iphone */  
+  
++ (BOOL)isIphone   
+{   
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;   
+  
+}   
+  
+/** 判断当前系统是否有摄像头 */  
++ (BOOL)hasCamera   
+{   
+    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];   
+}   
+  
+@end   
+
+#+end_src 
+
+* iOS学习笔记——字符串编码转换
+
+我们知道，使用NSURLConnection的代理方法下载网页，存到一个NSData中，
+
+#+begin_src objc
+NSMutableData *pageData;
+[pageData appendData:data];
+#+end_src
+
+如果网页编码是UTF-8的，可以这么转换为字符串：
+
+#+begin_src objc
+NSString *pageSource = [[NSString alloc] initWithData:pageData encoding:NSUTF8StringEncoding];
+#+end_src 
+
+如果网页是gbk（或者gb2312），用UTF8转换的话，pageSource返回nil。这时需要使用gbk编码做转换，但是NSStringEncoding不含gbk，怎么办？用另一个方法处理一下：
+
+#+begin_src objc
+NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+NSString *pageSource = [[NSString alloc] initWithData:pageData encoding:gbkEncoding];
+#+end_src
+
+为什么可以这么处理？在NSString.h（按住command，双击NSStringEncoding即能查看），对NSStringEncoding的定义中，注释这么写着：
+
+Note that in addition to the values explicitly listed below, NSStringEncoding supports encodings provided by CFString.
+
+See CFStringEncodingExt.h for a list of these encodings.
+
+See CFString.h for functions which convert between NSStringEncoding and CFStringEncoding.
+
+* 造成unrecognized selector sent to instance……程序崩溃原因分析  
+
+造成unrecognized selector sent to instance……，大部分情况下是因为对象被提前release了，在你心里不希望他release的情况下，指针还在，对象已经不在了。
+很多时候，是因为init初始化函数中，对属性赋值没有使用self.foo赋值，而是直接对foo赋值，导致属性对象没有retain(心里以为retain了)，而提前释放。
+
+属性必须用 self 
+属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 属性必须用 self 
+=======
+
+* 如何将NSstring转欢成char (UTF8String, cString)
+如果是 .m文件，直接可以转换
+
+#+begin_src objc
+char *s;
+NSString *str;
+s=[str UTF8String];
+
+str=[NSString stringWithUTF8String:s];
+str=[NSString stringWithFormat:@"%s",s];
+#+end_src
+
+如果是.mm会提示出错,因为[str UTF8String]返回的是const char *
+
+* Cocoa Fundation内存释放原则
+
+1. 通过分配或复制创建的对象保持计数1
+2. 假设任何别的方法获取的对象保持计数1,而且在自动释放池中. 要想在当前执行范围外使用该对象,就必须保持它
+3. 向集合添加对象时它就被保持,从集合移除对象时就被释放.释放集合对象会释放该集合中的所有对象
+4. 确保有多少alloc,copy,mutableCopy或retain消息就有多少release或autorelease消息发送给该对象. 换句话说,确保你的代码平衡
+5. 在访问方法设置属性,先保持,再释放 (ztime: 现在有@propperty , @synthesize 两个指令自动创建此代码)
+6. 用@"..."结构创建的NSString对象是常量.发送release或retain并无效果
+
+* iOS中NSString引用计数内存管理机制分析
+
+在 iOS 中引用计数是内存的管理方式，虽然在 iOS5 版本中，已经支持了自动引用计数管理模式，但理解它的运行方式有助于我们了解程序的运行原理，有助于 debug 程序。
+   操作系统的内存管理分成堆和栈。
+
+   在堆中分配的内存，都试用引用计数模式；在栈中则不是。
+
+   NSString 定义的对象是保存在栈中，所以它没有引用计算。看一些书上说它的引用计算会是 fffffffff 最大整数，测试的结果显示它是－ 1. 对该对象进行 retain 操作，不好改变它的 retainCount 值。
+
+   MutableNSString 定义的对象，需要先分配堆中的内存空间，再初始化才能使用。它是采用引用计数管理内存的。对该对象做 retainCount 操作则每次增加一个。
+
+NSString: initWithString
+NSString: stringWithString
+是在栈上分配的空间。没有引用计数。
+NSString: initWithFormat
+NSString: stringWithFormat
+是在堆上分配的空间，有引用计数。
+
+不论在堆上还是在栈上分配空间的NSString， 在str = [str substringFromIndex:2];之后，都会在堆上分配一个新的空间。str会指向新的内存空间。有可能会造成内存泄露。所以应该 str1 = [str substringFromIndex:2]; [str release]; str = str1;
+
+
+// 下面的内容说的不正确。
+   其实，引用计数是对内存区域的空间管理方式，是应从内存块的视角去看的。任何对象都是指向它的指针，有多少个指针指向它，就有多少个引用计算。
+   如果没有任何指针指向该内存块了，很明显，该内存块就没有对象引用了，引用计算就是 0, 系统会人为该内存区域已经空闲，于是立即清理，也就是更新一下管理堆的链表中某个标示位。
+   // 到此为止
+* iOS中的堆(heap)和栈(stack)的理解
+操作系统iOS 中应用程序使用的计算机内存不是统一分配空间，运行代码使用的空间在三个不同的内存区域，分成三个段：“text segment “，“stack segment ”，“heap segment ”。
+
+
+[[http://dl.iteye.com/upload/picture/pic/115454/2d89dcdc-0a17-3ac8-afbe-c2782f498cbe.gif]]
+[[file:d:/googlePic.png]]
+
+
+段“text segment ”是应用程序运行时应用程序代码存在的内存段。每一个指令，每一个单个函数、过程、方法和执行代码都存在这个内存段中直到应用程序退出。一般情况下，你不会真的不得不知道这个段的任何事情。
+当应用开始以后，函数main() 被调用，一些空间分配在”stack” 中。这是为应用分配的另一个段的内存空间，这是为了函数变量存储需要而分配的内存。每一次在应用中调用一个函数，“stack ”的一部分会被分配在”stack” 中，称之为”frame” 。新函数的本地变量分配在这里。
+正如名称所示，“stack ”是后进先出（LIFO ）结构。当函数调用其他的函数时，“stack frame ”会被创建；当其他函数退出后，这个“frame ”会自动被破坏。
+ “heap” 段也称为”data” 段，提供一个保存中介贯穿函数的执行过程，全局和静态变量保存在“heap ”中，直到应用退出。
+为了访问你创建在heap 中的数据，你最少要求有一个保存在stack 中的指针，因为你的CPU 通过stack 中的指针访问heap 中的数据。
+你可以认为stack 中的一个指针仅仅是一个整型变量，保存了heap 中特定内存地址的数据。实际上，它有一点点复杂，但这是它的基本结构。
+
+#+Begin_html
+<div> aaaaa </div>
+<font color="#0000FF">我的颜色为蓝色#0000FF</font>
+#+end_html
+
+简而言之，操作系统使用stack 段中的指针值访问heap 段中的对象。如果stack 对象的指针没有了，则heap 中的对象就不能访问。这也是内存泄露的原因。
+在iOS 操作系统的stack 段和heap 段中，你都可以创建数据对象。
+stack 对象的优点主要有两点，一是创建速度快，二是管理简单，它有严格的生命周期。stack 对象的缺点是它不灵活。创建时长度是多大就一直是多大，创建时是哪个函数创建的，它的owner 就一直是它。不像heap 对象那样有多个owner ，其实多个owner 等同于引用计数。只有heap 对象才是采用“引用计数”方法管理它。
+stack 对象的创建
+只要栈的剩余空间大于stack 对象申请创建的空间，操作系统就会为程序提供这段内存空间，否则将报异常提示栈溢出。
+heap 对象的创建
+操作系统对于内存heap 段是采用链表进行管理的。操作系统有一个记录空闲内存地址的链表，当收到程序的申请时，会遍历链表，寻找第一个空间大于所申请的heap 节点，然后将该节点从空闲节点链表中删除，并将该节点的空间分配给程序。
+例如：
+NSString 的对象就是stack 中的对象，NSMutableString 的对象就是heap 中的对象。前者创建时分配的内存长度固定且不可修改；后者是分配内存长度是可变的，可有多个owner, 适用于计数管理内存管理模式。
+两类对象的创建方法也不同，前者直接创建“NSString * str1=@"welcome"; “，而后者需要先分配再初始化“ NSMutableString * mstr1=[[NSMutableString alloc] initWithString:@"welcome"]; ”。
+ 
+(miki西游 @mikixiyou 原文链接: http://mikixiyou.iteye.com/blog/1595230 )
+ 
+再补充一点，这里说的是操作系统的堆和栈。
+在我们学习“数据结构”时，接触到的堆和栈的概念和这个操作系统中的堆和栈不是一回事的。
+操作系统的堆和栈是指对内存进行操作和管理的一些方式。
+“数据结构“的堆实际上指的就是（满足堆性质的）优先Queue 的一种数据结构，第1 个元素有最高的优先权；栈实际上就是满足先进后出的性质的数据或数据结构。
+
+* 删除视图中的子视图
+
+#+begin_src objc
+  for (UIView *oneView in cell.subviews ) {
+      if ([oneView isKindOfClass:[UILabel class]]) {
+          [oneView removeFromSuperview];
+      }
+  }
+#+end_src
+=======
+* iPhone 程式要間隔一段時間執行某個函式的方法
+最基本的就是用NSTimer ..
+只是這個要建一個 NSTimer 再做一些設定..
+感覺有點麻煩..
+
+有看到另一種方法.
+[self performSelector:@selector(test:) withObject:nnil afterDelay:1.0];
+
+
+
+可以設定過幾秒後執行.
+要一直執行就在函式中也加上同樣命令.就會一直進去了.
+要停止的話就做判斷,條件達到的時候不會跑該命令就好.
+
+另外在cocos2D裡也有
+
+
+
+[self schedule:@selector(objMove:) interval:0.01f];
+的方式可以達成.
+不過這個跟 performSelector:(selector)... 方法有點不一樣.
+就是 schedule 比較像timer 會一直執行.. (其實裡面好像就是幫你處理timer的宣告..)
+所以要停止的話要用
+[self unschedule:@selector(objMove:)];
+
+來停止這個動作的繼續執行.
+=======
+* 设置UIPickerView默认选择
+
+#+begin_src objc
+[[self pickerView] selectRow:3 inComponent:0 animated:NO];
+#+end_src objc
+
+* UIView
+** UIView层次管理 放到最上层 放到最下层
+
+将一个UIView显示在最前面只需要调用其父视图的 bringSubviewToFront（）方法。
+将一个UIView层推送到背后只需要调用其父视图的 sendSubviewToBack（）方法。
+
+** UIView如何管理子视图
+UIView提供了很多建立和管理视图的方法。
+
+1. 添加视图
+
+     insertSubview:atIndex:   //放在子视图数组的具体索引位置
+
+     insertSubview:aboveSubview:   //某个子视图前面
+
+     insertSubview:aboveSubview:   //某个子视图前面
+
+1. 重新排序和删除子视图
+
+      [parentView exchangeSubviewAtIndex:i withSubviewAtIndex:j]//交换两个视图的位置
+
+      bringSubviewToFront:和sendSubviewToBack://将子视图提前活置后
+
+      [childView removeSuperview]//删除某个视图的子视图
+
+1. 视图回调
+
+   某个视图的层次一改变，该视图就会收到一次回调。
+
+   1. 调用addSubivew:成功后会给该视图发送didAddSubivew:回调，触发UIView的子类在心增视图时执行其他操作。
+
+   1. ndidMoveToSuperview:会通知相关视图他们的上级视图已经变化。
+
+   1. 视图移动前会发出willMoveToSuperview:回调
+
+   1. didMoveToWindow:回调和didMoveToSuperview:相似，从命名上能看出其区别。
+
+   1. willMoveToWindow:在视图移动前发出的回调。
+
+   1. willRemoveToSubview:回调通知父视图子视图即将被删除
+
+    #+BEGIN_SRC C
+//当加入视图完成后调用
+(void)didAddSubview:(UIView *)subview
+//当视图移动完成后调用
+(void)didMoveToSuperview
+//当视图移动到新的WINDOW后调用
+(void)didMoveToWindow
+//在删除视图之后调用
+(void)willRemoveSubview:(UIView *)subview
+//当移动视图之前调用
+(void)didMoveToSuperview:(UIView *)subview
+//当视图移动到WINDOW之前调用
+(void)didMoveToWindow
+
+#+END_SRC
+1. 管理视图
+    #+BEGIN_SRC C
+//加一个视图到一个视图里面
+addSubview:
+//将一个视图移到前面
+bringSubviewToFront:
+//将一个视图推送到背后
+sendSubviewToBack:
+//把视图移除
+removeFromSuperview
+//插入视图 并指定索引
+insertSubview:atIndex:
+//插入视图在某个视图之上
+insertSubview:aboveSubview:
+//插入视图在某个视图之下
+insertSubview:belowSubview:
+//交换两个位置索引的视图
+exchangeSubviewAtIndex:withSubviewAtIndex:
+#+END_SRC
+
+1. 找出所有父视图
+    #+BEGIN_SRC C
+// Return an array of parent views from the window down to the view
+NSArray *pathToView(UIView *aView)
+{
+    NSMutableArray *array = [NSMutableArray arrayWithObject:aView];
+    UIView *view = aView;
+    UIWindow *window = aView.window;
+    while (view != window)
+    {
+        view = [view superview];
+        [array insertObject:view atIndex:0];
+    }
+    return array;
+}
+
+#+END_SRC
+
+1. 找出所有子视图
+    #+BEGIN_SRC C
+NSArray *allSubviews(UIView *aView)
+{
+	NSArray *results = [aView subviews];
+	for (UIView *eachView in [aView subviews])
+	{
+		NSArray *riz = allSubviews(eachView);
+		if (riz) {
+			results = [results arrayByAddingObjectsFromArray:riz];
+		}
+	}
+	return results;
+}
+#+END_SRC
+
+1. 返回Application中的所有视图
+    #+BEGIN_SRC C
+// Return all views throughout the application
+NSArray *allApplicationViews()
+{
+    NSArray *results = [[UIApplication sharedApplication] windows];
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])
+	{
+		NSArray *riz = allSubviews(window);
+        if (riz) results = [results arrayByAddingObjectsFromArray: riz];
+	}
+    return results;
+}
+#+END_SRC
+
+1. 建立UIView
+    #+BEGIN_SRC C
+CGContextRef context = UIGraphicsGetCurrentContext();
+//标记动画开始
+[UIView beginAnimations:nil context:context];
+//定义动画加速或减速的方式
+[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//定义动画的时长 1秒
+[UIView setAnimationDuration:1.0];
+//中间处理 位置变化，大小变化，旋转，等等的
+[[self.view viewWithTag:999] setAlpha:1.0f];
+//标志动画块结束
+[UIView commitAnimations];
+//还可以设置回调
+[UIView setAnimationDelegate:self];
+//设置回调调用的方法
+[UIView setAnimationDidStopSelector:@selector(animationFinished:)];
+#+END_SRC
+
+
+UIView掌管直接屏幕绘图。他的drawRect:方法提供一种低级方式来直接绘制内容，允许使用Quartz 2D调用创建和显示任意元素，可将这两个元素结合起来共同构建具体、可操作的界面。
+
+当用户触摸屏幕时，Touchview类收集一系列点，在每个触摸移动之处，touchesMoved:WithEvent:方法调用setNeedsDisplay。这又会触发对drawRect:方法的调用，其中视图将这些点绘制成线段来创建一个可视屏幕路径。
+* iOS Programming – 触摸事件处理
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+
+当手指接触屏幕时，就会调用touchesBegan:withEvent方法；
+当手指在屏幕上移时，动就会调用touchesMoved:withEvent方法；
+当手指离开屏幕时，就会调用touchesEnded:withEvent方法；
+当触摸被取消（比如触摸过程中被来电打断），就会调用touchesCancelled:withEvent方法。而这几个方法被调用时，正好对应了UITouch类中phase属性的4个枚举值。
+
+[self.nextResponder touchesBegan:touches withEvent:event];
+可以把事件传递到下一个相应事件的view。
+
+* 遇到的问题
+** uinavigationController  pushviewController 的时候是不是需要把 push的viewcontroller给release掉。
+ 答案是需要。因为push会retain。
+ 但当时的情况是 release 这个push 的viewcontroller会导致exec_bad_access错误。
+
+ 原因是在这个被push的viewcontroller中，有些不需要release的view或button、label之类的控件被release掉了。
+ 并且没有实现dealloc 方法。
+
+ autorelease的不需要手动release。
+
+ dealloc方法中要写上 [super dealloc]。会自动释放标记为autorelease的控件。
+** incomplete implementation
+这个一般来说是在.h文件中声明了。却没有在.m文件中实现方法。
+* Xcode文件读写
+1. 得到文件路径。
+#+Begin_src objc
+NSArray *path = NSSearchPathForDirectorisInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+NSString *PathDir = [path objectAtIndex:0];
+
+//NSDocumentDirectory 是 NSSearchPathDirectory的枚举。可以得到其他文件夹路径。
+
+//文件夹追加文件名称。
+NSString *pathFile = [PathDir stringByAppendingFormat:@"/DataFile.plist"];
+//记得添加 "/"
+#+end_src objc
+
+
+1. 创建文件
+创建文件使用 NSFileManager
+#+begin_src objc
+NSFileManager *manager = [NSFileManager defaultManager];
+// 判断文件存在
+if(manager fileExistsAtPath:pathFile])
+{
+    //plist 文件应该都是 字典数据结构。可以用objectForKey 得到数据
+  NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithContentOfFile:pathFile];
+
+}
+else
+{
+    //创建文件。contents是NSData（不清除NSData结构）
+   [manager createFileAtPath:pathFile contents:nil attributes:nil];
+   创建一个dict对象。添加数据
+   [dict writeToFile:pathFile atomically:YES];
+}
+
+#+end_src
+
+
+* 取得wifi名称
+
+需要添加SystemConfiguration.framework
+#+begin_src objc
+    CFArrayRef arrayRef = CNCopySupportedInterfaces();
+    NSArray *interfaces = (NSArray *)arrayRef;
+    NSLog(@"interfaces -> %@",interfaces);
+    
+    NSLog(@"%lu",(unsigned long)interfaces.count);
+    
+    for (NSString *interfaceName in interfaces) {
+        NSLog(@"%@",interfaceName);
+        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((CFStringRef)interfaceName);
+        NSLog(@"%@",dictRef);
+        if (dictRef != NULL) {
+            NSDictionary *networkInfo = (NSDictionary *)dictRef;
+            NSLog(@"network info -> %@",networkInfo);
+            CFRelease(dictRef);
+        }
+    }
+    
+    CFRelease(arrayRef);
+
+#+end_src objc
+
+* 多线程
+
+#+begin_src objc
+线程创建与启动
+NSThread的创建主要有两种直接方式：
+[NSThread detachNewThreadSelector:@selector(myThreadMainMethod:) toTarget:self withObject:nil];
+和
+NSThread* myThread = [[NSThread alloc] initWithTarget:self
+                                        selector:@selector(myThreadMainMethod:)
+                                        object:nil];
+[myThread start];
+
+这两种方式的区别是：前一种一调用就会立即创建一个线程来做事情；而后一种虽然你 alloc 了也 init了，但是要直到我们手动调用 start 启动线程时才会真正去创建线程。这种延迟实现思想在很多跟资源相关的地方都有用到。后一种方式我们还可以在启动线程之前，对线程进行配置，比如设置 stack 大小，线程优先级。
+
+还有一种间接的方式，更加方便，我们甚至不需要显式编写 NSThread 相关代码。那就是利用 NSObject 的类方法 performSelectorInBackground:withObject: 来创建一个线程：
+[myObj performSelectorInBackground:@selector(myThreadMainMethod) withObject:nil];
+其效果与 NSThread 的 detachNewThreadSelector:toTarget:withObject: 是一样的。
+#+end_src 
+线程停止 使用 [thread cancel];
+
+线程执行的效果，需要线程启动的函数执行完毕之后才能体现出来。如果线程启动一个while（1）循环，那么基本就废了，在界面就不能体现线程都效果了。
+
+* NSDate
+** 得到当前日期的前一天或前几天是什么日期
+- 首先组织一个字符串20000101或20010101之类。
+
+- 用NSDateFormatter转换成NSDate格式
+
+#+begin_src objc
+NSDateFormatter *formatter = [[NSDateFormatter alloc] init];  
+NSTimeZone *timeZone = [NSTimeZone localTimeZone];  
+  //得设置一下时区
+[formatter setTimeZone:timeZone];  
+[formatter setDateFormat : @"M/d/yyyy h:m a"];  
+  
+NSString *stringTime = @"12/5/2011 3:4 am";  
+  
+NSDate *dateTime = [formatter dateFromString:stringTime];   
+
+NSDate *preDate = [NSDate dateWithTimeInterval:-24*60*60*10 sinceDate:dateTime];
+//-24*60*60*10 是10天的秒数。所以preDate就是2011年11月5日的10天前的日期。
+#+end_src objc
+
+- 也可以直接得到当前日期，
+#+begin_src objc
+NSDate *date = [NSDate date];
+//可以得到当前日期。
+NSDate *preDate = [NSDate dateWithTimeInterval:-24*60*60*10 sinceDate:date];
+#+end_src objc
+
+** 得到当前月份有几天
+
+#+begin_src objc
+NSCalendar *calendar = [NSCalendar currentCalendar];
+unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+ 
+NSDateComponents *components = [calendar components:unitFlags fromDate:[NSDate date]];
+ 
+NSInteger iCurYear = [components year];  //当前的年份
+ 
+NSInteger iCurMonth = [components month];  //当前的月份
+ 
+NSInteger iCurDay = [components day];  // 当前的号数
+
+#+end_src objc
+** NSDate 与 NSString 互换
+
+#+begin_src objc
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];  
+    NSTimeZone *timeZone = [NSTimeZone localTimeZone];  
+      
+    [formatter setTimeZone:timeZone];  
+    [formatter setDateFormat : @"M/d/yyyy h:m a"];  
+      
+    NSString *stringTime = @"12/5/2011 3:4 am";  
+      
+    NSDate *dateTime = [formatter dateFromString:stringTime];   
+      
+    NSLog(@"%@", dateTime);//打印2011-12-04 19:04:00 +0000，这里+0000表示时区  
+      
+    NSDate *dateNow = [NSDate date];  
+      
+    NSLog(@"%@", dateNow);//打印2011-08-17 08:26:57 +0000，这里+0000表示时区  
+      
+    [formatter setDateFormat : @"yyyy年M月d日 H点m分"];  
+      
+    NSLog(@"%@", [formatter stringFromDate:dateNow]);//打印2011年8月17日 16点26分  
+#+end_src objc
+* Xcode 获取私有API
+1. 首先要下载class-dump.
+
+class-dump下载地址http://www.codethecode.com/projects/class-dump/
+
+1. 然后下载DumpFrameworks.pl
+
+DumpFrameworks.pl的下载地址：https://github.com/shuhongwu/HackSpringDemo/blob/master/DumpFrameworks.pl
+
+1. 把class-dump放到$PATH路径下
+
+1. DumpFrameworks.pl中的ios库的路径有可能不对，需要手动修改。
+
+1. 然后执行DumpFrameworks.pl即可，头文件会放到 $HOME/Headers 目录下
+
+1. 将想用的头文件，组成xxx.framework/Headers的样式。导入工程。
+
+但是bulidsetting 设置framework的search path 时要设置真实的私有库路径，因为我们要用它的可执行文件，只有头文件是不行的。
+
+例如：/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/PrivateFrameworks
+
+这样就可以调用ios的私有库了
+
+* xcode的MapKit中，如何点击大头针的时候，出现自定义的“callout bubble”
+大头针是一个MKAnnotationView ( MKPinAnnotationView)
+callout bubble 也是一个MKAnnotationView
+
+
+MKAnnotationView都有一个annotation
+大概的方法是，
+
+
+1. 先创建MKAnnotation的子类
+   #+BEGIN_SRC Obj-c
+@interface customMKAnnotation : NSObject
+然后声明“customMKAnnotation 遵守 MKAnnotation协议
+变为
+@interfact customMKAnnotation : NSObject < MKAnnotation>
+   
+   #+END_SRC
+此 子类 中一般定义一个type变量，
+
+1. 创建自定义的MKAnnotationView的子类。
+
+然后在主程序中定义一个customMKAnnotation的实例，type值为“1”
+
+在程序运行时，往mapView中添加普通的customMKAnnotation实例（type值为“2”）。
+
+点击这些type值为“2”的annotation，会触发didSelectAnnotationView方法。在此函数中根据点击的annotation的坐标，把此坐标赋值给type值为“1”的实例。并添加此实例到mapView中。
+
+添加annotation到mapview中会触发viewForAnnotation方法。在此函数中，根据type的值来区别，是创建普通的MKAnnotationView还是特殊的。
+
+
+
+写了半天，还是没办法把语言组织清楚。疯了，还在看代码把，回头把代码上传到git。
+* xcode如何修改uitabbaritem的字体颜色
+#+BEGIN_SRC C
+[self.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                             [UIColor redColor], UITextAttributeTextColor,
+                                             nil] forState:UIControlStateNormal];
+
+#+END_SRC
+把此代码放到uiView的[viewDidAppear]和[viewDidDisAppear]里面。
+* Xcode快捷键
+** 代码格式化
+Xcode  版本：4.2和4.2之前的版本
+             选中需要格式化代码 -> Edit -> Format ->Re-Indent
+Xcode 版本：4.2之后的版本
+             选中需要格式化代码 -> Editor -> Structure ->Re-Indent 或者
+             选中需要格式化代码 -> 右击 ->选中 Structure ->Re-Indent
+command ＋ '］': 代码块 右移
+command + '［': 代码块 左移
+
+
+
+* 如何清除xcode里面的mobileprovision文件
+首先cd到目录“~/Library/MobileDevice/Provisioning\ Profiles”
+然后删除里面所有的mobileprovision文件
+#+BEGIN_SRC C
+cd ~/Library/MobileDevice/Provisioning\ Profiles/
+rm *.mobileprovision
+#+END_SRC
+
+
+这样再看xcode的时候，所有的mobileprovision，发现没有任何provisioning profile了。这个时候不需要再次的去一个一个的添加。
+
+访问XCode的Preferences>Accounts，在Apple IDs里面找到你的帐号，选中后，在右侧，在Name下面会有一行描述。双击。在弹出窗口里面，有个刷新按钮，点击之后，属于这个帐号的provisioning profile就会再次出现
+
+
+* GCD
+什么是GCD
+Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法。该方法在Mac OS X 10.6雪豹中首次推出，并随后被引入到了iOS4.0中。GCD是一个替代诸如NSThread, NSOperationQueue, NSInvocationOperation等技术的很高效和强大的技术，它看起来象就其它语言的闭包(Closure)一样，但苹果把它叫做blocks。
+
+应用举例
+让我们来看一个编程场景。我们要在iphone上做一个下载网页的功能，该功能非常简单，就是在iphone上放置一个按钮，点击该按钮时，显示一个转动的圆圈，表示正在进行下载，下载完成之后，将内容加载到界面上的一个文本控件中。
+
+不用GCD前
+虽然功能简单，但是我们必须把下载过程放到后台线程中，否则会阻塞UI线程显示。所以，如果不用GCD, 我们需要写如下3个方法：
+
+someClick 方法是点击按钮后的代码，可以看到我们用NSInvocationOperation建了一个后台线程，并且放到NSOperationQueue中。后台线程执行download方法。
+download 方法处理下载网页的逻辑。下载完成后用performSelectorOnMainThread执行download_completed 方法。
+download_completed 进行clear up的工作，并把下载的内容显示到文本控件中。
+这3个方法的代码如下。可以看到，虽然 开始下载 -> 下载中 -> 下载完成 这3个步骤是整个功能的三步。但是它们却被切分成了3块。他们之间因为是3个方法，所以还需要传递数据参数。如果是复杂的应用，数据参数很可能就不象本例子中的NSString那么简单了，另外，下载可能放到Model的类中来做，而界面的控制放到View Controller层来做，这使得本来就分开的代码变得更加散落。代码的可读性大大降低。
+
+#+BEGIN_SRC C
+
+
+static NSOperationQueue * queue; 
+ 
+- (IBAction)someClick:(id)sender { 
+    self.indicator.hidden = NO; 
+    [self.indicator startAnimating]; 
+    queue = [[NSOperationQueue alloc] init]; 
+    NSInvocationOperation * op = [[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(download) object:nil] autorelease]; 
+    [queue addOperation:op]; 
+} 
+ 
+- (void)download { 
+    NSURL * url = [NSURL URLWithString:@"http://www.youdao.com"]; 
+    NSError * error; 
+    NSString * data = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error]; 
+    if (data != nil) { 
+        [self performSelectorOnMainThread:@selector(download_completed:) withObject:data waitUntilDone:NO]; 
+    } else { 
+        NSLog(@"error when download:%@", error); 
+        [queue release]; 
+    } 
+} 
+ 
+- (void) download_completed:(NSString *) data { 
+    NSLog(@"call back"); 
+    [self.indicator stopAnimating]; 
+    self.indicator.hidden = YES; 
+    self.content.text = data; 
+    [queue release]; 
+} 
+#+END_SRC
+
+使用GCD后
+如果使用GCD，以上3个方法都可以放到一起，如下所示：
+#+BEGIN_SRC C
+
+
+// 原代码块一 
+self.indicator.hidden = NO; 
+[self.indicator startAnimating]; 
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ 
+    // 原代码块二 
+    NSURL * url = [NSURL URLWithString:@"http://www.youdao.com"]; 
+    NSError * error; 
+    NSString * data = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error]; 
+    if (data != nil) { 
+        // 原代码块三 
+        dispatch_async(dispatch_get_main_queue(), ^{ 
+            [self.indicator stopAnimating]; 
+            self.indicator.hidden = YES; 
+            self.content.text = data; 
+        }); 
+    } else { 
+        NSLog(@"error when download:%@", error); 
+    } 
+}); 
+#+END_SRC
+
+
+首先我们可以看到，代码变短了。因为少了原来3个方法的定义，也少了相互之间需要传递的变量的封装。
+
+另外，代码变清楚了，虽然是异步的代码，但是它们被GCD合理的整合在一起，逻辑非常清晰。如果应用上MVC模式，我们也可以将View Controller层的回调函数用GCD的方式传递给Modal层，这相比以前用@selector的方式，代码的逻辑关系会更加清楚。
+
+GCD的定义
+简单GCD的定义有点象函数指针，差别是用 ^ 替代了函数指针的 * 号，如下所示：
+
+// 申明变量 
+ (void) (^loggerBlock)(void); 
+ // 定义 
+ loggerBlock = ^{ 
+      NSLog(@"Hello world"); 
+ }; 
+ // 调用 
+ loggerBlock(); 
+但是大多数时候，我们通常使用内联的方式来定义它，即将它的程序块写在调用的函数里面，例如这样：
+
+dispatch_async(dispatch_get_global_queue(0, 0), ^{ 
+     // something 
+}); 
+从上面大家可以看出，block有如下特点：
+
+程序块可以在代码中以内联的方式来定义。
+程序块可以访问在创建它的范围内的可用的变量。
+系统提供的dispatch方法
+为了方便地使用GCD，苹果提供了一些方法方便我们将block放在主线程 或 后台线程执行，或者延后执行。使用的例子如下：
+
+#+BEGIN_SRC C
+
+//  后台执行： 
+ dispatch_async(dispatch_get_global_queue(0, 0), ^{ 
+      // something 
+ }); 
+ // 主线程执行： 
+ dispatch_async(dispatch_get_main_queue(), ^{ 
+      // something 
+ }); 
+ // 一次性执行： 
+ static dispatch_once_t onceToken; 
+ dispatch_once(&onceToken, ^{ 
+     // code to be executed once 
+ }); 
+ // 延迟2秒执行： 
+ double delayInSeconds = 2.0; 
+ dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC); 
+ dispatch_after(popTime, dispatch_get_main_queue(), ^(void){ 
+     // code to be executed on the main queue after delay 
+ }); 
+dispatch_queue_t 也可以自己定义，如要要自定义queue，可以用dispatch_queue_create方法，示例如下：
+
+dispatch_queue_t urls_queue = dispatch_queue_create("blog.devtang.com", NULL); 
+dispatch_async(urls_queue, ^{ 
+     // your code 
+}); 
+dispatch_release(urls_queue); 
+
+#+END_SRC
+
+另外，GCD还有一些高级用法，例如让后台2个线程并行执行，然后等2个线程都结束后，再汇总执行结果。这个可以用dispatch_group, dispatch_group_async 和 dispatch_group_notify来实现，示例如下：
+
+#+BEGIN_SRC C
+
+
+dispatch_group_t group = dispatch_group_create(); 
+dispatch_group_async(group, dispatch_get_global_queue(0,0), ^{ 
+      // 并行执行的线程一 
+ }); 
+ dispatch_group_async(group, dispatch_get_global_queue(0,0), ^{ 
+      // 并行执行的线程二 
+ }); 
+ dispatch_group_notify(group, dispatch_get_global_queue(0,0), ^{ 
+      // 汇总结果 
+ }); 
+#+END_SRC
+修改block之外的变量
+默认情况下，在程序块中访问的外部变量是复制过去的，即写操作不对原变量生效。但是你可以加上 __block来让其写操作生效，示例代码如下：
+
+__block int a = 0; 
+void  (^foo)(void) = ^{ 
+     a = 1; 
+} 
+foo(); 
+// 这里，a的值被修改为1 
+后台运行
+GCD的另一个用处是可以让程序在后台较长久的运行。在没有使用GCD时，当app被按home键退出后，app仅有最多5秒钟的时候做一些保存或清理资源的工作。但是在使用GCD后，app最多有10分钟的时间在后台长久运行。这个时间可以用来做清理本地缓存，发送统计数据等工作。
+
+让程序在后台长久运行的示例代码如下：
+#+BEGIN_SRC C
+
+
+// AppDelegate.h文件 
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask; 
+ 
+// AppDelegate.m文件 
+- (void)applicationDidEnterBackground:(UIApplication *)application 
+{ 
+    [self beingBackgroundUpdateTask]; 
+    // 在这里加上你需要长久运行的代码 
+    [self endBackgroundUpdateTask]; 
+} 
+ 
+- (void)beingBackgroundUpdateTask 
+{ 
+    self.backgroundUpdateTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{ 
+        [self endBackgroundUpdateTask]; 
+    }]; 
+} 
+ 
+- (void)endBackgroundUpdateTask 
+{ 
+    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundUpdateTask]; 
+    self.backgroundUpdateTask = UIBackgroundTaskInvalid; 
+} 
+#+END_SRC
+总结
+总体来说，GCD能够极大地方便开发者进行多线程编程。如果你的app不需要支持iOS4.0以下的系统，那么就应该尽量使用GCD来处理后台线程和UI线程的交互。
+>>>>>>> 5ad26efa05b7e6a56245672392a978c418af053e

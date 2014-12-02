@@ -1,0 +1,73 @@
+#+TITLE: Swift 枚举
+
+
+* enmu
+
+
+枚举里竟然可以有方法
+
+
+
+如果指定一个枚举是Int的。则不需要指定每一项的原始值（raw值，可以使用toRaw得到）
+如果指定一个枚举是非Int的。则必须指定每一项的原始值（raw值，可以使用toRaw得到），否则每一项没有Row值。
+如果没有指定一个枚举的类型，则每一项没有Raw值，只能使用枚举中的函数来返回每一项的实际意义。
+#+BEGIN_SRC C
+enum Suit : String{
+    case Spades = "a", Hearts = "b", Diamonds="c", Clubs="d" // 因为是String类型的。所以必须指定“a”，“b”。。
+    func simpleDescription() -> String {
+        switch self {
+        case .Spades:
+            return "spades"
+        case .Hearts:
+            return "hearts"
+        case .Diamonds:
+            return "diamonds"
+        case .Clubs:
+            return "clubs"
+        }
+    }
+    
+}
+let hearts = Suit.Hearts
+let heartsDescription = hearts.simpleDescription()
+let dd = hearts.toRaw()                   // 不然此处会提示 hearts没有toRow这个方法。
+
+#+END_SRC
+
+
+
+#+BEGIN_SRC C
+enum Rank: Int {
+    case Ace = 1
+    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+    case Jack, Queen, King
+    func simpleDescription() -> String {
+        switch self {
+        case .Ace:
+            return "ace"
+        case .Jack:
+            return "jack"
+        case .Queen:
+            return "queen"
+        case .King:
+            return "king"
+        default:
+            return String(self.toRaw())
+        }
+    }
+}
+let ace = Rank.Ace
+
+let aceRawValue = ace.toRaw()
+let a = ace.simpleDescription()
+
+let dd = Rank.fromRaw(50)  // Rank 不存在50个元素，但这个表达式不会报错，而是把dd设置为nil。
+let cc = dd!.simpleDescription()// 所以dd是一个Optional的值。在使用之前需要使用！来解包。
+
+if let convertedRank = Rank.fromRaw(3) {   //或者使用这种方式
+    let threeDescription = convertedRank.simpleDescription()
+}
+
+
+
+#+END_SRC

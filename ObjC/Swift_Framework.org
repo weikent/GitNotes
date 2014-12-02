@@ -1,0 +1,35 @@
+#+TITLE: Swift FrameWork
+
+
+
+* 在一个swift文件中如何引用ObjC的头文件
+
+可以在工程－》build settings --> Swift complier - code generation --> Objective-C Bridging Header中设置
+
+[[../images/SwiftFrameWork/1-1.jpeg]]
+
+
+* 在一个FrameWork / Libary 工程中，如果想让某个头文件是 public的。可以如下
+
+[[../images/SWiftFrameWork/2-1.jpeg]]
+
+[[../images/SwiftFrameWork/2-2.jpeg]]
+
+
+* 原来按钮上的名字，可以通过一下方式来得到
+sender.currentTitle
+
+
+* .. 与 ...的区别
+- ..是一个左闭右开的区间
+- ... 是一个左闭右闭的区间
+
+
+* Swift中Switch中的新功能
+** 值的绑定
+可以在case语句中使用 let 或者 var来定义一个临时变量，用来存储需要判断的值
+** 值绑定之后，可以使用where进行额外的判断
+
+
+* Swift中的break continue，可以实现类似C的goto功能
+但在Swift中只能跳出到当前的最外层，而不能像goto一样。可以跳到任何地方

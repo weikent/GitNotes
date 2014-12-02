@@ -1,0 +1,64 @@
+#+TITLE Python 笔记
+
+
+* shelve
+#+BEGIN_SRC python
+
+    import shelve
+    instanceName = shelve.open('fileName')
+    print 1+1
+
+##use instanceName['key'], can assert the data.
+
+#+END_SRC
+
+
+* instance.method(arg1, arg2) 等价于  class.method(instance, arg1, arg2)
+
+* 安装mysqldb
+** 下载mysqldb
+** 在mysqldb目录中，修改setup_posix.py其中的 mysql_config.path为mysql_config的路径。
+*** 可以使用whereis mysql来查找到mysql的安装目录。
+** 执行 python setup.py build
+** 执行 python setup.py install
+** 测试 mysqldb
+*** 在命令行执行python
+*** import MySQLdb 没问题就是安装成功了。
+* 查找python 模块的方法
+** python
+** import 模块名称
+** dir(模块名称)
+ 会列出模块可用的方法，一般再使用 __path__就会列出模块的位置
+
+* 查找python的位置
+** python
+** import sys
+** sys.path
+
+
+* ctypes
+ctypes基本数据类型映射表
+参数类型预先设定好，或者在调用函数时再把参数转成相应的c_***类型。ctypes的类型对应如下:
+| ctypes type  | C type                                 | Python Type                |
+| c_char       | char                                   | 1-character string         |
+| c_wchar      | wchar_t                                | 1-character unicode string |
+| c_byte       | char                                   | int/long                   |
+| c_ubyte      | unsigned char                          | int/long                   |
+| c_bool       | bool                                   | bool                       |
+| c_short      | short                                  | int/long                   |
+| c_ushort     | unsigned short                         | int/long                   |
+| c_int        | int                                    | int/long                   |
+| c_uint       | unsigned int                           | int/long                   |
+| c_long       | long                                   | int/long                   |
+| c_ulong      | unsigned long                          | int/long                   |
+| c_longlong   | __int64 or longlong                    | int/long                   |
+| c_ulonglong  | unsigned __int64 or unsigned long long | int/long                   |
+| c_float      | float                                  | float                      |
+| c_double     | double                                 | float                      |
+| c_longdouble | long double float                      | float                      |
+| c_char_p     | char *                                 | string or None             |
+| c_wchar_p    | wchar_t *                              | unicode or None            |
+| c_void_p     | void *                                 | int/long or None           |
+* struct
+[[./struct1.png]]
+

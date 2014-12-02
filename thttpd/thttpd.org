@@ -1,0 +1,97 @@
+#+TITLE: thttpd 说明
+
+
+
+
+
+* 安装
+#+BEGIN_SRC C
+# wget http://www.acme.com/software/thttpd/thttpd-2.25b.tar.gz
+# tar zxvf thttpd-2.25b.tar.gz
+# cd thttpd-2.25b
+# ./configure --prefix=/usr/local/thttpd
+# make
+#+END_SRC
+
+ 一般编译的时候会报错，修改extras/htpasswd.c 里面的getline重命名为get_line或别的。
+文件中有2个getline都需要改。
+
+make install的时候会报没有/usr/local/man/man1的错误，所以要
+#+BEGIN_SRC C
+# mkdir man1 
+#+END_SRC
+
+* 配置
+#+BEGIN_SRC C
+port=80
+user=www
+host=0.0.0.0
+logfile=/usr/local/thttpd/logs/thttpd.log
+pidfile=/usr/local/thttpd/logs/thttpd.pid
+#throttles=/usr/local/thttpd/etc/throttle.conf
+#urlpat=*.txt|*.mp3
+#charset=utf-8
+dir=/usr/www
+cgipat=/usr/local/thttpd/www/cgi-bin/*
+#+END_SRC
+把以上代码写到一个文件中即可。  这个是基本配置
+
+* 启动
+#+BEGIN_SRC C
+# /usr/local/thttpd/sbin/thttpd -C /usr/local/thttpd/conf/thttpd.conf
+查看进程是否启动
+# ps aux | grep thttpd
+
+#+END_SRC
+
+另一个方法
+#+BEGIN_SRC C
+thttpd -p 80 -d /home/httpd/html -u root 启动
+
+#+END_SRC
+* 调试
+二.使用GDB调试thttpd
+修改configure后的Makefile
+默认是
+CCOPT =  -O2
+修改为
+CCOPT =  -g -O0
+ 
+还要修改thttpd.c
+增加：
+ debug=1;
+在
+ if ( ! debug )
+之前
+ 
+因为启用debug，这样就不会生成守护进程，不然不方便调试！
+ 
+启用thttpd
+# /usr/local/thttpd/sbin/thttpd -C /usr/local/thttpd/conf/thttpd.conf
+ 
+附加gdb进程
+#gdb -p thttpd-pid
+(gdb)  break main
+(gdb)  r
+(gdb)  l
+
+
+* 使用经验
+
+** 如果配置文件有chroot设置，则C语言版本的 cgi程序 必须静态编译。
+** 测试一下thttpd所需要的动态库，readelf -d thttpd
+** 配置文件中的user应该指定成系统中有的某个user。
+** cgipat=/cgi-bin/** 两个*表示目录下的子目录也可以执行cgi程序。
+** printf("%s%c%c ","Content-Type:text/html",13,10) 一个cgi程序必须在最开始 添加这句话，才能在页面中正常显示。
+** cgi程序中经常用到的变量
+*** HTTP-REFERER：调用该CGI程序的网页的URL 
+*** REMOTE-HOST：调用该CGI程序的Web浏览器的机器名和域名 
+*** REQUEST-METHOD：当Web服务器传递数据给CGI程序时所采用的方法，分为GET和POST两种。GET方法仅通过环境变量（如QUERY-STRING）传递数据给CGI程序，而POST方法通过环境变量和标准输入传递数据给CGI程序，因此POST方法可较方便的传递数据给CGI程序。 
+*** SCRIPT—NAME：该CGI程序的名称 
+*** QUERY-STRING：当使用POST方法时，Form中的数据最后放在QUERY-STRING中，传递给CGI程序 
+*** CONTENT-TYPE：传递给CGI程序数据的MIME类型，通常为"application/x-www-form-url-encoded"，它是html form中以POST方法传递数据给CGI程序的数据编码类型，成为URL编码类型。 
+*** CONTENT-LENGTH： 传递给CGI程序的数据字符数(字节数) 
+** 页面form提交的信息是经过编码的。需要解码。
+    一般来说是：
+***  将+转换成空格符 
+***     %xx ： 用其十六进制ASCII码值表示的特殊字符。根据值xx将其转换成相应的ASCII字符。 

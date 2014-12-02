@@ -1,0 +1,95 @@
+#+TITLE: 命令行命令记录
+
+
+
+
+* Linux
+
+** find
+*** find path -name pattern 可以用来查找特定到文件名，但是只能用shell里的通配符匹配，包括* ? [ ]。通配符到匹配模式有限。
+*** find path -regex "regular expression"
+man find 中 
+#+begin_quote
+ -regex pattern
+
+              File name matches regular expression pattern.  This is a match on the whole path, not a search.   For  example,  to
+              match a file named `./fubar3', you can use the regular expression `.*bar.' or `.*b.*3', but not `f.*r3'.  The regu‐
+              lar expressions understood by find are by default Emacs Regular Expressions, but  this  can  be  changed  with  the
+              -regextype option.
+#+end_quote
+
+注意：
+1) 匹配的是完整路径，即包括./
+1) -regex默认是emacs正则表达式类型（[[http://www.greenend.org.uk/rjk/tech/regexp.html][各种正则表达式类型的区别]]）,可以通过-regextype来修改。
+** grep命令可以用来查找文件中的特定内容。
+
+** find rm
+
+
+   find /home/raven -name abc.txt | xargs rm -rf
+
+   如果不使用xargs，则为：
+
+   find /home/raven -name abc.txt -exec rm -fv {} \;
+
+** find cp
+   find . -type f ! -path "*/.svn*" | xargs -i cp {} /media/psf/Home/web/
+
+** u盘之类的设备在那里呢？？？
+在 /Volumes 目录下
+
+** 根据进程名获取进程id
+ps -ax  ¦ grep "进程名"  ¦ awk '{print $1}'
+** 修改目录权限
+chmod 777 * -R  
+结果：全部子目录及文件权限改为 777
+
+* Windows
+** 修改文件隐藏属性
+
+*** 隐藏文件或文件夹属性无法修改解决方案一：
+1) 进入"开始"菜单，选择"运行"输入"cmd"后进入命令提示符窗口。
+2) 输入盘符进入出问题的分区，如“H:”（不要引号）。
+3) 键入如下命令即可去掉当前分区下所有文件和文件夹的隐藏属性：
+
+attrib /s /d -s -h
+
+或者
+
+attrib *.* -s -h /s /d
+
+如果只是需要修改个别文件夹的隐藏属性，可以用如下命令：
+attrib Drive:\Path\"File Name" -s -h
+
+*** 解决方案二：
+
+使用批处理文件。代码如下：
+
+#+begin_src bat
+@echo off
+title 修改文件的隐藏属性
+mode con: cols=30 lines=10
+
+attrib *.* -r -s -h /s /d
+echo.
+echo 处理成功，请按任意键退出！
+pause>nul
+#+end_src
+
+将上面的代码复制到记事本，然后另存为bat文件。将该文件放到需要更改隐藏属性文件夹或者根目录下，双击即可自动运行。
+
+attrib命令格式：
+格式：
+ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [[drive:] [path] filename] [/S [/D]]
+
+
+attrib命令属性详解：
+/S 处理当前文件夹及其子文件夹中的匹配文件。
+/D 处理文件夹。
++ 设置属性。
+- 清除属性。
+R 只读文件属性。
+A 存档文件属性。
+S 系统文件属性。
+H 隐藏文件属性。
+[drive:][path][filename] 指定要处理的文件属性。

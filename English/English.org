@@ -1,0 +1,492 @@
+#+Title English 
+
+
+* at和on和in的用法?
+
+** 地方介系詞 at 、on 、in 之比較
+[at] 強調場所中的「點」，[on] 強調場所中的「面」及「線」，[in]強調場所中的「立體空間」。
+
+
+ 1) [at] 強調場所/位置中的「點」: at 通常用來表示可視為"一點"的場所，即使地方大，只要說話人將其視為"一點"，則可用at。
+ 2) [on] 強調場所/位置中的「面」及「線」: 指在....(面)上，在.....(路線)上
+ 3) [in]強調場所/位置中的「立體空間」: in通常用來表示在某空間之內，不論地點大小，只要說話者著眼於"空間 (在.....裡)"，即用in。
+
+*** 比較1: 
+on a river (在河面上) 
+in a river (在河裡)
+
+
+*** 比較2:
+
+1 in the corner of a room 
+
+(在房間的角落裡—將角落視為一個「長寬高」皆具的"立體空間")
+
+2 at the corner of a street 
+
+(在街的角落上—將角落視為"一點")
+
+3 on the corner of a street 
+
+(在街的角落上—強調在街角的"街面"上)
+
+
+
+----------------例句比較-------------
+
+
+
+【比較一】at the station 及 in the station
+
+(1) We met him at the station. 
+
+車站雖是立體空間，但由於此句強調"碰面的地點"(此時的車站如同地圖上的一點)，因此介系詞用表示「點」的 at。
+
+(2) People in the station are tired, weary and exhausted.
+
+說明在車站內的人們很疲累，強調"場所內部的空間"，因此介系詞用表示「立體空間」的 in。
+
+
+
+【比較二】 on the street 及 in the street
+
+(1) I met her on the street.
+
+街雖是立體空間，但此句強調在某"街面上"(有腳踏於地面的感覺)遇見她，因此用表示「面」的 on。
+
+(2) I met her in the street.
+
+說明在街上遇見她，強調被眼前這個街上的立體空間所環繞(有置身於街上這個立體空間的感覺)，因此用表示「立體空間」的 in。
+
+
+
+【比較三】on one's way 及in one's way
+
+(1) He is on his way home.
+
+回家的道路，是一條路線，強調「線狀」空間，因此用表示「線」的 on。
+
+(2) Excuse me! You are in my way!
+
+對方擋住路，是擋住一個「長寬高」皆具的"空間"，對方要讓出一個「立體空間」才能讓自已順利通過。因此用表示「立體空間」的 in。
+
+
+
+----------補充說明---------------
+
+
+
+一般國內外文法書及傳統文法教學常將此三介系詞的使用規則以所指的"地點大小"來區分(at+小型地點，on+中型地點，in+大型地點)。但地點的大小常因個人觀感不同而有所差異，因此此種分類方法常會對學習者造成困擾。
+
+
+
+舉例:
+
+
+
+(1)factory比car大，但我們講 at a factory (在工廠)、in a car (在車子裡)，是因為當我們談到「在工廠時」，所強調的是在工廠這個「地點」，當我們談到「在車子裡」時，所強調的是在車內的「立體空間」裡。
+
+
+
+(可看出介系詞的使用並非以地點的大小型來區分)
+
+(2)當我們說"街道、河川"時，通常用介系詞「on」。
+
+如on Tenth Street(第十街)--因第十街是「路線」故用強調「線」的on。又如on the Yellow River(在黃河)--因在河"面"上，故用強調「面」的「on 」。
+
+(非因街道、河川為中型地點)
+
+因此以書寫者所要強調的為地點/位置的「點、線、面、立體空間」來區別「at、on、in」的使用，是較簡易且正確的方法。
+
+** 時間介系詞 at、on、in 的比較
+
+- at 表示具体几点
+- on 表示具体的日期，即：后面的时间可以确定是某个确切的日期。
+- in 表示比天更长的时间，年啊。月啊。世纪啊。如果是天的话。应该是不能确定是某个确切日期的天。
+
+以[at ] 表示「點」;以 [on]標示出「(特定)日期」或和「日期」連用的某一時間段;以[in]表示除日以外的「某一時段」。
+
+
+
+(一) 以[at ] 表示「點」。(at 在此有「點」的感覺)
+
+
+
+(1) [at ]表示一天中的某時刻，不用冠詞，如at 5 :20 A.M.(在凌晨5點20分)，at 11 o'clock (在11點整)，at dawn(在黎明)，at sunrise(日出時)，at noon(在正午)，at night(在晚上)，at sunset(日落時)。
+
+
+
+(2) [at ]表示一瞬間或短暫的時間，如at that moment(在那一瞬間)，at present(目前)，at that time (那時)，at breakfast (早餐時)。
+
+
+
+(3) [at ]表示某特定節日期間(public holiday periods)，如at Christmas(或寫成 at Christmas time )，at Easter (在復活節)。
+
+
+
+(4) [at ]表示年齡「點」，如at the age of ten (在十歲時)，at 16(在十六歲時)。
+
+
+
+(二) 以 [on]標示出「(特定)日期」或和日期連用的某一時間段
+
+
+
+(1)以[on]表示某日或某特定日期，如on Monday (在星期一)， on Christmas Day (在聖誕節，指在當天)，on Independence Day (獨立紀念日)。
+
+
+
+(2)以[on] 表示和某日連用的某一時段，如on Friday afternoon(在星期五下午)， on the morning of August the eighth(在八月八日早晨)。
+
+
+
+(三) 以[in]表示除日以外的「某一時段」，有「線」的感覺。
+
+
+
+(1)[in] 表示年、月、季節、世紀、時代，如 in 1997(在1997年)， in May(在五月)，in winter(在冬季)， in the 20th century(在二十世紀)，in the eighties(在八十年代)，in modern times (在現代)。
+
+
+
+(2)與「定冠詞」連用表示一天中某個「時間段」，如in the night(在晚上)， in the morning (afternoon, evening)在早上 (下午，晚上)。
+
+
+
+(3)[in ]表示「年齡段、時間段或在某段經歷」中，如：in one's youth(在某人青年時代) , in those days(在那些日子裡), in one’s school days.(在某人的學生時代)。
+
+
+
+比較1:
+
+on Christmas Day ----在聖誕節當天 (on標示特定日期)。
+
+at Christmas (time) ---在聖誕節期間 (at標示public holiday periods)。
+
+
+
+比較2:
+
+in the morning --- 在早上，著眼於從dawn到noon的這個「時間段」。
+
+on Monday morning ---在星期一早上，著眼於「特定日期」中的某時段。
+
+
+
+比較3:
+
+at night ---在晚上，夜晚，將night視為一個「時間點」。
+
+in the night ---在夜間，強調(從sunset 到sunrise)的這個「時段」。
+
+in the evening ---強調 (從sunset到bedtime)的這個「時段」。
+
+
+
+註:時間介系詞的比較，部分內容參考自「溫世仁先生的動畫文法」。
+
+
+* for的用法
+** （表目的）为了
+They went out for a walk.
+What did you do that for?
+That's what we're here for.
+What's she gone for this time?
+He was waiting for the bus.
+
+说明： 在通常情况下，英语不用 for doing sth来表示目的。如：
+- 误： He went there for seeing his uncle.
+- 正： He went there for see his uncle.
+
+但是，若一个动名词已名词化，则可以与for连用表目的。如： 
+- He went there for swimming. 
+** （表利益）为了
+What can I do for you?
+We stduy hard for our motherland.
+Would you please carry this for me.
+Do more exercise fro the good of you health.
+
+说明： 
+- 有些后接双宾语的动词（如：buy, choose, fetch, find, get, order, prepare, sing, spare）， 当双宾语易位时，通常用for来引出间接宾语，表示间接宾语为受益者。
+    - She made her daughter a dress. / She made a dress for her daughter.
+    - He cooked us some potatoes. / He cooked some potatoes for us.
+
+- 注意不要按汉语字面意思，在一些及物动词后误加for:
+- 他们决定在电视上为他们的新产品打广告
+    - 误： They decided to advertise for their new produce on TV
+    - 正： They decided to advertise their new product on TV
+    说明： advertise 可用作及物动词，也可以用作不及物动词。
+           advertise sth = 为卖出某物而打广告。
+           advertise for sth = 为寻找某物而打广告。
+           如：advertise for a job = 登广告求职。
+
+** （表用途）用于，用来。
+- Knives are used for cutting things.
+- This knife is for cutting bread.
+- It's a machine for slicing bread.
+- The doctor gave her some medicine for her cold.
+
+** 为得到，为拿到，为取得
+- He went home for his book.
+- He went to his friend for advice.
+- She often asked her parents for money.
+- We all hope for success.
+- Are you coming in for some tea.
+
+
+** 给（某人），供（某人）用
+- That's for you.
+- Here is a letter for you.
+- Have you room for me there?
+
+** （表原因，理由）因为，由于。
+- I am sorry for it.
+- Thank you for coming to see me.
+- He is famous for his poems.
+- He was sent to prison for robbery. 他因为抢劫而坐牢。
+- I could't speak for langhing.
+- He could't sleep for joy.
+- For several reason, I'd rather not meet her.
+
+此处有 As a [the] result of 是习语，表示原因。
+congratulate 后习惯接介词on表示原因。
+
+** （表目的，去向）
+- Is this bus for Chicago?
+- They'll leave for Beijing tomorrow.
+- They set off for the shops. 他们买东西去了。
+- Is this the train for Shanghai>
+- Passangers for Tianjing must change at Beijing.
+
+
+** （表时间，距离，数量等）达，计。
+- I'm going away for a few days.
+- I've been here for ten years.
+- He walked for ten miles.
+- The shop sent me a bill for $50.
+
+说明： for表示时间或距离的长度（尤其是紧跟在动词之后）时，有时可省略。
+The meeting lasted (for) three days.
+They walked (for) fifty miles.
+但是当for短语位于句首或在否定中时，for通常不宜省去。
+For ten years he lived here.
+We have not heard from him for a long time.
+
+** 对，对于
+Eggs are good for you.  
+Reading in bed is bad for you eyes.
+Fortunately for me, the train was also late.
+
+** （表适合）适合，适于。
+Do you have any books for children?
+He is the very person for the work.
+It's a good place for a camp.
+She bought some clothes for winter.
+
+** （表交换）换， 以.....作交换
+- He gave her some magazines for her dictionary.
+- She bought the shirt for $50.
+- I bought a pound of apple for 70 cents.
+- Don't translate word for word.
+
+** 作为， 当作
+- Don't take hime for a fool.
+- He mistook a rope for a snake.
+- He knew that for a fact.
+- The missing persons were given up for dead.
+
+说明： 用于此义时，有时相当于as, to be, as being.但要注意不同句型的搭配习惯。
+- I took him for an honest man. / I took him to be honest.
+- It was built for [as] a pleasure boat.
+
+** （表支持， 赞成）支持
+- Are you for or aganist the plan?
+- I'm all for the young enjoying themselves.
+
+** （表基准）就.....来说， 以.....而言。
+- He's done well for a beginner.
+- He is heavy for a small boy.
+- She was short for her age.
+- The day is cool for July.
+
+** （表比例） 每....就....
+- Plant three trees for every one that is cut down.
+- He has one enemy for a hundred friends.
+- For every five who passed, there were two who failed.
+- For every mistake you make, you'll lose half a mark. 你每犯一个错误，就 要扣掉半分。
+
+说明： 用于此义是， 通常与each, every或数词连用。
+
+** 代表，代替， 代理。
+- What's the English for "中国"?
+- What's the 'C' for in "BBC"?
+- Red is for danger.
+- Let me do it for you.
+- The lawyer acted for him during ht trial.
+
+** （表安排的时间）在，于。
+- The appointment is for 10:30.
+- We've invited our guests for 7 o'clock.
+- We've booked our holiday for the second week in July.
+- The next meeting was arranged for the tenth of May.
+
+说明： 用于此义时，for主要指安排或约定的时间，与to不同。
+- He gets up at six every day.
+- He was born in September, 1988.
+
+
+** （表让步）尽管，虽然，
+- For all his money, he's a very lonely man.
+- For all his efforts, he didn't succeed.
+- I love you, for all your shortcomings.
+
+
+** （与不定式连用，引出逻辑上的主语）
+- It is for you to decide.
+- All I want is for us to be together.
+- Is there any need for me to go?
+- He spoke too fast for her to follow.
+- It is a great pity fo him to leave here so soon.
+- It is dangerous for a small child to cross the road alone.
+- For a bridge to collapse like that is unbelievable.
+
+* what about 與 how about 有何差異性 
+- 在表達提出某種建議的意思時, 即"~怎麼樣;~好嗎?"時, what about 和 how about 是可以互換的,因為意思相同.例如:What should we go now?  How/What about going  to the movies? (我們現在要去哪呢?去看電影怎麼樣呢?)     比方說:How about taking a walk? (散個步好嗎?)
+- 若是詢問意見或打聽消息時, 就只能使用 what about了.例如:Andy, we are going to the harbor by ship. What about you? (Andy,我們政要搭船到海港去.你呢?)
+- 若是提供多項事物讓人選擇的話,則使用 how about.比方說:Mary, I suggest to go to McDonald or KFC to have lunch. How about you and your sister?* test2
+
+* have been 是什么时态
+- have/has been +名词，现在完成时态的主动语态
+- have/has been +动词的过去分词（done)，现在完成时态的被动语态
+- have/has been +动词的现在分词(doing)，现在完成进行时态的主动语态
+- had been +名词，过去完成时态的主动语态
+- had been +动词的过去分词（done)，过去完成时态的被动语态
+- had been +动词的现在分词(doing)，过去完成进行时态的主动语态
+
+* either 和 neither
+在either...or, 或 neither...nor 连接2个主语时，其谓语动词要与其相近到那个主语相同。
+* any 和 some的区别
+可以修饰或代替可数名词或不可数名词。
+** 表示 “一些” 含义的时候
+any 用在否定和疑问句中，但当疑问句实际上表示请求，邀请，建议时，用some而不用any。
+some 用在肯定句中
+** any还可以表示 “任何” 
+此时any可以出现在肯定句中。
+
+* such 后面加可数名词单数的时候要加a 或者 an，也就是说such后面如果没有a或者an，那么名词就一定要是复数形式。
+
+* make friends with sb
+friends 不能是 friend。 因为朋友至少得2个人。。。。
+
+* few, a few, little, a little 区别
+** few 和 a few 修饰可数名词，
+- few 表示否定，意思为没有，几乎没有。
+
+- a few 表示肯定，意思是有点。
+** little 和 a little 修饰不可数名词，
+- little 表示否定， 意思为没有，几乎没有。
+
+- a little 表示肯定， 意思是有点。
+* 以O 结尾的词 
+- 凡是生物既有生命的物体复数都加es  比如potatoes 
+- 不是生物加S比如zoos公园
+
+
+* 冠词
+冠词位于名词或名词词组之前或之后，在句子里主要是对名词起限定作用。
+** 定冠词的用法
+1. 定冠词和名词连用，表示某个或某些特定的人或东西。
+1. 指谈话双方彼此都知道的人或者事物。
+1. 用在表示宇宙间独一无二到事物的名词前。
+1. 对前面已经提到的人或者事物，第二次提到时加定冠词，用以表示特指。
+1. 在动词play（演奏）后与乐器名词连用。西方乐器加the，中国乐器不加the。
+1. 在海洋、江河、湖泊、山脉、群岛、海峡、海湾等地理名词前加定冠词。
+    the Pacific Ocean 太平洋 the Huanghe river 黄河 the Tianshan Mountains 天山山脉 the Taiwan Straits 台湾海峡
+1. 表示地点、方位、具体的时间或某天的一部分，
+    in the east 在东方，in the west 在西方， in the front 在前面, at the back 在后面，
+1. 专有名词前面， the Great Wall, the Summer Palace, the Forbidden City,
+1. 在姓氏的复数形式前加定冠词，表示一家人。
+1. 用在某些形容词前，表示 一类人。
+   the poor   the rich    the sick    the wounded 伤员  the good 好人  the beautiful 美丽的事物
+1. 用在一些习惯用语中。
+     in the day: 在白天
+     in the morning(afternoon, evening)
+** 不用冠词的场合
+1. 表示独一无二的职务、身份前一般不用冠词。如：Elizabeth II, Queen of Enland 英国女王伊丽莎白二世
+1. 交通工具名词前@<font color="#ff0000">不用冠词@</font>。
+1. 在一些地点到名词，如：bed，church,school,hospital,home,work等。当人们去这些地方做在这些地方应该做到事时，@<font color="#ff0000">不加冠词。@</font>
+    - go home 回家
+    - go to school 去上学
+    - go to church 去教堂祈祷
+    - in hospital 住院
+    - go to work 上班
+    如果在上述词组前面加上定冠词the，可以表示去这些场所做其他事情。如：
+    - He came to the school to speak to the headmaster. 他来学校和校长谈话。
+    - He Went to the church to see the carvings. 他去教堂看雕刻。
+    - His mother is in hospital and he has been in the hospital to take care of her. 
+1. 某些专有名词的前面不用冠词。如：China，Class Four
+1. 在国家前不用冠词，特例国家除外：the United States of America
+1. 在球类运动名称和三餐饭前，一般不用冠词。如：have launch，play football。
+1. 在季节、日期、星期、节日和学科的名称前，不用冠词。如：in spring, in June, on Monday
+    但是表示特指的时候 @<font color="#ff0000">加冠词@</font>
+
+1. 在不可数名词（抽象名词和物质名词）前面，一般不用冠词。如：
+    We have all played with snow and ice。 我们都玩过雪和冰。
+1. 名词前面已有作定语用的this，these,that,those,my,their,your,his,some,many等词时，常常不用冠词，如:The letter is in her pocket.信在她的衣袋里。
+1. 在某些习惯用法和固定短语中，常不用冠词。如：in bed, after school, by bus。
+* 感叹句的结构 (新概念第一册，123&124)
+** what
+What + n. + adj. + S + v. !
+What a beautiful ship it is!
+** how
+How + adj. + S + v.!
+How beautiful the ship is!
+
+* 动词分类
+** 实义动词
+含有实在的意义，表示动作 或 状态， 在句中独立做谓语。
+** 连系动词
+本身有一定的词义，但不能独立出现。
+- 状态系动词
+    用来表示主语的状态，中有be一词
+- 持续系动词
+    用来表示主语继续或保持一种状况或态度，主要有keep, rest, remain, stay, lie, stand,
+- 表像系动词
+    用来表示"看起来像"这一概念，主要有seem, appear, look
+- 感官系动词
+    表感觉，感官系动词主要有feel, smell, sound, taste
+- 变化系动词
+    这些系动词表示主语变成什么样，变化系动词主要有become, grow, turn, fall, get, go, gome, run
+- 终止系动词
+    表示主语已终止动作， 主要有prove, trun out, 表达"证实","变成"之意。
+** 助动词
+本身没有词义，和主要动词一起构成谓语动词，用来表示否定、疑问、时态、语态或其它语法形式，助动词自身有人称、单复数和时态的变化。
+- 助动词是指没有实际意义但能提前(提到句子前面)构成疑问或直接加not构成否定的动词。
+
+英语中有12个这样的动词。do, be ,have, can, may, need,dare, must, will, shall, used ,ought.这12个词必须构成合成谓语。
+
+** 情态动词
+本身有一定的意义，表示说话人的义正语气和情态。
+
+- 联系动词是实义动词。不能提前构成疑问，也不能加not构成否定。
+
+
+be动词很特殊，兼有特殊助动词和普通实义动词特点。
+it's getting cool. is是助动词，不是系词。没有实意。仅起提前疑问和加not否定作用。
+ Is it cool.这里的is既是特殊助动词也是普通实意联系动词。
+It gets cool.get是普通实意联系动词。不能提前疑问，不能加not否定。
+* 动词的过去式和过去分词区别在哪里
+- 不同点 
+    - 过去式是动词的谓语形式，可以在句子中免独立作谓语，只能构成一般过去式。 过去式的助动词是did。
+    - 过去分词是动词的非谓语形式，不可以在句子中独立作谓语，可以通过助动词have(has,had)构成4种完成时态，和be类助动词构成所有的被动语态。
+    - 过去分词还可以独立当形容词使用，主要表示被动、完成以及与人相关的状态。
+
+- 相同点
+    规则动词的过去式和过去分词长的一样，在句中分清哪个是过去式，哪个是过去分词也是动词概念清晰的标志之一。
+* like + to 与 like + ing
+都表示喜欢干什么
+** like + to 表达的是一个特殊情况
+i like to play football in my free time with my friends.
+可以理解为某次空闲时间喜欢和朋友踢足球，另一次空闲时间就喜欢干别的。
+** like + ing 表达的是一个普遍情况
+i like playing football in my free time with my friends.
+可以理解为任何空闲时间都喜欢和朋友踢足球。

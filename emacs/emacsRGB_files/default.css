@@ -1,0 +1,89 @@
+body{
+        color            : #ffffff;
+        background-color : #999999;
+        line-height      : 1.2em;    /*文書全体の行間をフォントサイズの1.2倍*/ 
+/*        font-size:              12pt; */
+        margin           : 4% 8% 4% 8%;
+}
+a{
+        text-decoration : none;
+        color : #ffff33;
+}
+
+a:visited { color : #33ffff }
+a:active  { color : #ffffff }
+table{
+        height : 1px;
+        margin : 0;
+        border-width : 0;
+        padding : 0;
+}
+pre{
+        font-weight:            normal;
+        white-space:            pre;
+/*        font-size:              10pt; */
+        line-height:            1.1em;
+        color:                  #ffffcc;
+        background-color:       #cc9933;
+        margin:                 1em 2em 1em 20pt;
+        padding:                0.5em;
+        border-width:           1px 1px 1px 1px;
+        border-style:           solid;
+        border-color:           #ffff99;
+}
+h1{
+        font-size:              24pt;
+        font-weight:            900;
+        color:                  #ccffcc;
+        margin:                 4px 0 0 -3%;
+        padding:                10px 0 8px 0;
+        border-width:           2px 0 0 12px;
+        border-style:           solid;
+        border-color:           #336666;
+        width:                  103%;
+}
+h2{
+        font-weight:            400;
+        font-size:              18pt;
+        color:                  #ffccff;
+        margin:                 60px 0 20px -2%;
+        padding:                0 0 1px 0;
+        border-width:           1px 0 1px 8px;
+        border-style:           solid;
+        border-color:           #663399;
+        width:                  100%;
+}
+h3{
+        color:                  #ffcc66;
+        font-size:              16pt;
+        margin:                 60px 0 20px -1%;
+        padding:                0 0 0 0;
+        border-width:           0 4px 1px 0;
+        border-style:           solid;
+        border-color:           #996633;
+        width:                  80%;
+}
+h4{
+        color:                  #aaaadd;
+        font-weight:            bold;
+        font-size:              16pt;
+        padding:                0px;
+}
+h5{
+        color:                  #000090;
+        font-weight:            bold;
+        font-size:              12pt;
+}
+em{
+        font-weight:            bold;
+        font-style:             normal;
+        color:                  #000099;
+        font-size:              14pt;
+}
+strong{
+        font-weight:            bold;
+        font-style:             normal;
+        color:                  #cc0000;
+        font-size:              16pt;
+}
+

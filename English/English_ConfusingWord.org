@@ -1,0 +1,330 @@
+#+TITLE: 易混词
+
+
+* 名词
+** battle 与 war
+
+- battle 是指局部的战争、战役、战斗
+- war 是指整体的战斗
+
+** cloth，clothes，clothing与dress
+
+- cloth 指“布”，“布料”。
+
+    a dish cloth 一块擦碗布
+    a piece of cloth 一块布料
+
+- clothes 指具体的衣服，包括内衣、外衣，不能与数词连用。
+
+    I want to buy sports clothes. 我想买运动服。
+
+- clothing 是服装的总称， 包括内衣、外衣、还有帽子、鞋袜、手套之类。 @<font color="#ff0000">只能用单数，无复数@</font>
+
+    Now people are all in their winter clothing. 现在人们都穿着冬装。
+    This ti a fatory taht makes childred's clothing. 这是一家制作童装的工厂。
+
+- dress 做不可数名词时，指外衣，尤指 社交场合穿的服装。 做可数名词时，长指 连衣裙
+
+    He doesn't care much about dress. 他不太注意衣着。
+    She wore a blue dress last night. 她昨晚穿了件蓝色连衣裙。
+
+** drawing， painting 和 picture
+
+- drawing 是指用铅笔，钢笔，工具画的画。
+- painting 是指用颜料画的画 （油画、水彩画等）
+- picture 可指 drawing、painting、photo等
+
+** dinner 和 meal
+
+- dinner 是指“正餐（午饭或晚饭）” 或者 “宴会”
+
+    Let's go and have dinner together. 我们一起出去吃饭吧。
+    We're having fish for dinner. 我们午饭吃鱼。
+    Come to dinner with us tonight. 今晚来和我们共进晚餐。
+
+- meal 是指“一餐（一顿饭）”
+
+    What time do you usually have your meals? 你们通常什么时候用餐？
+    We take three meals a day. 我们每天吃三顿饭。
+
+** family，house，home
+
+- family 指家庭成员， 是“家人、家族、一家”的意思。@<font color="#ff0000"> 表示家族全体时 视为单数 ， 表示家庭成员时 视为复数 @</font> 
+
+    He has a family of three.
+
+- house 指房子，建筑物
+
+    She left home at the age of sixteen.
+
+- home 指家庭，包括家人，家居，家园。
+
+    He bought a very big house.
+
+** job 与 work
+
+- job 是可数名词
+
+    She got a job of washing clothes.
+    He has tried different jobs.
+
+- work 是不可数名词
+
+    It takes a lot of work to build a building.
+
+** person，people和man
+待补充
+
+** problem 与 question
+
+- problem 指等待解决（solve）或决定（decide）的问题，难题。
+
+    That's no problem. I can lend you my money.
+
+- question 指等待回答的 问题，提问。
+
+    May i ask some questions?
+
+** table 与 desk
+
+- table 通常用于吃饭，游乐等，一般没有抽屉
+- desk 被称为书桌，课桌，通常有抽屉
+
+** farmer 与 peasant
+
+- farmer 美国农民，很少或者不种自己吃的粮食。
+- peasant 中国农民，以种地为生。
+
+** floor 与 ground
+
+- gloor 指室内的地板，地面
+- ground 指室外的地面，也可以指地球表面
+
+** door 和 gate
+
+- door 一般指房子，房间，家具的门，也可用于比喻意义
+
+    Close the door when you go out.
+    Good luck is often the door to success. 好运常是成功的大门。
+    He lives next door to us.
+
+- gate 指围墙、篱笆、栅栏的开口处。
+
+    He walked through the gate into the garden.
+    We'll meet at the school gate at nine.
+
+** sound 与 noise
+
+- sound 指一般的声音， 多做可数名词
+
+    I was waiting for the sound of the other shoe!
+    The door was open, sounds came from the bedroom.
+
+- noise 指令人不愉快的嘈杂声，刺耳声， 可以作可数名词也可以做不可数名词
+
+    But every night he heard the noise upstairs.
+
+** road、street、way
+
+- road 意为 宽阔的大道。
+- street 意为 道路两旁的建筑物比较高，可 视为 街道。
+- way 表示要到达某地所要经过的途径，还可引申为 方式、 方法。
+
+
+** hedge、fence
+
+- hedge是植物修剪成的篱笆
+- fence是人工制作的
+
+** value、worth、price、cost
+
+- value 价值（按人的主观判断对物品本身内在的有用评价）。
+- price 东西的标价。购买某物品时要付的钱。
+- cost 成本。
+- worth 指物体本身永远不变的价值。
+
+* 形容词
+
+** each和every的区别
+*** each 强调个体，是形容词(adj)和代词(PRON).形容词时，起修饰限定作用，代词可以单独使用。each指2个或2个以上中的每一个。
+- each boy
+- each of the boys
+- each of my hands
+- each of my parents
+*** every 强调整体，只能做adj
+every 指三个或三个以上中的每一个。
+- every students (不能写为every of the student) 
+- every one of my fingers.  
+
+**  vast、huge、enormous、tremendous、 immense、 igignantic、massive
+- @<font color="#ff0000"> vast @</font> 着重空间，面积，范围的巨大，数量的庞大。不涉及重量。用作比喻时也指 阅历广，花费大。
+      
+    + Our country has a large population, vast territory and abundant resources.
+
+        我国人口众多，地大物博。
+
+    + Vast amount of data about sales, prices, market conditions are stored in the computer system.
+
+        计算机中存储着大量的关于销售、价格、市场状况的记录。
+
+    + In the vast desert in Northwest China, there is a small leaf-shaped oasis about 25 kilometers to the southwest of the city of Dunhuang in Gansu Province.
+
+        在中国西北部一望无尽际的浩瀚荒漠中，甘肃省敦煌市东南25公里处有一片树叶形的绿洲。
+
+- @<font color="#ff0000"> huge @</font>  指体积，数量大的超过一般标准。可用来形容物体、距离、声音和程度等。
+
+    + They spent a huge amount of money on that villa.
+
+        他花巨款买下了那幢别墅。
+
+    + They hanged a huge inflated balloon above the company site to celebrate its fiftieth anniversary.
+
+        他们在公司所在地的上方挂了一个巨大的充气气球来庆祝五十周年。
+
+    + Down a few stairs was a huge stone slab carved with mysterious designs and hieroglyphics.
+
+        往下走几级梯子，有一个巨大的石板，上面刻着神秘的图案和象形文字。
+
+    + The huge curtain of falling water drops more than 100 meters into the mighty Zambezi River.
+
+        巨幅的瀑布在100米的高处从天而降，流入到宽广的赞比西河。
+
+- @<font color="#ff0000"> enormous @</font> 指体积、规模、数量上的巨大。 着重体积庞大，硕大无比。令人咋舌的事物。多用来形容形体，数量和程度。 有时含有紧急，严重的意思。
+
+    + 我们已经在这些问题上花费来大量的注意力。
+
+        An enormous amount of attention has been lavished on these problems.
+
+    + An enormous gap remains between the advanced countries and the developing countries.
+
+        发达国家与发展中国家之间存在这巨大的差距。
+
+    + Ever since the new manager start working, everyone in the office feel an enormous pressure.
+
+        自从新经理开始工作以来，办公室里的每个人都感觉到一种巨大的压力。
+
+- @<font color="#ff0000"> tremendous @</font> 语气比enormous强，而且多用于抽象的事物。
+
+    + Many foreign visitors marvel at the tremendous changes in Shanghai having made in recent years.
+
+        许多外国游客惊叹上海最近几年发生的巨大变化。
+
+    + By his speech, he whipped up tremendous enthusiasm among the audience.
+
+        他用演说激发了听众的极大的热情。
+
+    + Spaceships must attain tremendous speeds to reach these planets in reasonable time.
+
+        宇宙飞船必须获得巨大的速度才能在一定时间内到达这些行星。 （reasonable: 合理的，合适的。）
+
+- @<font color="#ff0000"> immense @</font> 指三维空间和广度的巨大，也指规模巨大。 有大到不能计算的意味。
+
+    + Many early explorers got lost in the immense, uncharted Atlantic.
+
+        许多早期的探险家迷失在浩瀚未知的大西洋。
+
+    + He made an immense amount of money in business.
+
+        他在生意中赚了一大笔钱。
+
+- @<font color="#ff0000"> massive @</font>  指巨大的，笨重的。指大的体积、数量和重量，侧重庞大而笨重。
+
+    + Massive medical bills are draining finances of the country.
+
+        巨大的医疗账单耗费国家的财政支出。
+
+    + Last week we had a massive power failure during a freak afternoon thunderstorm.
+
+        上星期在反常的午后雷雨过程中，我们遇上大规模的停电。
+
+- @<font color="#ff0000"> gigantic @</font>  指特别巨大、庞大，巨人似的。
+ 
+    + The earth may be thought of as a gigantic magnet.     
+
+        整个地球可看作是一块硕大无朋的磁石。
+
+    + The project is on such a gigantic scale that the cost is hard to  calculate.
+
+        这项工程浩大，所费不赀。
+
+    + To achieve the four modernizations and make China a powerful socialist country before the end of this century will be a gigantic task.     
+
+        实现四个现代化,使中国在本世纪 末成为一个强大的社会主义国家将是一项宏大的任务。
+
+    + The rapid development of automobiles has posed a gigantic burden to the public transportation.
+
+        汽车的快速发展给公共交通带来了巨大的负担。
+
+
+
+
+
+* 形容词和副词
+
+** all 和 whole
+
+都可译为“整个的”“全部的”
+
+- 修饰单数可数名词或抽象名词时，它们可以呼唤，但词序不同。 all放在the，this，that，my，your等词前面   whole则放在之后
+
+    + She has worked all the afternoon.
+
+    + She has worked the whole afternoon.
+
+- 修饰复数可数名词时，all的意义是 “所有的”，  whole的意义是“整整的”
+
+    + All students will go there for a meeting.
+
+          所有的学生都将去那儿开会。
+
+    + It rained for two whole days.
+
+        雨下了整整两天。
+
+- 修饰地名时， whole不能直接跟地名。
+
+    + All Japan was surprised at the news.
+
+    + The whole of Japan was suprised at the news.
+
+- all 可以修饰物质名词，而whole不能。
+
+    + He ate all the food.
+
+** alone 和 lonely
+
+- alone 表示 独自一人
+
+- lonely 表示 “孤单，寂寞”的情绪
+
+
+
+- alone 作形容词时，只做表语
+
+    + But the children are not alone. 
+
+        但是孩子们不是独自呆着的。
+
+    + He will be alone from now on.
+
+        他从此将一个人了。
+
+- alone 也可以作副词，修饰动词
+
+    + She was sitting in the bed alone when we went to see her.
+
+        我们去看她的时候，她正一个人坐在床上。
+
+- lonely 一般只用做形容词
+
+    + So we never feel lonely.
+
+        所以我们从来不感到孤单
+
+    + Robert is a very lonely traveller.
+
+        罗伯特时一个极其孤单的旅行者
+
+
+
+

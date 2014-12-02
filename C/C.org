@@ -1,0 +1,1409 @@
+#+TITLE: C 笔记
+
+#+OPTIONS: ^:nil
+#+OPTIONS: \n:t
+
+
+* include"" 与 include<> 的区别
+- "" 是以当前路径为相对路径引用头文件
+- <> 是以系统环境变量路径引用头文件
+
+* include <iostream> 与 include <iostream.h>的区别
+在C语言中不存在iostream.h这个头文件，
+在C++语言中，include <iostream.h>是不正确的写法，即不是C++标准库的写法。
+C++标准库中的写法是include <iostream>    using namespace std;
+进化过程也许是 C--->C++--->C++标准  也许是退化过程
+
+@<font color="#ff0000">以下内容引用自网络@</font>
+
+C++标准库很大。非常大。难以置信的大。怎么个大法？这么说吧：在C++标准中，关于标准库的规格说明占了密密麻麻300多页，这还不包括标准C库，后者只是 "作为参考"（老实说，原文就是用的这个词）包含在C++库中。
+
+当然，并非总是越大越好，但在现在的情况下，确实越大越好，因为大的库会包含大量的功能。标准库中的功能越多，开发自己的应用程序时能借助的功能就越多。C++库并非提供了一切（很明显的是，没有提供并发和图形用户接口的支持），但确实提供了很多。几乎任何事你都可以求助于它。
+
+在归纳标准库中有些什么之前，需要介绍一下它是如何组织的。因为标准库中东西如此之多，你（或象你一样的其他什么人）所选择的类名或函数名就很有可能和标准库中的某个名字相同。为了避免这种情况所造成的名字冲突，实际上标准库中的一切都被放在名字空间std中（参见条款28）。但这带来了一个新问题。无数现有的C++代码都依赖于使用了多年的伪标准库中的功能，例如，声明在<iostream.h>，<complex.h>，<limits.h>等头文件中的功能。现有软件没有针对使用名字空间而进行设计，如果用std来包装标准库导致现有代码不能用，将是一种可耻行为。（这种釜底抽薪的做法会让现有代码的程序员说出比 "可耻" 更难听的话）
+
+慑于被激怒的程序员会产生的破坏力，标准委员会决定为包装了std的那部分标准库构件创建新的头文件名。生成新头文件的方法仅仅是将现有C++头文件名中的 .h 去掉，方法本身不重要，正如最后产生的结果不一致也并不重要一样。所以<iostream.h>变成了<iostream>，<complex.h>变成了<complex>，等等。对于C头文件，采用同样的方法，但在每个名字前还要添加一个c。所以C的<string.h>变成了<cstring>，<stdio.h>变成了<cstdio>，等等。最后一点是，旧的C++头文件是官方所反对使用的（即，明确列出不再支持），但旧的C头文件则没有（以保持对C的兼容性）。实际上，编译器制造商不会停止对客户现有软件提供支持，所以可以预计，旧的C++头文件在未来几年内还是会被支持。
+* Socket 编程
+** sock_stream 和 SOCK_DGRAM
+sock_stream   是有保障的（即能保证数据正确传送到对方）面向连接的SOCKET，多用于资料（如文件）传送。
+sock_dgram   是无保障的面向消息的socket　，　主要用于在网络上发广播信息。
+SOCK_STREAM是基于TCP的，数据传输比较有保障。SOCK_DGRAM是基于UDP的，专门用于局域网，基于广播
+SOCK_DGRAM 是数据流,一般是tcp/ip协议的编程,SOCK_DGRAM分是数据抱,是udp协议网络编程
+*** Tcp 和 udp的区别
+- 基于连接与无连接
+- 对系统资源的要求(tcp较多，udp少)
+- udp程序结构简单
+- 流模式与数据报模式
+    - tcp保证数据正确性，udp可能丢包
+    - tcp保证数据顺序，udp不保证
+**** 具体编程时的区别
+1. socket()的参数不同
+1. udp server不需要调用listen和accept
+1. udp收发数据用sendto/recvfrom函数
+1. tcp：地址信息在connect/accept时确定
+1. udp：在sendto/recvfrom函数中每次均需指定地址信息
+1. udp： shutdown函数无效
+** 第一件事就是用socket()建立一个socket
+#+begin_src c
+#include <sys/socket.h>
+#include <sys/types.h>
+
+int socket(int af, int type, int protocol) 
+#+end_src
+- 'int af'代表地址族或者称为socket所代表的域，通常有两个选项： 
+    - AF_UNIX - 只在单机上使用。 
+    - AF_INET - 可以在单机或其他使用DARPA协议(UDP/TCP/IP)的异种机通信。 
+
+
+- 'int type'代表你所使用的连接类型，通常也有两种情况： 
+  - SOCK_DGRAM - 用来建立没有连接的sockets，不能保证数据传输的可靠性。
+  - SOCK_STREAM - 用来建立面向连接的sockets，可以进行可靠无误的的数据传输 
+    
+    在本文中，我们着重使用AF_INET地址族和SOCK_STREAM连接类型。 
+
+- 'int protocol'通常设定为0。这样的目的是使系统选择默认的由协议族和连接类型所确定的协议。 
+
+这个函数的返回值是一个文件描述句柄，如果在此期间发生错误则返回-1并且设定了相应的errno。 
+
+所以一般创建一个socket就用
+#+begin_src c
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int sockfd /* soon to be socket file descriptor */ 
+
+sockfd = socket(AF_INET, SOCK_STREAM, 0) 
+/* error checking here */ 
+#+end_src
+
+
+** 第二件事是把socket绑定到某个端口上。bind()函数
+#+begin_src c
+
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int bind(int sockfd, struct sockaddr *name, int namelen) 
+#+end_src
+
+*** sockfd是从socket()调用得到的文件描述句柄。
+*** name是一个指向sockaddr类型结构的一个指针。
+**** 如果地址族被设定为AF_UNIX
+
+#+begin_src c
+struct sockaddr { 
+u_short sa_family; 
+char sa_data[14]; 
+}; 
+#+end_src
+name.sa_family应当被设定为AF_UNIX。
+name.sa_data应当包含最长为14个字节的文件名，这个文件名用来分配给socket。
+namelen给出了文件名的具体长度。 
+#+begin_src c
+#include <sys/types.h> 
+#include <sys.socket.h> 
+
+struct sockaddr name; 
+int sockfd; 
+
+name.sa_family = AF_UNIX; 
+strcpy(name.sa_data, "/tmp/whatever"); 
+
+sockfd = socket(AF_UNIX, SOCK_STREAM, 0) 
+/* error checking code here */ 
+
+bind(sockfd, &name, strlen(name.sa_data) + sizeof(name.sa_family) 
+/* error checking code here */ 
+#+end_src
+**** 如果地址族被设定为AF_INET
+#+begin_src c
+struct sockaddr_in { 
+    short int sin_family; /* Address family */ 
+    unsigned short int sin_port; /* Port number */ 
+    struct in_addr sin_addr; /* Internet address */ 
+    unsigned char sin_zero[8]; /* Same size as struct sockaddr */ 
+}; 
+
+#+end_src
+- sin_family指代协议族，在socket编程中只能是AF_INET
+- sin_port存储端口号（使用网络字节顺序），在linux下，端口号的范围0~65535,同时0~1024范围的端口号已经被系统使用或保留。
+- sin_addr存储IP地址，使用in_addr这个数据结构
+- sin_zero是为了让sockaddr与sockaddr_in两个数据结构保持大小相同而保留的空字节。
+
+#+begin_src c
+sockaddr_in mysock;
+bzero((char*)&mysock,sizeof(mysock));
+mysock.sa_family=AF_INET;
+mysock.sin_port=htons(1234);//1234是端口号
+mysock.sin_addr.s_addr=inet_addr("192.168.0.1");
+#+end_src
+
+具体实例
+#+begin_src c
+#include <stdio.h> 
+#include <sys/types.h> 
+#include <sys/socket.h> 
+#include <errno.h> 
+
+int sockfd, port = 23; 
+struct sockaddr_in my_addr; 
+
+if((sockfd=socket(AF_INET, SOCK_STREAM, 0)) == -1) 
+{ 
+printf("Socket Error, %d\n", errno); 
+exit(1); 
+} 
+
+my_addr.sin_family = AF_INET; /* host byte order */ 
+my_addr.sin_port = htons(port); /* see man htons for more information 
+*/ 
+my_addr.sin_addr.s_addr = htonl(INADDR_ANY); /* get our address */ 
+bzero(&(my_addr.sin_zero), 8); /* zero out the rest of the space */ 
+
+if((bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr))
+ == -1) 
+{ 
+printf("Bind Error, %d\n", errno); 
+close(sockfd); 
+exit(1); 
+} 
+#+end_src
+
+@<font color="#ff0000">bind()就是把一个指定的端口分配给要bind的socket。 以后就可以用这个端口来“听“网络的请求。bind()用于server端，一般端口都是well known，以便于提供服务。 端口分配后，其他socket不能再用这个端口。相当于告诉client端"要请求服务，往这个端口发"。 client端不用bind，每建一个socket系统会分配一个临时的端口，用完后再释放。谁叫它是client.@</font>
+
+
+** 如果是服务器就可以listen()了，如果是客户端就可以connect()了。
+*** 服务器listen()
+当我们需要建立一个服务器的时候，我们需要有一种手段来监听输入的请求，而listen()函数正是提供这个功能。 
+#+begin_src c
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int listen(int sockfd, int backlog); 
+#+end_src
+
+参数backlog是指一次可以监听多少个连接 
+
+#+begin_src c
+socket(); /* to create out socket file descriptor */ 
+bind(); /* to give our socket a name */ 
+listen(); /* listen for connection */ 
+
+#+end_src
+*** 客户端connect()
+使用connect()函数可以和服务器建立链接。
+#+begin_src c
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);  
+#+end_src
+- sockfd是我们建立的文件描述句柄，
+- serv_addr是一个sockaddr结构，包含目的的地址和端口号，
+- addrlen 被设定为sockaddr结构的大小。 
+
+#+begin_src c
+
+#include <string.h>  
+#include <sys/types.h>  
+#include <sys/socket.h>  
+
+#define DEST_IP "132.241.5.10" 
+#define DEST_PORT 23 
+
+main() 
+{ 
+int sockfd; 
+struct sockaddr_in dest_addr; /* will hold the destination addr */ 
+
+sockfd = socket(AF_INET, SOCK_STREAM, 0); /* do some error checking! *
+/ 
+
+dest_addr.sin_family = AF_INET; /* host byte order */ 
+dest_addr.sin_port = htons(DEST_PORT); /* short, network byte order */
+
+dest_addr.sin_addr.s_addr = inet_addr(DEST_IP); 
+bzero(&(dest_addr.sin_zero), 8); /* zero the rest of the struct */ 
+
+connect(sockfd, (struct sockaddr *)&dest_addr, sizeof(struct sockaddr)
+); 
+/* error checking code here */ 
+/* more code  
+. 
+. 
+. 
+*/ 
+} 
+#+end_src
+
+** 当客户端发起链接的时候，服务器端可以accept()
+当有人试图从服务器打开的端口登陆进来时服务器应该响应他，这个时候就要用到accept()函数了
+#+begin_src c
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int accept(int sockfd, void *addr, int *addrlen); 
+#+end_src
+
+#+begin_src c
+#include <string.h>  
+#include <sys/types.h>  
+#include <sys/socket.h>  
+
+#define MYPORT 1500 /* the port users will be connecting to */ 
+#define BACKLOG 5 /* how many pending connections queue will hold */ 
+
+main() 
+{ 
+int sockfd, new_fd; /* listen on sock_fd, new connection on new_fd */ 
+
+struct sockaddr_in my_addr; /* my address information */ 
+struct sockaddr_in their_addr; /* connector's address information */ 
+int sin_size; 
+
+sockfd = socket(AF_INET, SOCK_STREAM, 0); /* do some error checking! *
+/ 
+
+my_addr.sin_family = AF_INET; /* host byte order */ 
+my_addr.sin_port = htons(MYPORT); /* short, network byte order */ 
+my_addr.sin_addr.s_addr = INADDR_ANY; /* auto-fill with my IP */ 
+bzero(&(my_addr.sin_zero), 8); /* zero the rest of the struct */ 
+
+/* did you remember your error checking? */ 
+bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)); 
+
+listen(sockfd, BACKLOG); 
+
+sin_size = sizeof(struct sockaddr_in); 
+new_fd = accept(sockfd, &their_addr, &sin_size); 
+
+#+end_src
+
+这里我们要注意的是：我们用new_fd来完成所有的接收和发送的操作。如果在只有一个连接的情况下你可以关闭原来的sockfd用来防止更多的输入请求。 
+
+
+** accept()之后，可以用send() recv()或者write() read()来发送和接受信息。
+
+*** send()和recv()
+
+#+begin_src c
+
+#include <sys/types.h> 
+#include <sys/socket.h> 
+
+int send(int sockfd, const void *msg, int len, int flags); 
+int recv(int sockfd, void *buf, int len, unsigned int flags); 
+
+send(): 
+sockfd - socket file descriptor 
+msg - message to send 
+len - size of message to send 
+flags - read 'man send' for more info, set it to 0 for now :) 
+
+recv(): 
+sockfd - socket file descriptor 
+buf - data to receive 
+len - size of buf 
+flags - same as flags in send() 
+
+send() 例程: 
+- ------ 
+
+char *msg = "Hey there people"; 
+int len, send_msg; 
+
+/* code to create(), bind(), listen() and accept() */  
+
+len = strlen(msg); 
+bytes_sent = send(sockfd, msg, len, 0); 
+
+- ------ 
+recv() 例程: 
+- ------ 
+
+char *buf; 
+int len, recv_msg; 
+
+/* code to create(), bind(), listen() and accept() */ 
+
+len = strlen(buf); 
+recv_msg = recv(sockfd, buf, len, 0); 
+
+#+end_src
+
+*** write() 和 read()
+必须头：
+#+begin_src c
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+#+end_src
+
+- 关于write()
+#+begin_src c
+ssize_t write(int d,const void *buf,size_t nbytes);
+#+end_src
+
+调用成功返回成功写入的字节数，调用失败则返回-1。参数1为对象的句柄；参数2是写入的内容；参数3是前
+者的大小。
+
+- 关于read()
+#+begin_src c
+ssize_t read(int d,void *buf,size_t nbytes);
+#+end_src
+
+正常调用返回成功读入的字节数，当读到句柄对象的底部时返回0，调用失败返回-1。参数1为对象句柄；参
+数2是读入容器的地址；参数3是前者的大小。
+
+** close() and shutdown() 
+传输结束时，应当关闭连接。 
+#+begin_src c
+#include <stdio.h> 
+
+/* all you code */ 
+
+close(sockfd); 
+#+end_src
+
+更保险的方法是用shutdown()来关闭连接。 
+
+#+begin_src c
+int shutdown(int sockfd, int how) 
+#+end_src
+
+
+参数how的选择： 
+1 - 不允许接收更多的数据 
+2 - 不允许发送更多的数据 
+3 - 不允许接收和发送更多的数据(和close()一样) 
+** 其他函数 获取站点名称获取地址，根据地址获取名称
+*** getpeerbyname
+服务器端得到与其链接的客户端信息。
+#+begin_src c
+#include <sys/socket.h> 
+
+int getpeername(int sockfd, struct sockaddr *addr, int *addrlen); 
+
+struct sockaddr_in name;
+int namelen = sizeof(name);
+.
+.
+.
+if(getpeername(0,(struct sockaddr*)&name, &namelen)<0){
+  syslog(LOG_ERR,"getpeername: %m");
+  exit(1);
+} else
+  syslog(LOG_INFO,"Connection from %s",inet_ntoa(name.sin_addr));
+#+end_src
+
+*** gethostname
+返回本地主机的标准主机名。
+#include <Winsock2.h>
+int PASCAL FAR gethostname(char FAR *name, int namelen);
+name：   一个指向将要存放主机名的缓冲区指针。
+namelen：缓冲区的长度。
+#+begin_src c
+#include <stdio.h>
+#include <unistd.h>
+int main()
+{
+char name[65];
+gethostname(name, sizeof(name));
+printf("hostname = %s\n", name);
+}
+
+
+#+end_src
+
+*** gethostbyname
+返回对应于给定主机名的包含主机名字和地址信息的hostent结构指针
+#+begin_src c
+#include <winsock2.h>
+struct hostent FAR *PASCAL FAR gethostbyname(const char
+FAR * name);
+name：指向主机名的指针。
+返回类型
+struct hostent
+{
+char FAR * h_name;
+char FAR * FAR * h_aliases;
+short h_addrtype;
+short h_length;
+char FAR * FAR * h_addr_list;
+};
+Linux版
+#include <netdb.h>
+struct hostent *gethostbyname(const char * hostname);
+返回：非空指针——成功，空指针——出错，同时设置h_errno
+
+#+end_src
+- h_name 正规的主机名字（PC）。
+- h_aliases 一个以空指针结尾的可选主机名队列。
+- h_addrtype 返回地址的类型，对于Windows Sockets，这个域总是PF_INET。
+- h_legnth 每个地址的长度（字节数），对应于PF_INET这个域应该为4。
+- h_addr_list 应该以空指针结尾的主机地址的列表，返回的地址是以网络顺序排列的
+为了保证其他旧的软件的兼容性，h_addr_list[0]被定义为宏h_addr。
+
+*** gethostbyaddr
+返回对应于给定地址的主机信息。
+
+#+begin_src c
+#include <winsock.h>
+struct hostent FAR *PASCAL FAR gethostbyaddr(const char
+FAR * addr, int len, int type);
+addr：指向网络字节顺序地址的指针。
+len： 地址的长度，在AF_INET类型地址中为4。
+type：地址类型，应为AF_INET。
+注释
+gethostbyaddr()返回对应于给定地址的包含主机名字和地址信息的hostent结构指针。结构的声明如下：
+struct hostent {
+char FAR * h_name;
+char FAR * FAR * h_aliases;
+short h_addrtype;
+short h_length;
+char FAR * FAR * h_addr_list;
+};
+结构的成员有
+成员 用途
+h_name 正规的主机名字（PC）。
+h_aliases 一个以空指针结尾的可选主机名队列。
+h_addrtype 返回地址的类型，对于Windows Sockets，这个域总是PF_INET。
+h_legnth 每个地址的长度（字节数），对应于PF_INET这个域应该为4。
+h_addr_list 应该以空指针结尾的主机地址的列表，返回的地址是以网络顺序排列的
+为了保证其他旧的软件的兼容性，h_addr_list[0]被定义为宏h_addr。
+#+end_src
+
+- h_name 正规的主机名字（PC）。
+- h_aliases 一个以空指针结尾的可选主机名队列。
+- h_addrtype 返回地址的类型，对于Windows Sockets，这个域总是PF_INET。
+- h_legnth 每个地址的长度（字节数），对应于PF_INET这个域应该为4。
+- h_addr_list 应该以空指针结尾的主机地址的列表，返回的地址是以网络顺序排列的
+为了保证其他旧的软件的兼容性，h_addr_list[0]被定义为宏h_addr。
+
+
+** select函数说明
+个人认为select函数的作用是循环检查几个文件描述符（套结字描述符）中是否有可以进行读、写，或者出现异常的描述符。
+它并不代表blocking 或者 nonblocking。
+blcoking是由函数调用所产生的。
+一般情况下，在使用select之前，需要把一个描述符设置成nonblocking的模式，使描述符在执行读、写或是连接的时候，不会发生程序的blocking。而是使程序的blcoking发生在select函数的调用的时候。
+
+#+begin_src C
+select 函数：
+select(int __nfds, fd_set *restrict __readfds, fd_set *restrict __writefds, fd_set *restrict __exceptfds, struct timeval *restrict __timeout)
+返回 0 : 在timeout结束时，没有任何描述符就绪，即没有任何描述符可读写。
+返回 -1: 出错
+返回>0 : 表示就绪的描述符的总数。
+
+
+FD_ZERO (fd_set *set); 将一个文件描述符集合清零
+FD_SET(int fd, fd_set *set); 将文件描述符fd加入到集合set中
+FD_CLR(int fd, fd_set *set); 将文件描述符fd从集合set中删除
+FD_ISSET(int fd, fd_set *set); 判断文件描述符fd是否存在于集合set中。
+
+#+end_src
+
+n
+** 设置套结字描述符的非阻塞模式（nonblocking）
+使用fcntl()函数。
+#+begin_src C
+# include <unistd.h>
+# include <fcntl.h>
+
+
+int fcntl(int fd,   //文件描述符
+            int cmd , //不同的命令
+             struct flock *lock) //设置记录锁的具体状态
+
+sockfd = socket(AF_INET, SOCK_STREAM, 0);
+fcntl(sockfd, F_SETFL, O_NONBLOCK);
+
+#+end_src
+
+此函数功能强大的多，先写这么多。
+
+** fcntl 和 select函数的结合
+先用fcntl设置套结字的nonblocking模式，再用select循环检测套结字的可读写状态。
+* gdb 调试工具
+
+[[http://blog.csdn.net/liigo/archive/2006/01/17/582231.aspx][GDB 十分钟教程]]
+
+* C语言防止头文件重复调用
+[[http://www.cnblogs.com/IamEasy_Man/archive/2009/10/21/1587658.html][关于防止头文件重复调用和变量重复定义的网页说明]]
+
+
+使用条件编译，在所有头文件中都如下编写
+#+begin_src C
+#ifndef _HEADERNAME_H
+#define _HEADERNAME_H
+// 头文件内容
+
+#endif
+
+#+end_src
+
+这样多重包含的危险就被消除了。当头文件第一次被包含时，它被正常处理，符号_HEADERNAME_H被定义为1， 如果头文件再次被包含，通过条件编译，它的内容被忽略。符号_HEADERNAME_H按照被包含头文件的文件名进行取名，以避免由于其他头文件使用相同的符号而引起的冲突。
+
+但是，预处理器仍将整个头文件读入，即使这个头文件所有内容被忽略，由于这种处理将托慢编译速度，如有可能，应该避免出现多重包含。
+* C语言防止变量被重复定义
+因为工程中的每个C文件都是独立的解释，即使在头文件中有#ifndef #define #endif之类的预定义，但不同的C文件引用的H文件中有重名变量，由于C文件独立解释，所以每个C文件都生成单独的O文件，再链接的时候，因为每个.O文件中都包含同一个重名变量，重名变量就会出现重复定义错误。
+
+** 解决办法
+- 在C文件中声明变量
+- 然后建立一个头文件（.h文件）在所有的变量声明前都加上extern
+- 但不用对变量进行初始化
+- 然后在其他需要使用全局变量的.c文件中都包含此.h文件。
+- 在编译器会为.c生成目标文件，然后链接时，如果该.c文件使用了全局变量，连接器就会连接到此.c文件。
+
+* C语言指针
+
+指针即地址，指针变量即存地址的变量。
+
+** 定义指针
+int *ptr1;
+int* ptr2;
+两种方式都对，@<font color="#ff0000">所以‘*’并不是和int结合来指定int类型的指针@</font>
+
+第一种方式可以避免误解
+int* ptr1, ptr2;
+这样的定义方式，容易把ptr2也误认为是指针
+** 指针的运算
+*** & (address-of operator)
+取指针的地址
+*** * (Dereference operator)
+*在定义时用来说明一个变量是指针，
+而在定义一个指针之后，*表示取指针所指向的对象（变量）
+
+** 指针数组
+元素类型是指针的数组
+int *p[];
+char *p[];
+都是定义了一个数组，数组的元素是指针。
+** 数组指针
+指向数组的指针
+int (*p)[];
+char (*p)[];
+都是定义了一个指针p，p指向一个数组。
+#+BEGIN_SRC C
+int (*p)[4];  // 定义一个指向数组的指针。
+int arr[4] = {1,2,3,4};   //定义一个数组，并赋值。
+p = &arr;   //给指针p赋值。
+
+
+int (*p2)[4];
+int arr2[2][4] = {{1,2,3,4},{5,6,7,8}};
+p2 = arr2;
+
+@<font color="#ff0000">注意：@</font> 
+- p和p2都是指向数组的指针，而数组可以用其首地址表示，即可以理解为p和p2是一个指向指针的指针。
+- arr是一个数组，可以理解为一个指针。所以arr和p的类型不一样。不可以直接赋值。需要用取地址运算符取得arr的地址，再赋值给p。
+- arr2是一个二维数组，二维数组可以理解为一个指向指针的指针，所以arr2和p2的类型一样，可以直接赋值。
+#+END_SRC
+** 字符串指针
+char *p = "hello";
+p 是一个字符串指针变量。
+&p表示p这个变量在内存中的地址，
+p表示p这个变量所存儲的地址，即"hello"这个字符串常量的首地址。
+*p表示p这个变量所存储的地址所存储的内容。此例中是'h'。   *(p+1) 是'o'。
+
+
+* C语言引用传递
+在C中，没有类似C++的引用传递。但可以用指针的方式来改变函数参数的值。
+即要把一个变量的地址作为函数的参数传递过去。使用此地址来修改地址所指向的指。
+#+begin_src C
+//This program is to test whether a function can change the parameter's 
+//value in .c files.
+//also provides how we can change the value(use pointer!). YES, use pointer!
+#include<stdio.h>
+void changeInt(int *a)
+{
+*a=3;
+}
+void changeChar(char** c)
+{
+*c="changed!";
+}
+void main()
+{
+int a=0;
+char *c="hello";
+changeChar(&c);
+printf("%s\n",c);//print 'changed!'
+changeInt(&a);
+printf("%d\n",a);//out: 3
+}
+
+#+end_src
+
+
+#+begin_src C
+/* Swap function */
+void swap(int* a,int* b)
+{
+*a=*a-*b;
+*b=*b+*a;
+*a=*b-*a;
+}
+/* Main function */
+void main()
+{
+int i=3,j=1;
+swap(&i,&j); //如果数组的话 则可用这种形式：swap(&(a[i]),&(a[i+1]));
+printf("j:%d ",j);//3
+printf("i:%d\n",i);//i
+}
+
+#+end_src
+
+* 堆和栈
+- 栈：由编译器自动分配释放。
+- 堆：有程序员分配释放。
+
+
+
+* C语言多线程
+线程相对与进程来说，比较节省资源。
+
+编译多线程程序的时候，要指定 '-lpthread' 参数， 用来调用静态链接库。因为pthread不是linux的默认库。
+
+引用头文件 pthread.h。
+
+** 创建线程
+pthread.h: extern int pthread_create (pthread_t* __newthread,const pthread_attr_t* __attr,void*,void* __arg)
+- 第一个参数是指向线程标识符的指针
+    标识符是pthread_t 类型，定义在/usr/include/bits/pthreadtypes.h中。
+    typedef unsigned long int pthread_t
+- 第二个参数是用来设置线程的属性
+- 第三个参数是线程的执行函数的起始地址
+- 第四个参数是线程的执行函数的参数
+    - 当参数是一个的时候，直接定义变量并传递给线程执行函数
+    #+begin_src C
+#include <iostream>
+#include <pthread.h>
+using namespace std;
+pthread_t thread;
+void fn(void *arg)
+{
+    int i = *(int *)arg;
+    cout<<"i = "<<i<<endl;
+    return ((void *)0);
+}
+int main()
+{
+    int err1;
+    int i=10;
+   err1 = pthread_create(&thread, NULL, fn, &i);
+    pthread_join(thread, NULL);
+}
+    
+    #+end_src
+
+    - 当参数多余一个的时候，就要定义一个结构来包含所有的参数，并传递给线程执行函数
+#+begin_src C
+首先定义一个结构体：
+
+struct  parameter
+
+{
+
+  int size,
+
+  int count;
+
+。。。。。
+
+。。。 
+};
+
+然后在main函数将这个结构体指针，作为void
+ *形参的实际参数传递
+
+struct parameter arg;
+
+
+通过如下的方式来调用函数：
+pthread_create(&ntid, NULL, fn,& (arg));
+函数中需要定义一个parameter类型的结构指针来引用这个参数 
+void fn(void *arg)
+{
+    int i = *(int *)arg;
+    cout<<"i = "<<i<<endl;
+    return ((void *)0);
+}
+
+
+void thr_fn(void *arg)
+{
+       struct parameter *pstru;
+       pstru = ( struct parameter *) arg;
+       然后在这个函数中就可以使用指针来使用相应的变量的值了。
+}
+
+
+#+end_src
+
+
+此创建线程的函数，返回0表示创建成功，非0表示失败。
+常见的错误
+- EAGAIN ： 系统限制创建新的线程。
+- EINVAL ： 表示设置的线程属性为非法。
+
+** 等待线程结束
+一个线程可以等待另一个线程结束
+int pthread_join __P ((pthread_t __th, void **__thread_return));
+- 第一个参数是被等待的线程标识符
+- 第二个参数是用户定义的指针，它可以用来存放被等待线程的返回值（当线程结束的时候返回返回值）
+
+当调用pthread_join的时候，线程将被阻塞，直到被等待的线程结束为止。
+
+#+begin_src C
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+pthread_t       tid1, tid2; 
+void            *tret;  //线程的返回值，貌似可以是任何类型，先用void来表示，之后再强制转换类型
+
+ 
+
+void *
+thr_fn1(void *arg)
+{
+        sleep(1);//睡眠一秒，等待TID2结束。
+        pthread_join(tid2, &tret);//tid1一直阻赛，等到tid2的退出，获得TID2的退出码
+         printf("thread 2 exit code %d\n", (int)tret); //此处强制转换线程返回值为int型
+    printf("thread 1 returning\n");
+    return((void *)2);
+}
+
+void *
+thr_fn2(void *arg)
+{      
+    printf("thread 2 exiting\n");
+     pthread_exit((void *)3);
+}
+
+int
+main(void)
+{
+    int            err;
+
+    err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+    if (err != 0)
+        printf("can't create thread 1\n");
+    err = pthread_create(&tid2, NULL, thr_fn2, NULL);
+    if (err != 0)
+        printf("can't create thread 2\n");
+    err = pthread_join(tid1, &tret);//祝线程一直阻赛，等待TID1的返回。
+    if (err != 0)
+        printf("can't join with thread 1\n");
+    printf("thread 1 exit code %d\n", (int)tret);
+      //err = pthread_join(tid2, &tret);
+    //if (err != 0)
+    //    printf("can't join with thread 2\n");
+//    printf("thread 2 exit code %d\n", (int)tret);
+    exit(0);
+}
+
+ 
+
+
+命令：＃gcc -lthread myfile11-3.c
+
+        ：＃./a.out
+
+运行结果：
+
+thread 2 exiting
+thread 2 exit code 3
+thread 1 returning
+thread 1 exit code 2
+
+#+end_src
+** 结束线程
+void pthread_exit(void *__retval)
+当参数retval不是null的时候。这个值就被传递给thread_return。
+同时一个线程不能被多个线程等待，否则第一个接收到信号的线程返回成功，其余线程返回错误代码ESRCH。
+
+** 线程的互斥锁
+当2个或多个线程需要访问同一个变量（资源）的时候，会造成变量的值（或是函数返回结果）的不确定性。甚至是灾难性的。
+*** pthread_mutex_init() 用来生成一个互斥锁
+pthread_mutex_init(pthread_mutex_t *__mutex, const pthread_mutexattr_t *__mutexattr)
+*** pthread_mutexattr_init() 初始化互斥锁属性对象
+ pthread_mutexattr_init(pthread_mutexattr_t *__attr)
+*** pthread_mutexattr_setpshared() 用来设置互斥锁的属性
+pthread_mutexattr_setpshared(pthread_mutexattr_t *__attr, int __pshared)
+- PTHREAD_PROCESS_PRIVATE ：用来不同进程间的线程同步
+- PTHREAD_PROCESS_SHARED : 用来同步本进程间的不同线程 （此为默认值）
+*** pthread_mutexattr_settype()用来设置互斥锁的类型
+pthread_mutexattr_settype(pthread_mutexattr_t *__attr, int __kind)
+- PTHREAD_MUTEX_NORMAL
+- PTHREAD_MUTEX_ERRORCHECK
+- PTHREAD_MUTEX_RECURSIVE
+- PTHREAD_MUTEX_DEFAULT （默认值）
+
+
+** 线程的启动顺序
+*** ubuntu上
+在ubuntu上，一个线程创建之后，马上执行。
+如果同时创建了多个线程，则多个线程在创建完成之后，都是马上执行。
+但会根据系统时间片分配的原因，不能保证先创建的线程执行完成之后才开始执行后创建的线程。
+*** mac上
+在mac上，如果多个创建线程的语句（pthread_create)之间没有间隔，即类似sleep之类的语句，那么这些线程会按照先创建，后执行的方式来执行这些线程。
+
+如果这些语句之间有sleep之类的语句，那么这些线程会按照先创建 先执行的顺序来执行。
+
+*** 后来又发现并不是这样的。线程的执行顺序应该是取决于操作系统。可以说没有什么规律可言。
+* pthread_cond 线程条件变量
+原文： 
+http://apps.hi.baidu.com/share/detail/19786281
+http://hi.baidu.com/boobleoo0/blog/item/5f935039a37c58f8b311c77f.html 
+http://topic.csdn.net/u/20110105/16/12717238-9816-4571-a03d-e8b603724946.html 
+   pthread_cond_wait() 用于阻塞当前线程，等待别的线程使用pthread_cond_signal()或pthread_cond_broadcast来唤醒它。 pthread_cond_wait() 必须与pthread_mutex 配套使用。pthread_cond_wait()函数一进入wait状态就会自动release mutex。当其他线程通过pthread_cond_signal()或pthread_cond_broadcast，把该线程唤醒，使pthread_cond_wait()通过（返回）时，该线程又自动获得该mutex。
+  pthread_cond_signal函数的作用是发送一个信号给另外一个正在处于阻塞等待状态的线程,使其脱离阻塞状态,继续执行.如果没有线程处在阻塞等待状态,pthread_cond_signal也会成功返回。
+  使用pthread_cond_signal一般不会有“惊群现象”产生，他最多只给一个线程发信号。假如有多个线程正在阻塞等待着这个条件变量的话，那 么是根据各等待线程优先级的高低确定哪个线程接收到信号开始继续执行。如果各线程优先级相同，则根据等待时间的长短来确定哪个线程获得信号。但无论如何一 个pthread_cond_signal调用最多发信一次。
+  但是pthread_cond_signal在多处理器上可能同时唤醒多个线程，当你只能让一个线程处理某个任务时，其它被唤醒的线程就需要继续 wait，而且规范要求pthread_cond_signal至少唤醒一个pthread_cond_wait上的线程，其实有些实现为了简单在单处理器上也会唤醒多个线程. 
+   另外，某些应用，如线程池，pthread_cond_broadcast唤醒全部线程，但我们通常只需要一部分线程去做执行任务，所以其它的线程需要继续wait.所以强烈推荐对pthread_cond_wait() 使用while循环来做条件判断.
+** pthread_detach
+创建一个线程默认的状态是joinable, 如果一个线程结束运行但没有被join,则它的状态类似于进程中的Zombie Process,即还有一部分资源没有被回收（退出状态码），所以创建线程者应该调用pthread_join来等待线程运行结束，并可得到线程的退出代 码，回收其资源（类似于wait,waitpid) 　　但是调用pthread_join(pthread_id)后，如果该线程没有运行结束，调用 者会被阻塞，在有些情况下我们并不希望如此，比如在Web服务器中当主线程为每个新来的链接创建一个子线程进行处理的时候，主线程并不希望因为调用 pthread_join而阻塞（因为还要继续处理之后到来的链接），这时可以在子线程中加入代码 
+
+#+BEGIN_SRC C
+pthread_detach(pthread_self()) 　　
+#+END_SRC
+               或者父线程调用
+#+BEGIN_SRC C
+pthread_detach(thread_id)（非阻塞，可立即返回）
+#+END_SRC
+                    
+这将该子线程的状态设置为detached,则该线程运行结束后会自动释放所有资源。
+* Makefile
+ [[http://blog.csdn.net/liang13664759/article/details/1771246][跟我一起学makefile]]
+** Makefile的规则
+tartget:prerequisites...
+(tab)command
+
+...
+...
+
+- target 是一个目标文件，可以是Object File, 也可以是一个可执行文件，也可以是一个标签（label）,即伪目标。
+- prerequisites 是要生成那个target所需要的文件或是目标。
+- command 是make需要执行的命令。（任意的shell命令）。一般是生成target所需要执行的命令。
+
+这是一个文件的依赖关系，也就是说，target这一个或多个的目标文件依赖于prerequisites中的文件， 其生成规则定义在command中，说白一点，就是prerequisites中如果有一个以上文件比target文件要新的话，command所定义的命令就会被执行。
+
+
+此规则可以重复多次，第一个是最终目标，它的依赖文件可以是另一次的目标文件。一直到某个目标文件的依赖文件是.c/.h文件为止。
+
+#+BEGIN_SRC C
+edit:main.o a.o b.o c.o d.o
+cc -o edit main.o a.o b.o c.o d.o
+
+main.o:main.c main.h
+cc -c main.o main.c
+
+a.o:a.c a.h
+cc -c a.o a.c
+
+....
+#生成edit这个可执行文件，需要main.o a.o b.o c.o d.o这些文件。但是这些文件也需要依赖其它文件才可以生成，即生成main.o需要main.c、生成a.o需要a.c、生成b.o需要b.c...
+
+#+END_SRC
+
+** make是如何工作的
+1. make会在当前目录下找名字叫“Makefile”或“makefile”的文件。
+1. 如果找到，它会找文件中的第一个目标文件（target），在上面的例子中，他会找到“edit”这个文件，并把这个文件作为最终的目标文件。
+1. 如果edit文件不存在，或是edit所依赖的后面的 .o 文件的文件修改时间要比edit这个文件新，那么，他就会执行后面所定义的命令来生成edit这个文件。
+1. 如果edit所依赖的.o文件也不存在，那么make会在当前文件中找目标为.o文件的依赖性，如果找到则再根据那一个规则生成.o文件。（这有点像一个堆栈的过程）
+1. 当然，你的C文件和H文件是存在的啦，于是make会生成 .o 文件，然后再用 .o 文件生命make的终极任务，也就是执行文件edit了。
+
+** makefile中使用变量
+在makefile中可以使用变量，使变量等于某个target的prerequisites，或者等于某个命令的参数。然后就可以使用这个变量来代替这此文件或参数。
+
+#+BEGIN_SRC C
+objects = main.o a.o b.o c.o
+edit:$(objects)
+cc -o edit $(objects)
+
+#  $(objects) 就可以代替main.o a.o b.o c.o
+
+#+END_SRC
+** make的自动推导
+在生某个.o文件的时候，make命令可以自动推导出文件以及文件的依赖关系，和生成.o文件的命令。
+所以在生成.o文件的时候，只需要指出生成此.o文件的.h文件即可。
+#+BEGIN_SRC C
+main.o:main.c main.h **.h
+cc -c main.o main.c **.h
+
+可以写成
+main.o:main.h ***.h
+
+即可。
+
+#+END_SRC
+
+** makefile的文件搜寻
+- 定义makefile的特殊变量
+makefile默认搜寻路径是当前路径。
+如果使用makefile的特殊变量 VPATH 就可以指定其它搜索路径，当在当前路径找不到头文件时，可以在VPATH指定的路径中去查找。
+
+#+BEGIN_SRC C
+VPATH = src:../headers
+#+END_SRC
+
+这个定义指定了两个目录， src 和 ../headers  中间是用":"冒号分隔的。
+
+- 另一个是使用make的关键字
+vpath
+此为小写。
+语法如下:
+    - vpath <pattern> <directories> 
+        为符合模式<pattern>的文件指定搜索目录<directories>。
+    - vpath <pattern> 
+        为符合模式<pattern>的文件清除搜索目录。
+    - vpath
+        清除所有已被设置好的文件搜索目录。
+
+#+BEGIN_SRC C
+vpath %h ../headers
+注： "%" 是通配符， 是匹配零个或若干个字符。
+%.h 表示以.h结尾的文件
+
+上面语句表示：在../headers 目录中搜索所有以.h结尾的文件。
+
+
+
+vpath %.c foo
+vpath %.c blish
+vpath %.c bar
+表示：.c 结尾的文件， 先在foo目录，然后在blish目录，最后是bar目录。
+#+END_SRC
+
+
+
+** 伪目标
+伪目标不是一个文件，只是一个标签。
+make不能决非定它是不是要执行，所以需要显示的指明这个“目标”才能让其生效。
+@<font color="#ff0000">伪目标不能和文件名重名@</font>
+
+为了避免和文件名重名，可以使用一个特殊的标记".PHONY"来显示指明一个目标为"伪目标",向make说明，一管是否有这个文件， 这个目标就是伪目标。
+.PHONY:clean
+clean:
+(tab)rm *.o
+
+
+*** 伪目标其它功能
+伪目标一般没有依赖的文件。但是，我们也可以为伪目标指定所依赖的文件。伪目标同样可以作为“默认目标”，只要将其放在第一个。一个示例就是，如果你的Makefile需要一口气生成若干个可执行文件，但你只想简单地敲一个make完事，并且，所有的目标文件都写在一个Makefile中，那么你可以使用“伪目标”这个特性：
+
+all : prog1 prog2 prog3
+.PHONY : all
+
+prog1 : prog1.o utils.o
+cc -o prog1 prog1.o utils.o
+
+prog2 : prog2.o
+cc -o prog2 prog2.o
+
+prog3 : prog3.o sort.o utils.o
+cc -o prog3 prog3.o sort.o utils.o
+
+我们知道，Makefile中的第一个目标会被作为其默认目标。我们声明了一个“all”的伪目标，其依赖于其它三个目标。由于伪目标的特性是，总是被执行的，所以其依赖的那三个目标就总是不如“all”这个目标新。所以，其它三个目标的规则总是会被决议。也就达到了我们一口气生成多个目标的目的。“.PHONY : all”声明了“all”这个目标为“伪目标”。
+
+随便提一句，从上面的例子我们可以看出，目标也可以成为依赖。所以，伪目标同样也可成为依赖。看下面的例子：
+
+.PHONY: cleanall cleanobj cleandiff
+
+cleanall : cleanobj cleandiff
+rm program
+
+cleanobj :
+rm *.o
+
+cleandiff :
+rm *.diff
+
+“make clean”将清除所有要被清除的文件。“cleanobj”和“cleandiff”这两个伪目标有点像“子程序”的意思。我们可以输入“make cleanall”和“make cleanobj”和“make cleandiff”命令来达到清除不同种类文件的目的。
+
+
+
+** 静态模式
+静态模式可以更加容易地定义多目标的规则，可以让我们的规则变得更加的有弹性和灵活。我们还是先来看一下语法：
+
+<targets ...>: <target-pattern>: <prereq-patterns ...>
+<commands>
+...
+
+
+targets定义了一系列的目标文件，可以有通配符。是目标的一个集合。
+
+target-parrtern是指明了targets的模式，也就是的目标集模式。
+
+prereq-parrterns是目标的依赖模式，它对target-parrtern形成的模式再进行一次依赖目标的定义。
+
+这样描述这三个东西，可能还是没有说清楚，还是举个例子来说明一下吧。如果我们的<target-parrtern>定义成“%.o”，意思是我们的<target>集合中都是以“.o”结尾的，而如果我们的<prereq-parrterns>定义成“%.c”，意思是对<target-parrtern>所形成的目标集进行二次定义，其计算方法是，取<target-parrtern>模式中的“%”（也就是去掉了[.o]这个结尾），并为其加上[.c]这个结尾，形成的新集合。
+
+所以，我们的“目标模式”或是“依赖模式”中都应该有“%”这个字符，如果你的文件名中有“%”那么你可以使用反斜杠“/”进行转义，来标明真实的“%”字符。
+
+看一个例子：
+
+objects = foo.o bar.o
+
+all: $(objects)
+
+$(objects): %.o: %.c
+$(CC) -c $(CFLAGS) $< -o $@
+
+
+上面的例子中，指明了我们的目标从$object中获取，“%.o”表明要所有以“.o”结尾的目标，也就是“foo.o bar.o”，也就是变量$object集合的模式，而依赖模式“%.c”则取模式“%.o”的“%”，也就是“foo bar”，并为其加下“.c”的后缀，于是，我们的依赖目标就是“foo.c bar.c”。而命令中的“$<”和“$@”则是自动化变量，“$<”表示所有的依赖目标集（也就是“foo.c bar.c”），“$@”表示目标集（也就是“foo.o bar.o”）。于是，上面的规则展开后等价于下面的规则：
+
+foo.o : foo.c
+$(CC) -c $(CFLAGS) foo.c -o foo.o
+bar.o : bar.c
+$(CC) -c $(CFLAGS) bar.c -o bar.o
+
+试想，如果我们的“%.o”有几百个，那种我们只要用这种很简单的“静态模式规则”就可以写完一堆规则，实在是太有效率了。“静态模式规则”的用法很灵活，如果用得好，那会一个很强大的功能。再看一个例子：
+
+
+files = foo.elc bar.o lose.o
+
+$(filter %.o,$(files)): %.o: %.c
+$(CC) -c $(CFLAGS) $< -o $@
+$(filter %.elc,$(files)): %.elc: %.el
+emacs -f batch-byte-compile $<
+
+
+$(filter %.o,$(files))表示调用Makefile的filter函数，过滤“$filter”集，只要其中模式为“%.o”的内容。其的它内容，我就不用多说了吧。这个例字展示了Makefile中更大的弹性。
+
+
+
+@<font color="#ff0000">$<: 表示所有的依赖目标集
+$@表示所有的目标集
+都是自动化变量@</font>
+
+** makefile的函数
+Makefile  常用函数表
+
+*** 字符串处理函数
+
+1. $(subst FROM,TO,TEXT)
+    
+    函数名称：字符串替换函数—subst。
+    
+    函数功能：把字串“TEXT”中的“FROM”字符替换为“TO”。
+    
+    返回值：替换后的新字符串。
+    
+2. $(patsubst PATTERN,REPLACEMENT,TEXT)
+    
+    函数名称：模式替换函数—patsubst。
+    函数功能：搜索“TEXT”中以空格分开的单词，将否符合模式“TATTERN”替换为“REPLACEMENT”。参数“PATTERN”中可以使用模式通配符“%”来代表一个单词中的若干字符。如果参数“REPLACEMENT”中也包含一个“%”，那么“REPLACEMENT”中的“%”将是“TATTERN”中的那个“%”所代表的字符串。在“TATTERN”和“REPLACEMENT”中，只有第一个“%”被作为模式字符来处理，后续的作为字符本上来处理。在两个参数中当使用第一个“%”本是字符本身时，可使用反斜杠“\”对它进行转义处理。
+    返回值：替换后的新字符串。
+    函数说明：参数“TEXT”单词之间的多个空格在处理时被合并为一个空格，但前导和结尾空格忽略。
+3. $(strip STRINT)
+    
+    函数名称：去空格函数—strip。
+    函数功能：去掉字串（若干单词，使用若干空字符分割）“STRINT”开头和结尾的空字符，并将其中多个连续空字符合并为一个空字符。
+    返回值：无前导和结尾空字符、使用单一空格分割的多单词字符串。
+    函数说明：空字符包括空格、[Tab]等不可显示字符。
+
+4. $(findstring FIND,IN)
+函数名称：查找字符串函数—findstring。
+函数功能：搜索字串“IN”，查找“FIND”字串。
+返回值：如果在“IN”之中存在“FIND”，则返回“FIND”，否则返回空。
+函数说明：字串“IN”之中可以包含空格、[Tab]。搜索需要是严格的文本匹配。
+
+5. $(filter PATTERN…,TEXT)
+函数名称：过滤函数—filter。
+函数功能：过滤掉字串“TEXT”中所有不符合模式“PATTERN”的单词，保留所有符合此模式的单词。可以使用多个模式。模式中一般需要包含模式字符“%”。存在多个模式时，模式表达式之间使用空格分割。
+返回值：空格分割的“TEXT”字串中所有符合模式“PATTERN”的字串。
+函数说明：“filter”函数可以用来去除一个变量中的某些字符串，我们下边的例子中就是用到了此函数。
+
+6.$(filter-out PATTERN...,TEXT)
+函数名称：反过滤函数—filter-out。
+函数功能：和“filter”函数实现的功能相反。过滤掉字串“TEXT”中所有符合模式“PATTERN”的单词，保留所有不符合此模式的单词。可以有多个模式。存在多个模式时，模式表达式之间使用空格分割。。
+返回值：空格分割的“TEXT”字串中所有不符合模式“PATTERN”的字串。
+函数说明：“filter-out”函数也可以用来去除一个变量中的某些字符串，（实现和“filter”函数相反）。
+
+7.$(sort LIST)
+函数名称：排序函数—sort。
+函数功能：给字串“LIST”中的单词以首字母为准进行排序（升序），并取掉重复的单词。
+返回值：空格分割的没有重复单词的字串。
+函数说明：两个功能，排序和去字串中的重复单词。可以单独使用其中一个功能。
+
+8.$(word N,TEXT)
+函数名称：取单词函数—word。
+函数功能：取字串“TEXT”中第“N”个单词（“N”的值从1开始）。
+返回值：返回字串“TEXT”中第“N”个单词。
+函数说明：如果“N”值大于字串“TEXT”中单词的数目，返回空字符串。如果“N”为0，出错！
+
+9.$(wordlist S,E,TEXT)
+函数名称：取字串函数—wordlist。
+函数功能：从字串“TEXT”中取出从“S”开始到“E”的单词串。“S”和“E”表示单词在字串中位置的数字。
+返回值：字串“TEXT”中从第“S”到“E”（包括“E”）的单词字串。
+函数说明：“S”和“E”都是从1开始的数字。
+当“S”比“TEXT”中的字数大时，返回空。如果“E”大于“TEXT”字数，返回从“S”开始，到“TEXT”结束的单词串。如果“S”大于“E”，返回空。
+
+10.$(words TEXT)
+函数名称：统计单词数目函数—words。
+函数功能：字算字串“TEXT”中单词的数目。
+返回值：“TEXT”字串中的单词数。
+
+11.$(firstword NAMES…)
+函数名称：取首单词函数—firstword。
+函数功能：取字串“NAMES…”中的第一个单词。
+返回值：字串“NAMES…”的第一个单词。
+函数说明：“NAMES”被认为是使用空格分割的多个单词（名字）的序列。函数忽略“NAMES…”中除第一个单词以外的所有的单词。
+
+*** 文件名处理函数
+1.$(dir NAMES…)
+函数名称：取目录函数—dir。
+函数功能：从文件名序列“NAMES…”中取出各个文件名目录部分。文件名的目录部分就是包含在文件名中的最后一个斜线（“/”）（包括斜线）之前的部分。
+返回值：空格分割的文件名序列“NAMES…”中每一个文件的目录部分。
+函数说明：如果文件名中没有斜线，认为此文件为当前目录（“./”）下的文件。
+
+2.$(notdir NAMES…)
+函数名称：取文件名函数——notdir。
+函数功能：从文件名序列“NAMES…”中取出非目录部分。目录部分是指最后一个斜线（“/”）（包括斜线）之前的部分。删除所有文件名中的目录部分，只保留非目录部分。
+返回值：文件名序列“NAMES…”中每一个文件的非目录部分。
+函数说明：如果“NAMES…”中存在不包含斜线的文件名，则不改变这个文件名。以反斜线结尾的文件名，是用空串代替，因此当“NAMES…”中存在多个这样的文件名时，返回结果中分割各个文件名的空格数目将不确定！这是此函数的一个缺陷。
+
+3.$(suffix NAMES…)
+函数名称：取后缀函数—suffix。
+函数功能：从文件名序列“NAMES…”中取出各个文件名的后缀。后缀是文件名中最后一个以点“.”开始的（包含点号）部分，如果文件名中不包含一个点号，则为空。
+返回值：以空格分割的文件名序列“NAMES…”中每一个文件的后缀序列。
+函数说明：“NAMES…”是多个文件名时，返回值是多个以空格分割的单词序列。如果文件名没有后缀部分，则返回空。
+
+4.$(basename NAMES…)
+函数名称：取前缀函数—basename。
+函数功能：从文件名序列“NAMES…”中取出各个文件名的前缀部分（点号之后的部分）。前缀部分指的是文件名中最后一个点号之前的部分。
+返回值：空格分割的文件名序列“NAMES…”中各个文件的前缀序列。如果文件没有前缀，则返回空字串。
+函数说明：如果“NAMES…”中包含没有后缀的文件名，此文件名不改变。如果一个文件名中存在多个点号，则返回值为此文件名的最后一个点号之前的文件名部分。
+
+5.$(addsuffix SUFFIX,NAMES…)
+函数名称：加后缀函数—addsuffix。
+函数功能：为“NAMES…”中的每一个文件名添加后缀“SUFFIX”。参数“NAMES…”为空格分割的文件名序列，将“SUFFIX”追加到此序列的每一个文件名的末尾。
+返回值：以单空格分割的添加了后缀“SUFFIX”的文件名序列。
+
+6.$(addprefix PREFIX,NAMES…)
+函数名称：加前缀函数—addprefix。
+函数功能：为“NAMES…”中的每一个文件名添加前缀“PREFIX”。参数“NAMES…”是空格分割的文件名序列，将“SUFFIX”添加到此序列的每一个文件名之前。
+返回值：以单空格分割的添加了前缀“PREFIX”的文件名序列。
+
+7.$(join LIST1,LIST2)
+函数名称：单词连接函数——join。
+函数功能：将字串“LIST1”和字串“LIST2”各单词进行对应连接。就是将“LIST2”中的第一个单词追加“LIST1”第一个单词字后合并为一个单词；将“LIST2”中的第二个单词追加到“LIST1”的第一个单词之后并合并为一个单词，……依次列推。
+返回值：单空格分割的合并后的字（文件名）序列。
+函数说明：如果“LIST1”和“LIST2”中的字数目不一致时，两者中多余部分将被作为返回序列的一部分。
+
+8.$(wildcard PATTERN)
+函数名称：获取匹配模式文件名函数—wildcard
+函数功能：列出当前目录下所有符合模式“PATTERN”格式的文件名。
+返回值：空格分割的、存在当前目录下的所有符合模式“PATTERN”的文件名。
+函数说明：“PATTERN”使用shell可识别的通配符，包括“?”（单字符）、“*”（多字符）等。
+
+*** 其它函数
+1.$(foreach VAR,LIST,TEXT)
+函数功能：函数“foreach”不同于其它函数。它是一个循环函数。类似于Linux的shell中的循环（for语句）。这个函数的工作过程是这样
+的：如果必要（存在变量或者函数的引用），首先展开变量“VAR”和“LIST”；而表达式“TEXT”中的变量引用不被展开。执行时把“LIST”中使
+用空格分割的单词依次取出赋值给变量“VAR”，然后执行“TEXT”表达式。重复直到“LIST”的最后一个单词（为空时结束）。“TEXT”中的变量
+或者函数引用在执行时才被展开，因此如果在“TEXT”中存在对“VAR”的引用，那么“VAR”的值在每一次展开式将会到的不同的值。
+返回值：空格分割的多次表达式“TEXT”的计算的结果。
+
+2.$(if CONDITION,THEN-PART[,ELSE-PART])
+函数功能：函数“if”提供了一个在函数上下文中实现条件判断的功能。就像make所支持的条件语句—ifeq。第一个参数“CONDITION”，在函
+数执行时忽略其前导和结尾空字符并展开。“CONDITION”的展开结果非空，则条件为真，就将第二个参数“THEN_PATR”作为函数的计算表达
+式，函数的返回值就是第二表达式的计算结果；“CONDITION”的展开结果为空，将第三个参数
+“ELSE-PART”作为函数的表达式，返回结果为第三个表达式的计算结果。
+返回值：根据条件决定函数的返回值是第一个或者第二个参数表达式的计算结果。当不存在第三个参数“ELSE-PART”，并且“CONDITION”展开为空，函数返回空。
+函数说明：函数的条件表达式“CONDITION”决定了，函数的返回值只能是“THEN-PART”或者“ELSE-PART”两个之一的计算结果。
+
+3.$(call VARIABLE,PARAM,PARAM,...)
+函数功能：“call”函数是唯一一个可以创建定制参数化的函数的引用函数。我们可以将一个变量定义为一个复杂的表达式，用“call”函数根据不同的参数对它进行展开来获得不同的结果。
+在执行时，将它的参数“PARAM”依次赋值给临时变量“$(1)”、“$(2)”（这些临时变量定义在“VARIABLE”的值中，参考下边的例
+子）……
+call函数对参数的数目没有限制，也可以没有参数值，没有参数值的“call”没有任何实际存在的意义。执行时变量“VARIABLE”被展开为在函数
+上下文有效的临时变量，变量定义中的“$(1)”作为第一个参数，并将函数参数值中的第一个参数赋值给它；变量中的“$(2)”一样被赋值为函数的第二个
+参数值；依此类推（变量$(0)代表变量“VARIABLE”本身）。之后对变量“VARIABLE” 表达式的计算值。
+返回值：参数值“PARAM”依次替换“$(1)”、“$(2)”…… 之后变量“VARIABLE”定义的表达式的计算值。
+函数说明：1.
+函数中“VARIBLE”是一个变量名，而不是对变量的引用。因此，通常“call”函数中的“VARIABLE”中不包含“$”（当然，除了此变量名是
+一个计算的变量名）。2.
+当变量“VARIBLE”是一个make内嵌的函数名时（如“if”、“foreach”、“strip”等），对“PARAM”参数的使用需要注意，因
+为不合适或者不正确的参数将会导致函数的返回值难以预料。3. 函数中多个“PARAM”之间使用逗号分割。4.
+变量“VARIABLE”在定义时不能定义为直接展开式！只能定义为递归展开式。
+
+4.value函数
+$(value VARIABLE)
+函数功能：不对变量“VARIBLE”进行任何展开操作，直接返回变量“VARIBALE”代表的值。这里“VARIABLE”是一个变量名，一般不包含“$”（当然，除了计算的变量名），
+返回值：变量“VARIBALE”所定义文本值（不展开其中的变量或者函数应用）。
+
+5.eval函数
+函数功能：函数“eval”是一个比较特殊的函数。使用它我们可以在我们的Makefile中构造一个可变的规则结构关系（依赖关系链），其中可以使用其
+它变量和函数。函数“eval”对它的参数进行展开，展开的结果作为Makefile的一部分，make可以对展开内容进行语法解析。展开的结果可以包含
+一个新变量、目标、隐含规则或者是明确规则等。也就是说此函数的功能主要是：根据其参数的关系、结构，对它们进行替换展开。
+返回值：函数“eval”的返回值时空，也可以说没有返回值。
+函数说明：“eval”函数执行时会对它的参数进行两次展开。第一次展开过程发是由函数本身完成的，第二次是函数展开后的结果被作为Makefile内容
+时由make解析时展开的。明确这一点对于使用“eval”函数非常重要。在理解了函数“eval”二次展开的过程后。实际使用时，当函数的展开结果中存
+在引用（格式为：$(x)）时，那么在函数的参数中应该使用“$$”来代替“$”。因为这一点，所以通常它的参数中会使用函数“value”来取一个变量
+的文本值。
+
+6.origin函数
+$(origin VARIABLE)
+函数功能：函数“origin”查询参数“VARIABLE”（通常是一个变量名）的出处。
+函数说明：“VARIABLE”是一个变量名而不是一个变量的引用。因此通常它不包含“$”（当然，计算的变量名例外）。
+返回值：返回“VARIABLE”的定义方式。用字符串表示。
+. undefined
+变量“VARIABLE”没有被定义。
+. default
+变量“VARIABLE”是一个默认定义（内嵌变量）。如“CC”、“MAKE”、“RM”等变量。如果在Makefile中重新定义这些变量，函数返回值将相应发生变化。
+. environment
+变量“VARIABLE”是一个系统环境变量，并且make没有使用命令行选项“-e”（Makefile中不存在同名的变量定义，此变量没有被替代）。
+. environment override
+变量“VARIABLE”是一个系统环境变量，并且make使用了命令行选项“-e”。Makefile中存在一个同名的变量定义，使用“make -e”时环境变量值替代了文件中的变量定义。
+. file
+变量“VARIABLE”在某一个makefile文件中定义。
+. command line
+变量“VARIABLE”在命令行中定义。
+. override
+变量“VARIABLE”在makefile文件中定义并使用“override”指示符声明。
+. automatic
+变量“VARIABLE”是自动化变量。
+
+7.shell函数
+不同于除“wildcard”函数之外的其它函数。make可以使用它来和外部通信。
+函数功能：函数“shell”所实现的功能和shell中的引用（``）相同。实现了命令的扩展。意味着需要一个shell
+命令作为它的参数，而返回的结果是此命令在shell中的执行结果。make仅仅对它的回返结果进行处理；make将函数的返回结果中的所有换行符
+（“\n”）或者一对“\n\r”替换为单空格；并去掉末尾的回车符号（“\n”）或者“\n\r”。函数展开式时，它所调用的命令（它的参数）得到执
+行。除了对它的引用出现在规则的命令行中和递归的变量定义引用以外，其它决大多数情况下，make在读取Makefile时函数shell就被扩展。
+返回值：函数“shell”的参数在shell中的执行结果。
+函数说明：函数本身的返回值是其参数的执行结果，没有进行任何处理。对结果的处理是由make进行的。当对函数的引用出现在规则的命令行中，命令行在执行
+时函数引用才被展开。展开过程函数参数的执行时在另外一个shell进程中完成的，因此对于出现在规则命令行的多级“shell”函数引用需要谨慎处理，
+否则会影响效率（每一级的“shell”函数的参数都会有各自的shell进程）。
+
+8.error 函数
+$(error TEXT…)
+函数功能：产生致命错误，并提示“TEXT…”信息给用户，之后退出make的执行。需要说明的是：“error”函数是在函数展开式（函数被调用时）才
+提示信息并结束make进程。因此如果函数出现在命令中或者一个递归的变量定义中时，在读取Makefile时不会出现错误。而只有包含
+“error”函数引用的命令被执行，或者定义中引用此函数的递归变量被展开时，才会提示致命信息“TEXT…”同时make退出执行。
+返回值：空字符
+函数说明：“error”函数一般不出现在直接展开式的变量定义中，否则在make读取Makefile时将会提示致命错误。
+
+9. warning 函数
+$(warning TEXT…)
+函数功能：函数“warning”类似于函数“error”，区别在于它不会导致致命错误（make不退出），而只是提示“TEXT…”，make的执行过程继续。
+返回值：空字符
+函数说明：用法和“error”类似，展开过程相同。
+* access 函数
+access()函数用来判断用户是否具有访问某个文件的权限(或判断某个文件是否存在).
+ 
+#include<unistd.h>
+
+int access(const char *pathname,int mode)
+ 
+参数:
+         pathname:表示要测试的文件的路径
+ 
+         mode:表示测试的模式可能的值有:
+ 
+                 R_OK:是否具有读权限
+ 
+                 W_OK:是否具有可写权限
+ 
+                 X_OK:是否具有可执行权限
+ 
+                 F_OK:文件是否存在
+ 
+返回值:若测试成功则返回0,否则返回-1
+
+* strtok 函数
+头文件：#include <string.h>
+
+定义函数：char * strtok(char *s, const char *delim);
+
+函数说明：strtok()用来将字符串分割成一个个片段. 参数s 指向欲分割的字符串, 参数delim 则为分割字符串,当strtok()在参数s 的字符串中发现到参数delim 的分割字符时则会将该字符改为\0 字符. 在第一次调用时,strtok()必需给予参数s 字符串, 往后的调用则将参数s 设置成NULL. 每次调用成功则返回下一个分割后的字符串指针.
+
+返回值：返回下一个分割后的字符串指针, 如果已无从分割则返回NULL.
+
+#+BEGIN_SRC C
+#include <string.h>
+main()
+{
+    char s[] = "aaaa/bbbbb/cccc/dddd";
+
+    char *p;
+    printf("%s ", strtok(s, "/"));
+    printf("--------------");
+    while((p = strtok(NULL, "/")))
+        printf("%s ", p);
+    printf("\n");
+}
+
+//输出aaaa bbbb cccc dddd
+#+END_SRC
+
+* signal和sigaction
+
+* C语言的内存
+[[file:./Objective C中的Block – 程序员说.png]]
+
+** 栈区
+由编译器自动分配，自动释放。存放函数的参数，局部变量的值。
+** 堆
+由程序员分配，并负责释放。
+** 全局区     这些空间在程序编译时就分配好了。
+存放程序中的全局变量和静态变量。 程序退出后由系统释放。程序不退出就一直保存。
+*** 初始化的全局和静态变量在一片区域
+*** 未初始化的全局和静态变量在相邻的另一片区域
+** 常量区
+常量、字符串放在这个地方。
+** 程序代码区
+用来存放程序二进制代码的地方
+
+
+** 一个例子
+#+BEGIN_SRC C
+这是一个前辈写的，非常详细 
+//main.cpp 
+int a = 0; 全局初始化区 
+char *p1;全局未初始化区
+main() 
+{ 
+int b; 栈 
+char s[] = "abc"; 栈 
+char *p2; 栈 
+char *p3 = "123456"; 123456 在常量区， p3 在栈上。
+static int c =0 ； 全局（静态）初始化区 
+p1 = (char *)malloc(10); 
+p2 = (char *)malloc(20); 
+分配得来得 10 和 20 字节的区域就在堆区。 
+strcpy(p1, "123456"); 123456 放在常量区，编译器可能会将它与 p3 所指向的 "123456" 优化成一个地方。 
+}
+#+END_SRC
+
+** linux 中的size命令
+size命令列出的区域是在编译的时候就确定好的。
+size命令会列出 
+*** BSS 段
+存放的是程序中没有初始化的全局和静态变量的空间
+*** data 段
+存放的是程序中已经初始化的全局和静态变量的空间
+*** text 段
+是用来存放程序代码 的空间
+
+
+BSS 段和data 段合在一起对应 全局区
+text 段 对应程序代码区
+
+* end
+
+----------
+
+* 生成动态连接库
+gcc -shared -fPIC -o lib***.so a.c b.c c.c...
+
+使用时可以在文件(d.c)中引用a.h/b.h/c.h即可直接使用
+
+在编译时 gcc -o d d.c -L. -l***   需要把lib***.so 拷贝到/usr/lib中
+
+
+-L; 编译时的动态链接库路径。
+--rpath:程序运行时的动态连接库的路径。 需要配合-Wl使用   -Wl,--rpath=path1:path2:path3...
+-fPIC: 表示编译为位置独立的代码，不用此选项的话编译后的代码是位置相关的所以动态载入时是通过代码拷贝的方式来满足不同进程的需要，而不能达到真正代码段共享的目的。

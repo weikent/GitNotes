@@ -1,0 +1,138 @@
+#+Title: Mac skills
+
+* Finder中显示隐藏文件
+  defaults write com.apple.finder AppleShowAllFiles -bool false
+  KillAll Finder
+
+* Mac 里面‘其他’内容越来越多。改怎么办？
+1 首先cd /,
+2 sudo du -sh *  du 是用来显示当前目录及其子目录的空间占用。
+3 一般 /private 中比较大，/private/var/vm 里面的文件一般是系统睡眠、挂起时候的内存镜像，可以用sudo dynamic_pager -L 1073741824 来清理清理。
+
+有些可能是：其他其实没什么可操心的。‘其他’磁盘空间是可以自动释放出来的。。。
+* Mac 里面安装MySQL
+去mysql 官网下载MySQL 64bit。 dmg模式的直接双击安装即可。
+MySQL Workbench(GUI Tool) 是mysql都 GUI。图形管理方式。
+* MAC 安装Mysql for Python
+
+安装时 有时候需要修改site.cfg文件（在下载的mysqldb目录中），mysql_config = /usr/local/mysql/bin/mysql_config
+需要安装 command line tools ，因为需要用gcc。
+
+sudo python setup.py clean
+sudo python setup.py build
+sudo python setup.py install
+
+安装完成之后。
+在mac下使用MySQLdb模块，import时遇到以下错误：
+
+1. Library not loaded: libmysqlclient.18.dylib
+
+解决方案：
+
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/mysql/lib
+
+ 
+
+1. ImportError: dlopen(/Library/Python/2.6/site-packages/_mysql.so, 2): no suitable image found. Did find:
+
+/Library/Python/2.6/site-packages/_mysql.so: mach-o, but wrong architecture
+
+解决方案:
+
+export VERSIONER_PYTHON_PREFER_32_BIT=yes
+
+
+分析：
+第一个问题，mysql的动态链接库目录不在系统 DYLD_LIBRARY_PATH里，所以无法加载（坑爹）
+
+第二个问题，python默认是64bit，mysql却是32bit，两个库不兼容，所以要强制python运行32版本的。 如果安装mysql 是64bit。则不需要设置第二步。
+
+
+有时候需要如下设置
+ PATH="/usr/local/mysql/bin:${PATH}"
+ export PATH
+ export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/
+ export VERSIONER_PYTHON_PREFER_64_BIT=yes
+ export VERSIONER_PYTHON_PREFER_32_BIT=yes
+* MySQL 修改root密码
+** mysqladmin命令（回目录）
+格式如下（其中，USER为用户名，PASSWORD为新密码）：
+#+begin_src sql
+mysqladmin -u USER -p password PASSWORD
+#+end_src
+该命令之后会提示输入原密码，输入正确后即可修改。
+例如，设置root用户的密码为123456，则
+#+begin_src sql
+mysqladmin -u root -p password 123456
+#+end_src
+** UPDATE user 语句（回目录）
+这种方式必须是先用root帐户登入mysql，然后执行：
+#+begin_src sql
+UPDATE user SET password=PASSWORD('123456') WHERE user='root';
+FLUSH PRIVILEGES;
+#+end_src 
+** SET PASSWORD 语句（回目录）
+这种方式也需要先用root命令登入mysql，然后执行：
+#+begin_src sql
+SET PASSWORD FOR root=PASSWORD('123456');
+#+end_src 
+* MySQL 基本命令
+** show
+*** show variables
+显示MySQL的配置变量；
+
+**** 修改变量
+- 全局变量影响服务器的全局操作。会话变量影响具体客户端连接相关操作。服务器启动时，将所有全局变量初始化为默认值。可 以在选项文件或命令行中指定的选项来更改这些默认值。服务器启动后，通过连接服务器并执行SET GLOBAL var_name语句可以更改动态全局变量。要想更改全局变量，必须具有SUPER权限。
+
+- mysqld服务器还为每个客户端连接维护会话变量。连接时使用相应全局变量的当前值对客户端会话变量进行初始化。客户可以通过SET [SESSION] var_name语句来更改动态会话变量。设置会话变量不需要特殊权限，但客户可以只更改自己的会话变量，而不更改其它客户的会话变量。
+
+
+***** 修改全局变量
+global不是立即生效 而是对新连接生效 
+#+begin_src sql
+set global sort_buffer_size=100000（要求有SUPER权限）
+#+end_src
+
+***** 修改会话变量
+session级别在设置后立即生效 断开连接后环境变量就失效了 
+#+begin_src sql
+set session sort_buffer_size=10000 (无权限要求)
+#+end_src
+*** show databases;
+可以显示有那些数据库；
+*** show tables;
+可以显示数据库中有那些表；
+* MAC 中 app Store 总提示“Use the Purchases page to try again.”的解决
+** 第一种
+#+BEGIN_SRC C
+open $TMPDIR../C/
+#+END_SRC
+然后删除com.apple.appstore 目录
+** 第二种
+1. rebooting
+1. remove ：~/Library/Cookies/com.apple.appstore.plist
+1. Searched and removed MAS-related files:
+
+#+BEGIN_SRC C
+sudo find /var/folders/ -ipath '*com.apple.appstore*' -print | xargs sudo fgrep -i xcode
+sudo find /var/folders/ -ipath '*com.apple.appstore*' -delete
+#+END_SRC
+** 第三种
+1. Open Terminal.
+
+1. Run the following command:
+
+#+BEGIN_SRC C
+defaults write com.apple.appstore ShowDebugMenu -bool true
+Relaunch the App Store.
+#+END_SRC
+
+1. Choose the menu item Debug → Reset Application.
+* MAC 下使用快盘，改为英文路径
+1. 在Finder中修改 “快盘” 为 “Kuaipan”
+2. 在Terminal中执行命令
+#+BEGIN_SRC C
+default write com.kingsoft.kuaipan SyncPath "/Users/weishijian/Kuaipan"
+
+#+END_SRC
+3. 重启快盘

@@ -1,0 +1,332 @@
+#+TITLE: emacs
+
+#+OPTIONS: ^:nil
+
+
+* emacs 启动 daemon模式
+** 在windows里面没有daemon，只能M-x server-start 来启动server，之后用emacsclient 文件名来打开新文件。
+** linux(ubuntu)
+要使用Emacs daemon，至少需要Emacs 23。它提供了一个emacsclient程序，用于启动客户端。
+
+有客户端就必然要有服务端。要启动一个daemon，需要在运行emacs时加入一个–daemon参数。幸运的是，我们不用手动启动服务端，而是可以利用emacsclient的-a参数。emacsclient的-a参数用于指定连接不上服务器时使用的别的编辑器（alternate editor），当把这项留空时，它会自动启动服务端。如果不想指定-a，也可以将ALTERNATE_EDITOR环境变量设为""。除了-a参数，emacsclient还要手工指定使用终端还是X来启动。要从终端启动，需要使用-t参数：
+*** 终端启动
+emacsclient -t -a ""
+*** X启动
+emacsclient -c -a ""
+
+** MAC OS
+可以通过
+*** http://www.emacswiki.org/emacs/EmacsAsDaemon     &    http://kopwei.wordpress.com/2012/12/22/在mac下配置emacs-daemon和client实现瞬间启动
+
+
+把下面脚本 放到 /Library/LaunchAgents 里面，名为 gnu.emacs.daemon.plist （*.plist）. 可以在mac开机的时候启动emacs daemon，之后就可以直接在命令行调用 emacsclient 来打开文件。
+
+#+BEGIN_SRC script
+
+ <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+        "http://www.apple.com/DTDs/PropertyList-1.0.dtd"> 
+     <plist version="1.0">
+      <dict> 
+        <key>Label</key>
+        <string>gnu.emacs.daemon</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+          <string>--daemon</string>
+        </array>
+       <key>RunAtLoad</key>
+       <true/>
+       <key>ServiceDescription</key>
+       <string>Gnu Emacs Daemon</string>
+       <key>UserName</key>
+       <string>[YOUR USERNAME HERE]</string>
+      </dict>
+    </plist>
+
+#+END_SRC
+
+
+*** https://gist.github.com/redinger/1394910  没试过啦。
+
+1. Open the AppleScript editor and paste the following:
+
+#+BEGIN_SRC c
+
+tell application "Terminal"
+do shell script "/Applications/Emacs.app/Contents/MacOS/Emacs --daemon"
+end tell
+
+#+END_SRC
+Save this as an Application called "Emacs Daemon" in your Applications folder
+
+1. Add as a login item
+
+Goto System Preferences > Accounts
+
+With your user name selected, click on the Login Items tab
+Click on the plus sign
+Browse to your applications folder and find "Emacs Daemon"
+Don't worry about the "hide" checkbox, since it the dock icon disappears naturally
+Create the client application
+Open the AppleScript editor and paste the following:
+
+#+BEGIN_SRC c
+
+tell application "Terminal"
+try
+set frameVisible to do shell script "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e '(<= 2 (length (visible-frame-list)))'"
+if frameVisible is not "t" then
+do shell script "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n"
+end if
+on error
+do shell script "/Applications/Emacs.app/Contents/MacOS/Emacs --daemon"
+do shell script "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n"
+end try
+end tell
+tell application "Emacs" to activate
+Save this as an Application called "Emacs Client" in your Applications folder.
+
+#+END_SRC
+
+1. Giving the client application a proper icon
+
+Using the Finder, navigate to your Application folder and right click on your Emacs application (not the client or daemon), and click on Show Package Contents Do the same for the Emacs Client application
+
+Copy the Emacs.icns file from Contents/Resources of the Emacs application to the Contents/Resources of the Emacs Client application Delete applet.icns and rename Emacs.icns to applet.icns in the Emacs Client application.
+
+*** https://github.com/doitian/dotfiles/blob/master/bin/emacs-dwim.mac 用的是这个。虽然我看不懂这个脚本的代码。
+
+#+BEGIN_SRC c
+
+#!/bin/bash
+# Author: Ian Yang
+
+# recommend aliases
+#
+# alias e=emacs-dwim
+# alias et='emacs-dwim -t'
+# alias en='emacs-dwim -n'
+
+AUTOMATOR=
+# AUTOMATOR=1
+#   set AUTOMATOR to 1 when used in automator as Application:
+#
+#   1.  Create an Application in Automator
+#   2.  Add an action to run Shell
+#   3.  Select "pass input as arguments".
+#   4.  Paste this file into the text area, and set AUTOMATOR=1
+#
+#   -   You can use the Application in "Open With..." or used as default handler.
+#   -   You can drag a file into this Application, and the file is opened in Emacs.
+#   -   You can add this Application in "System Preference -> Accounts -> Login Items" to auto
+#       start Emacs daemon.
+#
+EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs
+EMACSCLIENT=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+
+export LC_CTYPE=zh_CN.UTF-8
+export LC_ALL=
+
+_is_emacs_daemon_started () {
+  netstat -nl 2> /dev/null | awk '{print $NF}' | grep -q "emacs$UID/server"
+}
+_is_emacs_window_exist () {
+  _is_emacs_daemon_started && \
+    $EMACSCLIENT -e '(<= 2 (length (visible-frame-list)))' | grep -q -x t
+}
+
+kill_emacs () {
+  if _is_emacs_daemon_started; then
+    $EMACSCLIENT -e -n '(let ((desktop-save '\''if-exists)) (dolist (f (cdr-safe (reverse (frame-list)))) (delete-frame f t)) (kill-emacs "yyyyyy"))'
+    if _is_emacs_daemon_started; then
+      ps -u $UID -o pid,comm= | grep Emacs$ | cut -d' ' -f1 | xargs -n 1 kill
+    fi
+  fi
+  return 0
+}
+
+main () {
+  if ! _is_emacs_daemon_started; then
+    if $EMACS --daemon &> /tmp/emacs$UID.log; then
+      echo ' [sucess]'
+    else
+      echo ' [faild]'
+      return 1
+    fi
+  fi
+
+  local cur=$(osascript -e 'path to frontmost application as Unicode text')
+  if [ "$1" = "-t" ]; then
+    $EMACSCLIENT "$@"
+  elif [ -z "$1" ]; then
+    if ! _is_emacs_window_exist; then
+      $EMACSCLIENT -n -c
+    fi
+    osascript -e 'tell application "Emacs" to activate'
+    return 0
+  else
+    if ! _is_emacs_window_exist; then
+      $EMACSCLIENT -n -c
+    fi
+    if ! echo "$*" | grep -q -e '-n'; then
+      osascript -e 'tell application "Emacs" to activate'
+    fi
+    $EMACSCLIENT "$@"
+  fi
+  osascript -e "tell application \"${cur}\" to activate"
+}
+
+if [ -n "$AUTOMATOR" ]; then
+  [ -n "$1" ] \
+    && main -n "$@" \
+    || main
+else
+  [ -n "$1" -a "$1" = "-q" ] \
+    && kill_emacs \
+    || main "$@"
+fi
+
+#+END_SRC
+
+* emacs 关闭daemon模式
+1. 在emacs外部,可以使用 emacsclient -e '(kill-emacs)' 来关闭emacs daemon
+1. 在emacs内部,可以使用 kill-emacs 或者 save-buffers-kill-emacs 命令。
+
+* emacs root权限打开文件
+1. Installing and configuring
+    在emacs里面添加：（emacs22版本里面已经默认添加了tramp模块）
+  
+  ;;tramp
+
+     (setq tramp-default-method "scp")
+
+     (setq tramp-auto-save-directory "~/emacs/tramp")
+
+     (setq auto-save-file-name-transforms
+
+    '(("\\`/[^/]*:\\(.+/\\)*\\(.*\\)" "/tmp/\\2")))
+
+    (setq tramp-chunksize 328)
+
+    (require 'ange-ftp)
+
+    (require 'tramp)
+
+2. How to use
+    编辑root权限的文件：C-x C-f /su:root@localhost:/ 然后输入root密码，或者C-x C-f /sudo: 输入用户的密码
+
+    使用ftp，ssh等可以编辑远程文件，具体可以参考：
+
+    http://blog.donews.com/pluskid/archive/2006/05/06/858306.aspx
+
+3. Tramp和ido的冲突
+    很不幸，这个和ido.el有些冲突，找了比较久也没找到一个解决方法，只好在想使用tramp的时候使用M-x ido-mode暂时关闭ido-mode。打开需要编辑的文件后就可以继续使用ido-mode了。
+
+
+
+* emacs 正则表达式
+正则表达式(regular expressions, 缩写为regexp)是由几个特殊字符和一些普通 字符组成，一个普通字符就是一个简单的正则表达式，仅仅可以匹配与自己相同的字符。而特殊字符包括“$”，“^”，“.”，“*”，“+”，“?”，“[”，“]”以  及“\”。除非在一个字符前面有“\”，否则正则表达式中出现的任何其他字符都是普通字符，（当你在 Lisp 程序中使用正则表达式时，每一个“\”都必须写成两个，  因为需要对字符串中的“\”转义，请看下面的例子。
+
+      例如，“f”不是特殊字符，是普通字符，因此“f”是一个正则表达式，它仅仅  匹配串“f”。（不匹配“ff”。）同样“o”是仅匹配串“o”的正则表达式。（当不区分大小写时，前面的两个式子也匹配“F”和“O”，而实际上，一般认为它们是  “同样的串”，并不是因为例外。）     两个任意的表达式 A 和 B 可以连接，其结果是能够匹配以 A 开始，其余部分是  B 的字符串的表达式。
+
+      举个简单的例子，我们将表达式“f”和“o”连接，得到表达式“fo”，仅匹配 串“fo”，很简单的。想做些不简单的，需要使用特殊字符。下面介绍这些特殊字符。
+** 特殊字符
+*** “. (Period)”
+      匹配除了换行符(newline)之外任何单个字符的特殊字符。通过“连接”，可以得 到如“a.b”的表达式，匹配所有的以“a”开始，以“b”结束的三个字符的字符
+     串。
+*** “*”
+      自身不构成表达式的部分，作为后缀操作符，表示某个前导表达式可以任意次重复。比如，“o*”匹配任意个“o”连成的串（包括空串）。“*”总是作用于“最少的”可能的前导表达式。于是，“fo*”中，可以重复的 是“o”，而不是“fo”，匹配形如“f”, “fo”, “foo”的串等等。
+      匹配程序以迅速且尽可能多的找到重复部分来处理带“*”的结构。然后继续其他部分的处理。如果失败了，为了使剩余的部分能够尽可能的匹配，匹配程序会回 退，释放一些已经由“*”匹配的结构。
+        例如，在使用“ca*ar”来匹配串“caaar”时，“a*”首先试图匹配全部的三个“a”；但余下的部分是“ar”，不能匹配“r”，失败；接着选择是用“a*”匹配两个“a”，成功。
+*** “+”
+      和“*”相似的后缀操作符，它表示前导表达式至少出现一次。例如，“ca+r”匹  配串“car”和“caaaar”，但不能匹配“cr”，然而“ca*r”却可以。
+*** “?”
+      也是一个和“*”相似的操作符，它表示前导表达式至多出现一次。例如，“ca?r”仅仅匹配“car”或“cr”。
+*** “*?, +?, ??”
+      是前面几个操作符的非贪心(non-greedy)的变体。正常的“*”， “+”， “?” 操作符是“贪心的(greedy)”，只要总体上能够匹配，这些操作符总是尽可能多  的匹配。当紧跟着“?”时，则是非贪心的：将尽可能少的匹配。
+      “ab*”和“ab*?”都能匹配串“a”和“abbbb”；但如果你试图用它们来匹配“abbbb”时，“ab*”将匹配全部（最长有效匹配），而“ab*?”将仅仅匹配
+      “a”（最短有效匹配）。
+*** “\{N\}”
+      指定重复次数为 N 的后缀操作符，前导表达式必须恰好出现 N 次。例如“x\{4\}”仅匹配串“xxxx”。
+*** “\{N,M\}”
+      指定重复次数在N和M之间的后缀操作符，就是说它的前导表达式的出现次数至少 是N 但不能超过 M。如果省略 M，表示没有上限，但它的前导表达式至少出现 N 次。“\{0,1\}”等于“?”。“\{0,\}”等于“*”。“\{1,\}”等于“+”。
+*** “[ ... ]”
+      字符集，以“[”开始以“]”结束。最简单的例子，在两个方括号中间的字符就 是这个集合所能匹配的全部。 所以，“[ad]”仅匹配一个“a”或一个“d”，“[ad]*”匹配所有仅由“a”和“d”构成的串（和空串）。“c[ad]*r”匹配“cr”，“car”， “cdr”，“caddaar”，等等。
+      也可以用一个“-”放在一个开始字符和一个结束字符的中间，表示字符集中字符 的范围。“[a-z]”匹配所有小写 ASCII 字母。范围可以和单独的字符自由的组  合在一起，比如“[a-z$%.]”，匹配了任意的小写字母，或“$”，“%”，以及“.”。
+      注意，通常在字符集中的特殊字符不再特殊，而在字符集中的“]”，“-”和   “^”却是特殊字符。
+      如果想在字符集中包括字符“]”，必须放在第一个字符位置。例如，“[]a]”匹 配“]”或“a”。想包括“-”，要在第一个或最后一个位置，或在一个范围的后  面，如“[]-]”匹配“]”和“-”。
+      如果想在字符集中包括字符“^”，不可以放在第一个位置。（在开始位置，它会 把这个字符集取补——看下面。）
+      当不区分大小写使用范围时，表示范围的两个字符或者都是大写、或者都是小写、 或者都不是字母。混合大小写的范围如“A-z”意思不明确，不被接受，或许在将 来的 Emacs 中会被改变。
+*** “[^ ... ]”
+      “[^”表示“补集合”，匹配的字符是除掉指定的字符外其他所有的字符。如，“[^a-z0-9A-Z]”匹配除掉ASCII字母和数字的所有字符。
+      当“^”在字符集中第一个时，被看作是特殊字符。而跟在“^”后面的字符被看作是第一个字符（就是说，此处的“-”和“]”将不是特殊的）。
+      一个补集合可以匹配换行符，除非换行符被指定为补集合中的一个字符。这不同于某些象“grep”的程序对正则表达式的处理。
+*** “^”
+      仅仅匹配在文本中行首的那个空串的特殊字符。就是说，“^foo”匹配在行首的”foo”。
+        (匹配空串：比如"^fo" 就是说fo必须在一行的第一个字符,前面不能有空格等什么的，又如"fo$"就是fo必须是一行的最后一个字符，后面不能再有其他的任何字符----个人理解)
+*** “$”
+      和“^”相似，但仅匹配行尾的空串。因此“x+$”匹配在行尾的一个或多个“x”  的串。
+*** “\”
+      有两个作用：引用特殊字符（包括“\”）；产生附加的特殊结构。
+      
+      因为“\”引用特殊字符，“\$”是一个仅匹配“$”的表达式，“\[”是一个仅   匹配“[”的表达式，等等。
+** 关于反斜线
+      注意：为考虑兼容性，如果在其没有意义的上下文中，特殊字符将被当作普通字符。比如：“*foo”中把“*”当作普通字符，因为在它前面没有可以作用的前导表达 式。很少有人会根据这条规则去实践；无论如何，在任何地方都加上引用会更好些。
+      对于大多数情况，“\”后接任何字符仅仅匹配那个字符。然而，有几个例外： 以“\”开始的两字符序列会有特殊的意思。其中的第二个字符往往是普通字符。
+“\”的结构表
+(注意所有实际应用时候，都要加两个\\，下面是简写如 第一个"\|" 在实际中要写成“\\|" 第一个\表示引出第二个\ ，第二个\引出后面的字符(本例是|)是特殊字符)
+*** “\|” 
+      指定一个选择。中间有一个“\|”的两个正则表达式 A 和 B，形成了一个可以匹  配 A 或 B 的文本。它首先试图用 A 匹配，如果失败再用 B 去试。
+      由此，“foo\|bar”仅匹配“foo”或“bar”。“\|”作用于两边最长的可能的表达式。仅由“\( ... \)”括起来才可以限制“\|”的分组能力。
+      Emacs 有全面的回退功能，以处理“\|”的多种的用途。
+*** “\( ... \)”
+      分组结构，有三个功能：
+1.围住“\|”的选择项，以实现别的操作。例如“\(foo\|bar\)x”匹配“foox”或“barx”。
+2.围住复杂的表达式以实现后缀操作符（如“*”“+”和“?”）的操作。例如 “ba\(na\)*”匹配如“bananana”等，有任意个（零或更多）的“na”串。
+3.记录一个已匹配的子串用作后面的参考引用。
+      最后一个应用并不是括号的分组功能思想的结果；这个分开的特点是给同样的“\( ... \)”结构赋予的第二种含义。在实际应用中，这两种含义通常不会发生 冲突。当发生冲突的时候，可以使用“谨慎的”分组("shy" group)。
+*** “\(?: ... \)”
+      “谨慎的”分组("shy" group)，这个分组不记录匹配的子串；你不能用“\D”来 引用。这在机械的结合正则表达式的时候有用，这样，你可以为语法目的加入分   组，而不用干涉使用者写的分组的个数。
+*** “\D” 
+      匹配和“\( ... \)”结构第 D 次出现时所匹配的同样的文本。
+            如："(abc)(def)(ghi)\\2"  \\2引用的是(def)
+      在“\( ... \)”结构结束之后，匹配程序保存被这个结构匹配的文本（的开始和  结束）；之后的正则表达式中，你可以使用“\”跟着一个数字 D 来表示“匹配   和‘\( ... \)’结构第 D 次出现时所匹配的同样的文本。”
+      正则表达式中前九个出现的“\( ... \)”结构，按正则表达式中左括号出现的次 序从 1 到 9 赋值。因此可以用“\1”到“\9”来引用相应的“\( ... \)”结构。
+      例如，“\(.*\)\1”匹配任何有完全相同的两部分而无换行符的串。“\(.*\)” 匹配前一半，可以是任意的串，“\1”匹配后面的，但必须和前面的完全相同。
+      如果一个特定的“\( ... \)”结构匹配了多次（比如后面有一个“*”，这很显  然），那么仅记录最后一次的匹配。
+*** “\`” 
+      匹配空串，但仅是接在缓冲区的开始处的。
+*** “\'” 
+      匹配空串，但仅是接在缓冲区的尾部的。
+*** “\=” 
+      匹配空串，但仅在“点(point)”处的。
+*** “\b” 
+      匹配空串，但仅在一个词的开始或者结尾的。例如，“\bfoo\b”匹配任何作为单 独的词出现的“foo”。“\bballs?\b”匹配作为单独的词出现的“ball”或"balls”。
+      在缓冲区的开始和结束位置时，“\b”不考虑紧接其前的文本是什么。
+*** “\B” 
+      匹配空串，但不在词的开始或结尾处。
+*** “\<” 
+      匹配空串，但仅在词的开始处。仅当一个构成词的字符在缓冲区开始处时“\<” 匹配缓冲区开始处的空串。
+*** “\>” 
+      匹配空串，但仅在词的结尾处。仅当缓冲区尾部有构成词的字符时“\>”匹配缓 冲区尾部的空串。
+*** “\w” 
+      匹配任何构成词的字符。由语法表决定这些字符是什么。
+*** “\W” 
+      匹配任何非构成词的字符。
+*** “\sC”
+      匹配任何语法是 C 的字符。这里 C 是一个指定特定语法类的字符：如“w”为词 的构成字符，“-”或“ ”为空白，“.”为普通标点符号，等等。
+*** “\SC”
+      匹配任何字符不属于语法 C。
+*** “\cC”
+      匹配任何属于种类 C 的字符。例如，“\cc”匹配汉字，“\cg”匹配希腊字符等。 如果想了解已知种类，用“M-x describe-categories ”。
+*** “\CC”
+      匹配所有不属于种类C的字符。  属于词和语法的结构是由语法表的设置来控制的。
+** 例子
+
+        下面是一个复杂的正则表达式，存储在“sentence-end”，Emacs 将其用于识 别句子的结束以及后面的任何空白。其中以 Lisp 语法区分了空白符和制表符。在  Lisp 语法中，串常量用双引号括起来。“\"”表示双引号是表达式的一部分，“\\”表示反斜扛是表达式的一部分，“\t”表示制表符，“\n”表示换行。
+         "[.?!][]\”‘)]*\\($\\| $\\|\t\\|  \\)[ \t\n]*”
+    其中包含四个连续的部分：匹配句号(“.”)、“?”或“!”的字符集；匹配右方括号、右(单/双)引号的字符集的任意次重复的部分；在“反斜线括号”部分中，匹配行尾、行尾空白、制表符或两个空格的可选集合；以及一个任意次匹配空白的字符集。增量搜索中，要用 TAB 输入制表符，“C-j”输入换行符。也可以使用单 独的反斜线，不用象 Lisp 串中那样写成两个。
+
+
+

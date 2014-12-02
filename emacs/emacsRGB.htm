@@ -1,0 +1,905 @@
+
+<!-- saved from url=(0058)http://homepage1.nifty.com/blankspace/emacs/emacs_rgb.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link type="text/css" rel="stylesheet" href="./emacsRGB_files/default.css">
+<title>RGB color name in emacs (enable javascript, please)</title>
+<style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -32px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -110px -32px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -16px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -110px -16px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -110px 0; }</style></head>
+
+<body text="#d2b48c" bgcolor="#8b7d6b"><h1>RGB color name in emacs</h1>
+<br><br><br><br><br>
+
+
+<center>
+<form><table border="1"><tbody><tr>
+  <td align="center">name</td>
+  <td align="center">R</td><td align="center">G</td><td align="center">B</td>
+  <td align="center">hexl</td><td align="center">set as bgcolor</td>
+</tr>
+<tr>
+  <td><font color="#fffafa">snow</font></td>
+  <td align="right"><font color="#fffafa">255</font></td>
+  <td align="right"><font color="#fffafa">250</font></td>
+  <td align="right"><font color="#fffafa">250</font></td>
+  <td bgcolor="#fffafa">fffafa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffafa&#39;"></td></tr>
+<tr>
+  <td><font color="#f8f8ff">ghost white</font></td>
+  <td align="right"><font color="#f8f8ff">248</font></td>
+  <td align="right"><font color="#f8f8ff">248</font></td>
+  <td align="right"><font color="#f8f8ff">255</font></td>
+  <td bgcolor="#f8f8ff">f8f8ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f8f8ff&#39;"></td></tr>
+<tr>
+  <td><font color="#f8f8ff">GhostWhite</font></td>
+  <td align="right"><font color="#f8f8ff">248</font></td>
+  <td align="right"><font color="#f8f8ff">248</font></td>
+  <td align="right"><font color="#f8f8ff">255</font></td>
+  <td bgcolor="#f8f8ff">f8f8ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f8f8ff&#39;"></td></tr>
+<tr>
+  <td><font color="#f5f5f5">white smoke</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td bgcolor="#f5f5f5">f5f5f5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f5f5f5&#39;"></td></tr>
+<tr>
+  <td><font color="#f5f5f5">WhiteSmoke</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td align="right"><font color="#f5f5f5">245</font></td>
+  <td bgcolor="#f5f5f5">f5f5f5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f5f5f5&#39;"></td></tr>
+<tr>
+  <td><font color="#dcdcdc">gainsboro</font></td>
+  <td align="right"><font color="#dcdcdc">220</font></td>
+  <td align="right"><font color="#dcdcdc">220</font></td>
+  <td align="right"><font color="#dcdcdc">220</font></td>
+  <td bgcolor="#dcdcdc">dcdcdc</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;dcdcdc&#39;"></td></tr>
+<tr>
+  <td><font color="#fffaf0">floral white</font></td>
+  <td align="right"><font color="#fffaf0">255</font></td>
+  <td align="right"><font color="#fffaf0">250</font></td>
+  <td align="right"><font color="#fffaf0">240</font></td>
+  <td bgcolor="#fffaf0">fffaf0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffaf0&#39;"></td></tr>
+<tr>
+  <td><font color="#fffaf0">FloralWhite</font></td>
+  <td align="right"><font color="#fffaf0">255</font></td>
+  <td align="right"><font color="#fffaf0">250</font></td>
+  <td align="right"><font color="#fffaf0">240</font></td>
+  <td bgcolor="#fffaf0">fffaf0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffaf0&#39;"></td></tr>
+<tr>
+  <td><font color="#fdf5e6">old lace</font></td>
+  <td align="right"><font color="#fdf5e6">253</font></td>
+  <td align="right"><font color="#fdf5e6">245</font></td>
+  <td align="right"><font color="#fdf5e6">230</font></td>
+  <td bgcolor="#fdf5e6">fdf5e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fdf5e6&#39;"></td></tr>
+<tr>
+  <td><font color="#fdf5e6">OldLace</font></td>
+  <td align="right"><font color="#fdf5e6">253</font></td>
+  <td align="right"><font color="#fdf5e6">245</font></td>
+  <td align="right"><font color="#fdf5e6">230</font></td>
+  <td bgcolor="#fdf5e6">fdf5e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fdf5e6&#39;"></td></tr>
+<tr>
+  <td><font color="#faf0e6">linen</font></td>
+  <td align="right"><font color="#faf0e6">250</font></td>
+  <td align="right"><font color="#faf0e6">240</font></td>
+  <td align="right"><font color="#faf0e6">230</font></td>
+  <td bgcolor="#faf0e6">faf0e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;faf0e6&#39;"></td></tr>
+<tr>
+  <td><font color="#faebd7">antique white</font></td>
+  <td align="right"><font color="#faebd7">250</font></td>
+  <td align="right"><font color="#faebd7">235</font></td>
+  <td align="right"><font color="#faebd7">215</font></td>
+  <td bgcolor="#faebd7">faebd7</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;faebd7&#39;"></td></tr>
+<tr>
+  <td><font color="#faebd7">AntiqueWhite</font></td>
+  <td align="right"><font color="#faebd7">250</font></td>
+  <td align="right"><font color="#faebd7">235</font></td>
+  <td align="right"><font color="#faebd7">215</font></td>
+  <td bgcolor="#faebd7">faebd7</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;faebd7&#39;"></td></tr>
+<tr>
+  <td><font color="#ffefd5">papaya whip</font></td>
+  <td align="right"><font color="#ffefd5">255</font></td>
+  <td align="right"><font color="#ffefd5">239</font></td>
+  <td align="right"><font color="#ffefd5">213</font></td>
+  <td bgcolor="#ffefd5">ffefd5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffefd5&#39;"></td></tr>
+<tr>
+  <td><font color="#ffefd5">PapayaWhip</font></td>
+  <td align="right"><font color="#ffefd5">255</font></td>
+  <td align="right"><font color="#ffefd5">239</font></td>
+  <td align="right"><font color="#ffefd5">213</font></td>
+  <td bgcolor="#ffefd5">ffefd5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffefd5&#39;"></td></tr>
+<tr>
+  <td><font color="#ffebcd">blanched almond</font></td>
+  <td align="right"><font color="#ffebcd">255</font></td>
+  <td align="right"><font color="#ffebcd">235</font></td>
+  <td align="right"><font color="#ffebcd">205</font></td>
+  <td bgcolor="#ffebcd">ffebcd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffebcd&#39;"></td></tr>
+<tr>
+  <td><font color="#ffebcd">BlanchedAlmond</font></td>
+  <td align="right"><font color="#ffebcd">255</font></td>
+  <td align="right"><font color="#ffebcd">235</font></td>
+  <td align="right"><font color="#ffebcd">205</font></td>
+  <td bgcolor="#ffebcd">ffebcd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffebcd&#39;"></td></tr>
+<tr>
+  <td><font color="#ffe4c4">bisque</font></td>
+  <td align="right"><font color="#ffe4c4">255</font></td>
+  <td align="right"><font color="#ffe4c4">228</font></td>
+  <td align="right"><font color="#ffe4c4">196</font></td>
+  <td bgcolor="#ffe4c4">ffe4c4</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffe4c4&#39;"></td></tr>
+<tr>
+  <td><font color="#ffdab9">peach puff</font></td>
+  <td align="right"><font color="#ffdab9">255</font></td>
+  <td align="right"><font color="#ffdab9">218</font></td>
+  <td align="right"><font color="#ffdab9">185</font></td>
+  <td bgcolor="#ffdab9">ffdab9</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffdab9&#39;"></td></tr>
+<tr>
+  <td><font color="#ffdab9">PeachPuff</font></td>
+  <td align="right"><font color="#ffdab9">255</font></td>
+  <td align="right"><font color="#ffdab9">218</font></td>
+  <td align="right"><font color="#ffdab9">185</font></td>
+  <td bgcolor="#ffdab9">ffdab9</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffdab9&#39;"></td></tr>
+<tr>
+  <td><font color="#ffdead">navajo white</font></td>
+  <td align="right"><font color="#ffdead">255</font></td>
+  <td align="right"><font color="#ffdead">222</font></td>
+  <td align="right"><font color="#ffdead">173</font></td>
+  <td bgcolor="#ffdead">ffdead</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffdead&#39;"></td></tr>
+<tr>
+  <td><font color="#ffdead">NavajoWhite</font></td>
+  <td align="right"><font color="#ffdead">255</font></td>
+  <td align="right"><font color="#ffdead">222</font></td>
+  <td align="right"><font color="#ffdead">173</font></td>
+  <td bgcolor="#ffdead">ffdead</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffdead&#39;"></td></tr>
+<tr>
+  <td><font color="#ffe4b5">moccasin</font></td>
+  <td align="right"><font color="#ffe4b5">255</font></td>
+  <td align="right"><font color="#ffe4b5">228</font></td>
+  <td align="right"><font color="#ffe4b5">181</font></td>
+  <td bgcolor="#ffe4b5">ffe4b5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffe4b5&#39;"></td></tr>
+<tr>
+  <td><font color="#fff8dc">cornsilk</font></td>
+  <td align="right"><font color="#fff8dc">255</font></td>
+  <td align="right"><font color="#fff8dc">248</font></td>
+  <td align="right"><font color="#fff8dc">220</font></td>
+  <td bgcolor="#fff8dc">fff8dc</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fff8dc&#39;"></td></tr>
+<tr>
+  <td><font color="#fffff0">ivory</font></td>
+  <td align="right"><font color="#fffff0">255</font></td>
+  <td align="right"><font color="#fffff0">255</font></td>
+  <td align="right"><font color="#fffff0">240</font></td>
+  <td bgcolor="#fffff0">fffff0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffff0&#39;"></td></tr>
+<tr>
+  <td><font color="#fffacd">lemon chiffon</font></td>
+  <td align="right"><font color="#fffacd">255</font></td>
+  <td align="right"><font color="#fffacd">250</font></td>
+  <td align="right"><font color="#fffacd">205</font></td>
+  <td bgcolor="#fffacd">fffacd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffacd&#39;"></td></tr>
+<tr>
+  <td><font color="#fffacd">LemonChiffon</font></td>
+  <td align="right"><font color="#fffacd">255</font></td>
+  <td align="right"><font color="#fffacd">250</font></td>
+  <td align="right"><font color="#fffacd">205</font></td>
+  <td bgcolor="#fffacd">fffacd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fffacd&#39;"></td></tr>
+<tr>
+  <td><font color="#fff5ee">seashell</font></td>
+  <td align="right"><font color="#fff5ee">255</font></td>
+  <td align="right"><font color="#fff5ee">245</font></td>
+  <td align="right"><font color="#fff5ee">238</font></td>
+  <td bgcolor="#fff5ee">fff5ee</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fff5ee&#39;"></td></tr>
+<tr>
+  <td><font color="#f0fff0">honeydew</font></td>
+  <td align="right"><font color="#f0fff0">240</font></td>
+  <td align="right"><font color="#f0fff0">255</font></td>
+  <td align="right"><font color="#f0fff0">240</font></td>
+  <td bgcolor="#f0fff0">f0fff0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f0fff0&#39;"></td></tr>
+<tr>
+  <td><font color="#f5fffa">mint cream</font></td>
+  <td align="right"><font color="#f5fffa">245</font></td>
+  <td align="right"><font color="#f5fffa">255</font></td>
+  <td align="right"><font color="#f5fffa">250</font></td>
+  <td bgcolor="#f5fffa">f5fffa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f5fffa&#39;"></td></tr>
+<tr>
+  <td><font color="#f5fffa">MintCream</font></td>
+  <td align="right"><font color="#f5fffa">245</font></td>
+  <td align="right"><font color="#f5fffa">255</font></td>
+  <td align="right"><font color="#f5fffa">250</font></td>
+  <td bgcolor="#f5fffa">f5fffa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f5fffa&#39;"></td></tr>
+<tr>
+  <td><font color="#f0ffff">azure</font></td>
+  <td align="right"><font color="#f0ffff">240</font></td>
+  <td align="right"><font color="#f0ffff">255</font></td>
+  <td align="right"><font color="#f0ffff">255</font></td>
+  <td bgcolor="#f0ffff">f0ffff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f0ffff&#39;"></td></tr>
+<tr>
+  <td><font color="#f0f8ff">alice blue</font></td>
+  <td align="right"><font color="#f0f8ff">240</font></td>
+  <td align="right"><font color="#f0f8ff">248</font></td>
+  <td align="right"><font color="#f0f8ff">255</font></td>
+  <td bgcolor="#f0f8ff">f0f8ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f0f8ff&#39;"></td></tr>
+<tr>
+  <td><font color="#f0f8ff">AliceBlue</font></td>
+  <td align="right"><font color="#f0f8ff">240</font></td>
+  <td align="right"><font color="#f0f8ff">248</font></td>
+  <td align="right"><font color="#f0f8ff">255</font></td>
+  <td bgcolor="#f0f8ff">f0f8ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;f0f8ff&#39;"></td></tr>
+<tr>
+  <td><font color="#e6e6fa">lavender</font></td>
+  <td align="right"><font color="#e6e6fa">230</font></td>
+  <td align="right"><font color="#e6e6fa">230</font></td>
+  <td align="right"><font color="#e6e6fa">250</font></td>
+  <td bgcolor="#e6e6fa">e6e6fa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;e6e6fa&#39;"></td></tr>
+<tr>
+  <td><font color="#fff0f5">lavender blush</font></td>
+  <td align="right"><font color="#fff0f5">255</font></td>
+  <td align="right"><font color="#fff0f5">240</font></td>
+  <td align="right"><font color="#fff0f5">245</font></td>
+  <td bgcolor="#fff0f5">fff0f5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fff0f5&#39;"></td></tr>
+<tr>
+  <td><font color="#fff0f5">LavenderBlush</font></td>
+  <td align="right"><font color="#fff0f5">255</font></td>
+  <td align="right"><font color="#fff0f5">240</font></td>
+  <td align="right"><font color="#fff0f5">245</font></td>
+  <td bgcolor="#fff0f5">fff0f5</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;fff0f5&#39;"></td></tr>
+<tr>
+  <td><font color="#ffe4e1">misty rose</font></td>
+  <td align="right"><font color="#ffe4e1">255</font></td>
+  <td align="right"><font color="#ffe4e1">228</font></td>
+  <td align="right"><font color="#ffe4e1">225</font></td>
+  <td bgcolor="#ffe4e1">ffe4e1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffe4e1&#39;"></td></tr>
+<tr>
+  <td><font color="#ffe4e1">MistyRose</font></td>
+  <td align="right"><font color="#ffe4e1">255</font></td>
+  <td align="right"><font color="#ffe4e1">228</font></td>
+  <td align="right"><font color="#ffe4e1">225</font></td>
+  <td bgcolor="#ffe4e1">ffe4e1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffe4e1&#39;"></td></tr>
+<tr>
+  <td><font color="#ffffff">white</font></td>
+  <td align="right"><font color="#ffffff">255</font></td>
+  <td align="right"><font color="#ffffff">255</font></td>
+  <td align="right"><font color="#ffffff">255</font></td>
+  <td bgcolor="#ffffff">ffffff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;ffffff&#39;"></td></tr>
+<tr>
+  <td><font color="#000000">black</font></td>
+  <td align="right"><font color="#000000">0</font></td>
+  <td align="right"><font color="#000000">0</font></td>
+  <td align="right"><font color="#000000">0</font></td>
+  <td bgcolor="#000000">000000</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;000000&#39;"></td></tr>
+<tr>
+  <td><font color="#2f4f4f">dark slate gray</font></td>
+  <td align="right"><font color="#2f4f4f">47</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td bgcolor="#2f4f4f">2f4f4f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2f4f4f&#39;"></td></tr>
+<tr>
+  <td><font color="#2f4f4f">DarkSlateGray</font></td>
+  <td align="right"><font color="#2f4f4f">47</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td bgcolor="#2f4f4f">2f4f4f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2f4f4f&#39;"></td></tr>
+<tr>
+  <td><font color="#2f4f4f">dark slate grey</font></td>
+  <td align="right"><font color="#2f4f4f">47</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td bgcolor="#2f4f4f">2f4f4f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2f4f4f&#39;"></td></tr>
+<tr>
+  <td><font color="#2f4f4f">DarkSlateGrey</font></td>
+  <td align="right"><font color="#2f4f4f">47</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td align="right"><font color="#2f4f4f">79</font></td>
+  <td bgcolor="#2f4f4f">2f4f4f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2f4f4f&#39;"></td></tr>
+<tr>
+  <td><font color="#696969">dim gray</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td bgcolor="#696969">696969</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;696969&#39;"></td></tr>
+<tr>
+  <td><font color="#696969">DimGray</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td bgcolor="#696969">696969</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;696969&#39;"></td></tr>
+<tr>
+  <td><font color="#696969">dim grey</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td bgcolor="#696969">696969</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;696969&#39;"></td></tr>
+<tr>
+  <td><font color="#696969">DimGrey</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td align="right"><font color="#696969">105</font></td>
+  <td bgcolor="#696969">696969</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;696969&#39;"></td></tr>
+<tr>
+  <td><font color="#708090">slate gray</font></td>
+  <td align="right"><font color="#708090">112</font></td>
+  <td align="right"><font color="#708090">128</font></td>
+  <td align="right"><font color="#708090">144</font></td>
+  <td bgcolor="#708090">708090</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;708090&#39;"></td></tr>
+<tr>
+  <td><font color="#708090">SlateGray</font></td>
+  <td align="right"><font color="#708090">112</font></td>
+  <td align="right"><font color="#708090">128</font></td>
+  <td align="right"><font color="#708090">144</font></td>
+  <td bgcolor="#708090">708090</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;708090&#39;"></td></tr>
+<tr>
+  <td><font color="#708090">slate grey</font></td>
+  <td align="right"><font color="#708090">112</font></td>
+  <td align="right"><font color="#708090">128</font></td>
+  <td align="right"><font color="#708090">144</font></td>
+  <td bgcolor="#708090">708090</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;708090&#39;"></td></tr>
+<tr>
+  <td><font color="#708090">SlateGrey</font></td>
+  <td align="right"><font color="#708090">112</font></td>
+  <td align="right"><font color="#708090">128</font></td>
+  <td align="right"><font color="#708090">144</font></td>
+  <td bgcolor="#708090">708090</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;708090&#39;"></td></tr>
+<tr>
+  <td><font color="#778899">light slate gray</font></td>
+  <td align="right"><font color="#778899">119</font></td>
+  <td align="right"><font color="#778899">136</font></td>
+  <td align="right"><font color="#778899">153</font></td>
+  <td bgcolor="#778899">778899</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;778899&#39;"></td></tr>
+<tr>
+  <td><font color="#778899">LightSlateGray</font></td>
+  <td align="right"><font color="#778899">119</font></td>
+  <td align="right"><font color="#778899">136</font></td>
+  <td align="right"><font color="#778899">153</font></td>
+  <td bgcolor="#778899">778899</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;778899&#39;"></td></tr>
+<tr>
+  <td><font color="#778899">light slate grey</font></td>
+  <td align="right"><font color="#778899">119</font></td>
+  <td align="right"><font color="#778899">136</font></td>
+  <td align="right"><font color="#778899">153</font></td>
+  <td bgcolor="#778899">778899</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;778899&#39;"></td></tr>
+<tr>
+  <td><font color="#778899">LightSlateGrey</font></td>
+  <td align="right"><font color="#778899">119</font></td>
+  <td align="right"><font color="#778899">136</font></td>
+  <td align="right"><font color="#778899">153</font></td>
+  <td bgcolor="#778899">778899</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;778899&#39;"></td></tr>
+<tr>
+  <td><font color="#bebebe">gray</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td bgcolor="#bebebe">bebebe</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;bebebe&#39;"></td></tr>
+<tr>
+  <td><font color="#bebebe">grey</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td align="right"><font color="#bebebe">190</font></td>
+  <td bgcolor="#bebebe">bebebe</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;bebebe&#39;"></td></tr>
+<tr>
+  <td><font color="#d3d3d3">light grey</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td bgcolor="#d3d3d3">d3d3d3</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;d3d3d3&#39;"></td></tr>
+<tr>
+  <td><font color="#d3d3d3">LightGrey</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td bgcolor="#d3d3d3">d3d3d3</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;d3d3d3&#39;"></td></tr>
+<tr>
+  <td><font color="#d3d3d3">light gray</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td bgcolor="#d3d3d3">d3d3d3</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;d3d3d3&#39;"></td></tr>
+<tr>
+  <td><font color="#d3d3d3">LightGray</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td align="right"><font color="#d3d3d3">211</font></td>
+  <td bgcolor="#d3d3d3">d3d3d3</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;d3d3d3&#39;"></td></tr>
+<tr>
+  <td><font color="#191970">midnight blue</font></td>
+  <td align="right"><font color="#191970">25</font></td>
+  <td align="right"><font color="#191970">25</font></td>
+  <td align="right"><font color="#191970">112</font></td>
+  <td bgcolor="#191970">191970</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;191970&#39;"></td></tr>
+<tr>
+  <td><font color="#191970">MidnightBlue</font></td>
+  <td align="right"><font color="#191970">25</font></td>
+  <td align="right"><font color="#191970">25</font></td>
+  <td align="right"><font color="#191970">112</font></td>
+  <td bgcolor="#191970">191970</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;191970&#39;"></td></tr>
+<tr>
+  <td><font color="#000080">navy</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">128</font></td>
+  <td bgcolor="#000080">000080</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;000080&#39;"></td></tr>
+<tr>
+  <td><font color="#000080">navy blue</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">128</font></td>
+  <td bgcolor="#000080">000080</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;000080&#39;"></td></tr>
+<tr>
+  <td><font color="#000080">NavyBlue</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">0</font></td>
+  <td align="right"><font color="#000080">128</font></td>
+  <td bgcolor="#000080">000080</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;000080&#39;"></td></tr>
+<tr>
+  <td><font color="#6495ed">cornflower blue</font></td>
+  <td align="right"><font color="#6495ed">100</font></td>
+  <td align="right"><font color="#6495ed">149</font></td>
+  <td align="right"><font color="#6495ed">237</font></td>
+  <td bgcolor="#6495ed">6495ed</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;6495ed&#39;"></td></tr>
+<tr>
+  <td><font color="#6495ed">CornflowerBlue</font></td>
+  <td align="right"><font color="#6495ed">100</font></td>
+  <td align="right"><font color="#6495ed">149</font></td>
+  <td align="right"><font color="#6495ed">237</font></td>
+  <td bgcolor="#6495ed">6495ed</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;6495ed&#39;"></td></tr>
+<tr>
+  <td><font color="#483d8b">dark slate blue</font></td>
+  <td align="right"><font color="#483d8b">72</font></td>
+  <td align="right"><font color="#483d8b">61</font></td>
+  <td align="right"><font color="#483d8b">139</font></td>
+  <td bgcolor="#483d8b">483d8b</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;483d8b&#39;"></td></tr>
+<tr>
+  <td><font color="#483d8b">DarkSlateBlue</font></td>
+  <td align="right"><font color="#483d8b">72</font></td>
+  <td align="right"><font color="#483d8b">61</font></td>
+  <td align="right"><font color="#483d8b">139</font></td>
+  <td bgcolor="#483d8b">483d8b</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;483d8b&#39;"></td></tr>
+<tr>
+  <td><font color="#6a5acd">slate blue</font></td>
+  <td align="right"><font color="#6a5acd">106</font></td>
+  <td align="right"><font color="#6a5acd">90</font></td>
+  <td align="right"><font color="#6a5acd">205</font></td>
+  <td bgcolor="#6a5acd">6a5acd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;6a5acd&#39;"></td></tr>
+<tr>
+  <td><font color="#6a5acd">SlateBlue</font></td>
+  <td align="right"><font color="#6a5acd">106</font></td>
+  <td align="right"><font color="#6a5acd">90</font></td>
+  <td align="right"><font color="#6a5acd">205</font></td>
+  <td bgcolor="#6a5acd">6a5acd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;6a5acd&#39;"></td></tr>
+<tr>
+  <td><font color="#7b68ee">medium slate blue</font></td>
+  <td align="right"><font color="#7b68ee">123</font></td>
+  <td align="right"><font color="#7b68ee">104</font></td>
+  <td align="right"><font color="#7b68ee">238</font></td>
+  <td bgcolor="#7b68ee">7b68ee</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;7b68ee&#39;"></td></tr>
+<tr>
+  <td><font color="#7b68ee">MediumSlateBlue</font></td>
+  <td align="right"><font color="#7b68ee">123</font></td>
+  <td align="right"><font color="#7b68ee">104</font></td>
+  <td align="right"><font color="#7b68ee">238</font></td>
+  <td bgcolor="#7b68ee">7b68ee</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;7b68ee&#39;"></td></tr>
+<tr>
+  <td><font color="#8470ff">light slate blue</font></td>
+  <td align="right"><font color="#8470ff">132</font></td>
+  <td align="right"><font color="#8470ff">112</font></td>
+  <td align="right"><font color="#8470ff">255</font></td>
+  <td bgcolor="#8470ff">8470ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;8470ff&#39;"></td></tr>
+<tr>
+  <td><font color="#8470ff">LightSlateBlue</font></td>
+  <td align="right"><font color="#8470ff">132</font></td>
+  <td align="right"><font color="#8470ff">112</font></td>
+  <td align="right"><font color="#8470ff">255</font></td>
+  <td bgcolor="#8470ff">8470ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;8470ff&#39;"></td></tr>
+<tr>
+  <td><font color="#0000cd">medium blue</font></td>
+  <td align="right"><font color="#0000cd">0</font></td>
+  <td align="right"><font color="#0000cd">0</font></td>
+  <td align="right"><font color="#0000cd">205</font></td>
+  <td bgcolor="#0000cd">0000cd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;0000cd&#39;"></td></tr>
+<tr>
+  <td><font color="#0000cd">MediumBlue</font></td>
+  <td align="right"><font color="#0000cd">0</font></td>
+  <td align="right"><font color="#0000cd">0</font></td>
+  <td align="right"><font color="#0000cd">205</font></td>
+  <td bgcolor="#0000cd">0000cd</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;0000cd&#39;"></td></tr>
+<tr>
+  <td><font color="#4169e1">royal blue</font></td>
+  <td align="right"><font color="#4169e1">65</font></td>
+  <td align="right"><font color="#4169e1">105</font></td>
+  <td align="right"><font color="#4169e1">225</font></td>
+  <td bgcolor="#4169e1">4169e1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;4169e1&#39;"></td></tr>
+<tr>
+  <td><font color="#4169e1">RoyalBlue</font></td>
+  <td align="right"><font color="#4169e1">65</font></td>
+  <td align="right"><font color="#4169e1">105</font></td>
+  <td align="right"><font color="#4169e1">225</font></td>
+  <td bgcolor="#4169e1">4169e1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;4169e1&#39;"></td></tr>
+<tr>
+  <td><font color="#0000ff">blue</font></td>
+  <td align="right"><font color="#0000ff">0</font></td>
+  <td align="right"><font color="#0000ff">0</font></td>
+  <td align="right"><font color="#0000ff">255</font></td>
+  <td bgcolor="#0000ff">0000ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;0000ff&#39;"></td></tr>
+<tr>
+  <td><font color="#1e90ff">dodger blue</font></td>
+  <td align="right"><font color="#1e90ff">30</font></td>
+  <td align="right"><font color="#1e90ff">144</font></td>
+  <td align="right"><font color="#1e90ff">255</font></td>
+  <td bgcolor="#1e90ff">1e90ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;1e90ff&#39;"></td></tr>
+<tr>
+  <td><font color="#1e90ff">DodgerBlue</font></td>
+  <td align="right"><font color="#1e90ff">30</font></td>
+  <td align="right"><font color="#1e90ff">144</font></td>
+  <td align="right"><font color="#1e90ff">255</font></td>
+  <td bgcolor="#1e90ff">1e90ff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;1e90ff&#39;"></td></tr>
+<tr>
+  <td><font color="#00bfff">deep sky blue</font></td>
+  <td align="right"><font color="#00bfff">0</font></td>
+  <td align="right"><font color="#00bfff">191</font></td>
+  <td align="right"><font color="#00bfff">255</font></td>
+  <td bgcolor="#00bfff">00bfff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;00bfff&#39;"></td></tr>
+<tr>
+  <td><font color="#00bfff">DeepSkyBlue</font></td>
+  <td align="right"><font color="#00bfff">0</font></td>
+  <td align="right"><font color="#00bfff">191</font></td>
+  <td align="right"><font color="#00bfff">255</font></td>
+  <td bgcolor="#00bfff">00bfff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;00bfff&#39;"></td></tr>
+<tr>
+  <td><font color="#87ceeb">sky blue</font></td>
+  <td align="right"><font color="#87ceeb">135</font></td>
+  <td align="right"><font color="#87ceeb">206</font></td>
+  <td align="right"><font color="#87ceeb">235</font></td>
+  <td bgcolor="#87ceeb">87ceeb</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;87ceeb&#39;"></td></tr>
+<tr>
+  <td><font color="#87ceeb">SkyBlue</font></td>
+  <td align="right"><font color="#87ceeb">135</font></td>
+  <td align="right"><font color="#87ceeb">206</font></td>
+  <td align="right"><font color="#87ceeb">235</font></td>
+  <td bgcolor="#87ceeb">87ceeb</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;87ceeb&#39;"></td></tr>
+<tr>
+  <td><font color="#87cefa">light sky blue</font></td>
+  <td align="right"><font color="#87cefa">135</font></td>
+  <td align="right"><font color="#87cefa">206</font></td>
+  <td align="right"><font color="#87cefa">250</font></td>
+  <td bgcolor="#87cefa">87cefa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;87cefa&#39;"></td></tr>
+<tr>
+  <td><font color="#87cefa">LightSkyBlue</font></td>
+  <td align="right"><font color="#87cefa">135</font></td>
+  <td align="right"><font color="#87cefa">206</font></td>
+  <td align="right"><font color="#87cefa">250</font></td>
+  <td bgcolor="#87cefa">87cefa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;87cefa&#39;"></td></tr>
+<tr>
+  <td><font color="#4682b4">steel blue</font></td>
+  <td align="right"><font color="#4682b4">70</font></td>
+  <td align="right"><font color="#4682b4">130</font></td>
+  <td align="right"><font color="#4682b4">180</font></td>
+  <td bgcolor="#4682b4">4682b4</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;4682b4&#39;"></td></tr>
+<tr>
+  <td><font color="#4682b4">SteelBlue</font></td>
+  <td align="right"><font color="#4682b4">70</font></td>
+  <td align="right"><font color="#4682b4">130</font></td>
+  <td align="right"><font color="#4682b4">180</font></td>
+  <td bgcolor="#4682b4">4682b4</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;4682b4&#39;"></td></tr>
+<tr>
+  <td><font color="#b0c4de">light steel blue</font></td>
+  <td align="right"><font color="#b0c4de">176</font></td>
+  <td align="right"><font color="#b0c4de">196</font></td>
+  <td align="right"><font color="#b0c4de">222</font></td>
+  <td bgcolor="#b0c4de">b0c4de</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;b0c4de&#39;"></td></tr>
+<tr>
+  <td><font color="#b0c4de">LightSteelBlue</font></td>
+  <td align="right"><font color="#b0c4de">176</font></td>
+  <td align="right"><font color="#b0c4de">196</font></td>
+  <td align="right"><font color="#b0c4de">222</font></td>
+  <td bgcolor="#b0c4de">b0c4de</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;b0c4de&#39;"></td></tr>
+<tr>
+  <td><font color="#add8e6">light blue</font></td>
+  <td align="right"><font color="#add8e6">173</font></td>
+  <td align="right"><font color="#add8e6">216</font></td>
+  <td align="right"><font color="#add8e6">230</font></td>
+  <td bgcolor="#add8e6">add8e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;add8e6&#39;"></td></tr>
+<tr>
+  <td><font color="#add8e6">LightBlue</font></td>
+  <td align="right"><font color="#add8e6">173</font></td>
+  <td align="right"><font color="#add8e6">216</font></td>
+  <td align="right"><font color="#add8e6">230</font></td>
+  <td bgcolor="#add8e6">add8e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;add8e6&#39;"></td></tr>
+<tr>
+  <td><font color="#b0e0e6">powder blue</font></td>
+  <td align="right"><font color="#b0e0e6">176</font></td>
+  <td align="right"><font color="#b0e0e6">224</font></td>
+  <td align="right"><font color="#b0e0e6">230</font></td>
+  <td bgcolor="#b0e0e6">b0e0e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;b0e0e6&#39;"></td></tr>
+<tr>
+  <td><font color="#b0e0e6">PowderBlue</font></td>
+  <td align="right"><font color="#b0e0e6">176</font></td>
+  <td align="right"><font color="#b0e0e6">224</font></td>
+  <td align="right"><font color="#b0e0e6">230</font></td>
+  <td bgcolor="#b0e0e6">b0e0e6</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;b0e0e6&#39;"></td></tr>
+<tr>
+  <td><font color="#afeeee">pale turquoise</font></td>
+  <td align="right"><font color="#afeeee">175</font></td>
+  <td align="right"><font color="#afeeee">238</font></td>
+  <td align="right"><font color="#afeeee">238</font></td>
+  <td bgcolor="#afeeee">afeeee</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;afeeee&#39;"></td></tr>
+<tr>
+  <td><font color="#afeeee">PaleTurquoise</font></td>
+  <td align="right"><font color="#afeeee">175</font></td>
+  <td align="right"><font color="#afeeee">238</font></td>
+  <td align="right"><font color="#afeeee">238</font></td>
+  <td bgcolor="#afeeee">afeeee</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;afeeee&#39;"></td></tr>
+<tr>
+  <td><font color="#00ced1">dark turquoise</font></td>
+  <td align="right"><font color="#00ced1">0</font></td>
+  <td align="right"><font color="#00ced1">206</font></td>
+  <td align="right"><font color="#00ced1">209</font></td>
+  <td bgcolor="#00ced1">00ced1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;00ced1&#39;"></td></tr>
+<tr>
+  <td><font color="#00ced1">DarkTurquoise</font></td>
+  <td align="right"><font color="#00ced1">0</font></td>
+  <td align="right"><font color="#00ced1">206</font></td>
+  <td align="right"><font color="#00ced1">209</font></td>
+  <td bgcolor="#00ced1">00ced1</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;00ced1&#39;"></td></tr>
+<tr>
+  <td><font color="#48d1cc">medium turquoise</font></td>
+  <td align="right"><font color="#48d1cc">72</font></td>
+  <td align="right"><font color="#48d1cc">209</font></td>
+  <td align="right"><font color="#48d1cc">204</font></td>
+  <td bgcolor="#48d1cc">48d1cc</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;48d1cc&#39;"></td></tr>
+<tr>
+  <td><font color="#48d1cc">MediumTurquoise</font></td>
+  <td align="right"><font color="#48d1cc">72</font></td>
+  <td align="right"><font color="#48d1cc">209</font></td>
+  <td align="right"><font color="#48d1cc">204</font></td>
+  <td bgcolor="#48d1cc">48d1cc</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;48d1cc&#39;"></td></tr>
+<tr>
+  <td><font color="#40e0d0">turquoise</font></td>
+  <td align="right"><font color="#40e0d0">64</font></td>
+  <td align="right"><font color="#40e0d0">224</font></td>
+  <td align="right"><font color="#40e0d0">208</font></td>
+  <td bgcolor="#40e0d0">40e0d0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;40e0d0&#39;"></td></tr>
+<tr>
+  <td><font color="#00ffff">cyan</font></td>
+  <td align="right"><font color="#00ffff">0</font></td>
+  <td align="right"><font color="#00ffff">255</font></td>
+  <td align="right"><font color="#00ffff">255</font></td>
+  <td bgcolor="#00ffff">00ffff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;00ffff&#39;"></td></tr>
+<tr>
+  <td><font color="#e0ffff">light cyan</font></td>
+  <td align="right"><font color="#e0ffff">224</font></td>
+  <td align="right"><font color="#e0ffff">255</font></td>
+  <td align="right"><font color="#e0ffff">255</font></td>
+  <td bgcolor="#e0ffff">e0ffff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;e0ffff&#39;"></td></tr>
+<tr>
+  <td><font color="#e0ffff">LightCyan</font></td>
+  <td align="right"><font color="#e0ffff">224</font></td>
+  <td align="right"><font color="#e0ffff">255</font></td>
+  <td align="right"><font color="#e0ffff">255</font></td>
+  <td bgcolor="#e0ffff">e0ffff</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;e0ffff&#39;"></td></tr>
+<tr>
+  <td><font color="#5f9ea0">cadet blue</font></td>
+  <td align="right"><font color="#5f9ea0">95</font></td>
+  <td align="right"><font color="#5f9ea0">158</font></td>
+  <td align="right"><font color="#5f9ea0">160</font></td>
+  <td bgcolor="#5f9ea0">5f9ea0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;5f9ea0&#39;"></td></tr>
+<tr>
+  <td><font color="#5f9ea0">CadetBlue</font></td>
+  <td align="right"><font color="#5f9ea0">95</font></td>
+  <td align="right"><font color="#5f9ea0">158</font></td>
+  <td align="right"><font color="#5f9ea0">160</font></td>
+  <td bgcolor="#5f9ea0">5f9ea0</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;5f9ea0&#39;"></td></tr>
+<tr>
+  <td><font color="#66cdaa">medium aquamarine</font></td>
+  <td align="right"><font color="#66cdaa">102</font></td>
+  <td align="right"><font color="#66cdaa">205</font></td>
+  <td align="right"><font color="#66cdaa">170</font></td>
+  <td bgcolor="#66cdaa">66cdaa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;66cdaa&#39;"></td></tr>
+<tr>
+  <td><font color="#66cdaa">MediumAquamarine</font></td>
+  <td align="right"><font color="#66cdaa">102</font></td>
+  <td align="right"><font color="#66cdaa">205</font></td>
+  <td align="right"><font color="#66cdaa">170</font></td>
+  <td bgcolor="#66cdaa">66cdaa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;66cdaa&#39;"></td></tr>
+<tr>
+  <td><font color="#7fffd4">aquamarine</font></td>
+  <td align="right"><font color="#7fffd4">127</font></td>
+  <td align="right"><font color="#7fffd4">255</font></td>
+  <td align="right"><font color="#7fffd4">212</font></td>
+  <td bgcolor="#7fffd4">7fffd4</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;7fffd4&#39;"></td></tr>
+<tr>
+  <td><font color="#006400">dark green</font></td>
+  <td align="right"><font color="#006400">0</font></td>
+  <td align="right"><font color="#006400">100</font></td>
+  <td align="right"><font color="#006400">0</font></td>
+  <td bgcolor="#006400">006400</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;006400&#39;"></td></tr>
+<tr>
+  <td><font color="#006400">DarkGreen</font></td>
+  <td align="right"><font color="#006400">0</font></td>
+  <td align="right"><font color="#006400">100</font></td>
+  <td align="right"><font color="#006400">0</font></td>
+  <td bgcolor="#006400">006400</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;006400&#39;"></td></tr>
+<tr>
+  <td><font color="#556b2f">dark olive green</font></td>
+  <td align="right"><font color="#556b2f">85</font></td>
+  <td align="right"><font color="#556b2f">107</font></td>
+  <td align="right"><font color="#556b2f">47</font></td>
+  <td bgcolor="#556b2f">556b2f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;556b2f&#39;"></td></tr>
+<tr>
+  <td><font color="#556b2f">DarkOliveGreen</font></td>
+  <td align="right"><font color="#556b2f">85</font></td>
+  <td align="right"><font color="#556b2f">107</font></td>
+  <td align="right"><font color="#556b2f">47</font></td>
+  <td bgcolor="#556b2f">556b2f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;556b2f&#39;"></td></tr>
+<tr>
+  <td><font color="#8fbc8f">dark sea green</font></td>
+  <td align="right"><font color="#8fbc8f">143</font></td>
+  <td align="right"><font color="#8fbc8f">188</font></td>
+  <td align="right"><font color="#8fbc8f">143</font></td>
+  <td bgcolor="#8fbc8f">8fbc8f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;8fbc8f&#39;"></td></tr>
+<tr>
+  <td><font color="#8fbc8f">DarkSeaGreen</font></td>
+  <td align="right"><font color="#8fbc8f">143</font></td>
+  <td align="right"><font color="#8fbc8f">188</font></td>
+  <td align="right"><font color="#8fbc8f">143</font></td>
+  <td bgcolor="#8fbc8f">8fbc8f</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;8fbc8f&#39;"></td></tr>
+<tr>
+  <td><font color="#2e8b57">sea green</font></td>
+  <td align="right"><font color="#2e8b57">46</font></td>
+  <td align="right"><font color="#2e8b57">139</font></td>
+  <td align="right"><font color="#2e8b57">87</font></td>
+  <td bgcolor="#2e8b57">2e8b57</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2e8b57&#39;"></td></tr>
+<tr>
+  <td><font color="#2e8b57">SeaGreen</font></td>
+  <td align="right"><font color="#2e8b57">46</font></td>
+  <td align="right"><font color="#2e8b57">139</font></td>
+  <td align="right"><font color="#2e8b57">87</font></td>
+  <td bgcolor="#2e8b57">2e8b57</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;2e8b57&#39;"></td></tr>
+<tr>
+  <td><font color="#3cb371">medium sea green</font></td>
+  <td align="right"><font color="#3cb371">60</font></td>
+  <td align="right"><font color="#3cb371">179</font></td>
+  <td align="right"><font color="#3cb371">113</font></td>
+  <td bgcolor="#3cb371">3cb371</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;3cb371&#39;"></td></tr>
+<tr>
+  <td><font color="#3cb371">MediumSeaGreen</font></td>
+  <td align="right"><font color="#3cb371">60</font></td>
+  <td align="right"><font color="#3cb371">179</font></td>
+  <td align="right"><font color="#3cb371">113</font></td>
+  <td bgcolor="#3cb371">3cb371</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;3cb371&#39;"></td></tr>
+<tr>
+  <td><font color="#20b2aa">light sea green</font></td>
+  <td align="right"><font color="#20b2aa">32</font></td>
+  <td align="right"><font color="#20b2aa">178</font></td>
+  <td align="right"><font color="#20b2aa">170</font></td>
+  <td bgcolor="#20b2aa">20b2aa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;20b2aa&#39;"></td></tr>
+<tr>
+  <td><font color="#20b2aa">LightSeaGreen</font></td>
+  <td align="right"><font color="#20b2aa">32</font></td>
+  <td align="right"><font color="#20b2aa">178</font></td>
+  <td align="right"><font color="#20b2aa">170</font></td>
+  <td bgcolor="#20b2aa">20b2aa</td>
+  <td><input type="button" value="click" onclick="document.bgColor=&#39;20b2aa&#39;"></td></tr>
+<tr>
+  <td><font color="#98fb98">pale green</font></td>
+  <td align="right"><font color="#98fb98">152</font></td>
+  <td align="right"><font color="#98fb98">251</font></td>
+  <td align="right"><font color="#98fb98">152</font></td></tr></tbody></table></form></center><div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a href="http://homepage1.nifty.com/blankspace/emacs/emacs_rgb.html#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>

@@ -1,0 +1,84 @@
+#+TITLE: Swift 实战心得
+
+
+* 如何通过storyboard创建一个ViewController的实例
+1. 在storyBoard中推进一个ViewController
+1. 在identity inspector -> StoryBoard ID中写下一个 ID。用来标记这个ViewController
+1. 在需要创建这个ViewController的实例的地方使用如下代码
+#+BEGIN_SRC C
+var pageView : PageContentViewController = self.storyboard.instantiateViewControllerWithIdentifier("PageContentController") as PageContentViewController
+
+#+END_SRC
+这样就创建好了
+
+* 如何创建一个PageViewController
+
+- 在与UIPageViewController相对应的Class文件中，实现UIPageViewControllerDataSource
+   需要实现下面这2个方法
+   - viewControllerBeforeViewController
+   - viewControllerAfterViewController
+   - presentationCountForPageViewController  有几张图片需要显示
+   - presentationIndexForPageViewController  当前显示顺序的索引
+
+   指定self.datasoure = self
+
+- 需要一个ViewController，在其中添加UIImageView，每次PageViewController都是创建一个ViewController的实例，并指定其中的UIImageView显示不同的图片
+
+
+具体步骤是：
+1. 创建一个数组，用来存储ViewController的实例，并至少存储一个ViewController的实例
+1. 设置UIPageViewController的setViewControllers方法，参数传第一步的数组
+1. 指定UIPageViewController的didMoveToParentViewController(self)
+ 
+
+这是一个例子。用说的真说不明白啊
+
+#+BEGIN_SRC C
+var pageController : UIPageViewController? = nil
+    
+var titleArray = ["title1", "title2", "title3", "title4", "title5"]
+//需要显示的图片的数组
+var imageArray = ["view1.png", "view2.png", "view3.png", "view4.png", "view5.png"]
+    
+override func viewDidLoad() {
+        super.viewDidLoad()
+        
+//        self.pageController = self.storyboard.instantiateViewControllerWithIdentifier("PageViewController") as? UIPageViewController
+        self.pageController = UIPageViewController()
+        
+        var pageView = self.viewControllerAtIndex(0)
+
+        var viewControllerArrays : NSArray = [pageView];
+//        var viewControllerArrays : NSArray = NSArray(object: pageView)
+   
+     self.pageController!.setViewControllers(viewControllerArrays, direction: UIPageViewControllerNavigationDirection.Forward, animated: false, completion: nil)
+
+        
+        self.pageController!.dataSource = self
+        
+        self.pageController!.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+        self.addChildViewController(self.pageController!)
+        
+
+        self.view.addSubview(self.pageController!.view)
+        self.pageController!.didMoveToParentViewController(self)
+        // Do any additional setup after loading the view.
+}
+
+#+END_SRC
+
+
+* 如何实现一个UIPageViewController
+以全部手动创建为例子，即不使用StroyBoard
+1. 准备2个ViewController
+    - 第一个用来
+
+
+1. 创建一个Swift类， cocoa touch class ，继承自UIViewController
+1. 在此Swift类中指定实现UIPageViewController
+1. 在此Swift类中创建一个变量，
+#+BEGIN_SRC C
+var pageController : UIPageViewController? = nil
+#+END_SRC
+
+1. 

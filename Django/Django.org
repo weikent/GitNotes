@@ -1,0 +1,311 @@
+#+TITLE:     Django 笔记
+
+#+OPTIONS: ^:nil
+
+
+* 安装
+首先得有Python
+1. 官方版本
+    1. 下载 http://www.djangoproject.com/download/
+    1. 解压 并  python setup.py install。
+1. Trunk版本
+    没安装这个版本，具体介绍看http://djangobook.py3k.cn/2.0/chapter02/
+
+
+** 官方版本和Trunk版本的区别
+  区别是，Trunk版本中都是拥有最新功能，但不是很稳定的版本。
+
+
+
+* 第一个项目
+
+1. 创建一个目录专门用来存放django到代码。
+1. 在创建到目录中运行 
+#+BEGIN_SRC sh
+ django-admin.py startproject mysite
+#+END_SRC
+mysite是项目到名称，可以换做其他名称
+
+startproject 命令创建一个目录，包含4个文件：
+
+#+BEGIN_SRC sh
+
+mysite/
+    __init__.py
+    manage.py
+    settings.py
+    urls.py
+
+
+#+END_SRC sh
+
+    + __init__.py:让python把该项目当成一个开发包（即一组模块）所需到文件，这是一个空文件，一般不需要修改。
+    + manage.py: 一种命令行工具，允许以多种方式与该Django项目进行交互。键入python manage.py help.可以看到帮助，不许要修改，生成它纯是为了方便。
+    + settings.py: 该Django项目的设置或配置，查看并理解这个文件中可用的设置类型及默认值。
+    + urls.py: Django 项目的URL设置。可视其为django网站的目录，
+
+
+@<font color="#ff0000">
+setting.py 文件是一个重要的配置文件，
+@</font>
+
+
+切换到mysite目录， 执行 python manage.py runserver   可以启动django web 服务。默认监听端口8000.
+
+可以用python manage.py runserver 8080 指定监听端口。
+
+可以用python manage.py runserver 0.0.0.0:8000 制定监听端口和ip地址。
+
+
+
+* 添加视图
+
+web 服务起来了。可是没有显示什么有用到内容。
+
+django使用视图来显示页面信息。
+
+使用Django， 页面的内容是靠view function（视图函数） 来产生，URL定义在 URLconf 中
+
+视图的名称无关紧要，django都可以找到，但建议写成views.py
+
+#+BEGIN_SRC sh
+
+from django.http import HttpResponse
+
+def hello(request):
+    return HttpResponse("Hello world")
+
+#+END_SRC
+
+1. 从django.http模块导入HttpResponse类，
+1. 每个视图函数都有，至少有1个参数 ： request
+    request是一个触发这个视图、包含当前web请求信息到对象，是类diango.http.HttpRequest的一个实例。
+1. 视图函数的名称并不重要，任意起名即可， urlconf中指定这个视图函数对样到url即可。
+1. 返回一个HttpResponse实例。
+
+
+--
+
++ 一个视图就是一个python函数，
++ 第一个参数必须是HttpRequest类型，
++ 返回必须是HttpResponse实例。
+
+
+* 添加视图对应的url
+我们需要一个详细描述的url来显示告诉项目，我们有一个视图。这里就要用到URLconf（urls.py）
+
+URLconf是url和url所指向的视图函数之间到映射表。
+
+@<font color="#ff0000">
+需要在urls.py中import 视图所在的model。
+
+from mysite.views import hello 或者 import mysite.views
+@</font>
+
+
+在urls.py中,修改urlpatterns变量。添加类似\\
+('^hello/$', hello), 的url和视图的对应关系。
+
+
+
++ ^hello/$  是一个正则表达式。
+    + ^ 匹配以“hello/“开始的字符串
+    + $ 匹配以“hello/”结束到字符串
++ hello 是一个视图的名称。
+
+
+
+
++ django在处理url请求的时候，会自动去掉http://127.0.0.1:8080/ 类似的字符串，而保留后面的“hello/”，来对应urls.py中的映射。
+
++ “^hello/$” 中 最后的"/", 当用户的输入的url不包含最后的”/“时，可以设置“APPEND_SLASH”为“true”来自动添加最后的“/”来达到匹配正则表达式的目的。也可以把“APPEND_SLASH”为“false”，不自动添加最后的“/”。这样"hello/" 和 "hello" 将对应2个不同的view。
+
++ 在url中有时会出现被括号括住的内容,表示括号中的内容是参数，要传递给url对应的视图函数的参数。如(\d{1,3})即传递最大3位数的数字给函数。
+
+
+@<font color="#ff0000">
+基本的正则表达式
+@</font>
+
+| 符号     | 匹配                                                                        |
+|----------+----------------------------------------------------------------------------|
+| . (dot)  | 任意单一字符                                                                |
+| \d       | 任意一位数字                                                                |
+| [A-Z]    | A 到 Z中任意一个字符（大写）                                                |
+| [a-z]    | a 到 z中任意一个字符（小写）                                                |
+| [A-Za-z] | a 到 z中任意一个字符（不区分大小写）                                        |
+| +        | 匹配一个或更多 (例如, \d+ 匹配一个或 多个数字字符)                          |
+| [^/]+    | 一个或多个不为‘/’的字符                                                   |
+| *        | 零个或一个之前的表达式（例如：\d? 匹配零个或一个数字）                      |
+| *        | 匹配0个或更多 (例如, \d* 匹配0个 或更多数字字符)                            |
+| {1,3}    | 介于一个和三个（包含）之前的表达式（例如，\d{1,3}匹配一个或两个或三个数字） |
+
+
+* 遇到的问题
+** empty module name
+此问题我是在设置数据库信息的时候，把”django.db.backends.mysql“错误的写成”django.db.backends.mysql.”
+最后多了一个@<font color="#ff0000">点号@</font>
+** 安裝MySQLdb
+- 有时会遇到找不到mysql_config的问题
+     可以安装 sudo apt-get install libmysqld-dev
+     之后再修改site.cfg文件，将mysql_config指向正确的位置。
+- 有时会遇到Python.h这个文件不存在
+     可以安装 sudo apt-get install python-dev
+- 有时会遇到没有setuptools
+     安装即可。
+- 有可能还需要安装libmysqlclient-dev
+     sudo apt-get install libmysqlclient-dev
+     否则import模块时会出错。
+
+
+* django与apache
+1. 安装apache
+   
+    sudo apt-get install apache
+
+    可执行程序是
+
+    /usr/sbin/apache2
+
+    配置文件是在
+
+    /etc/apache2
+
+    网站(web)文件是在：
+
+    /var/www
+
+    这个当然你可以配置，修改
+
+    /etc/apache2/sites-available/default
+
+    这个文件的下面的字段
+    
+    DocumentRoot /var/www
+
+    比如你改到/var/temp
+
+    那么就把这行改成：
+
+    DocumentRoot /var/temp
+
+    配置文件并不是在httpd.conf里面，而是apache2.conf，而这里面并没有配置所有的东西，如端口是在ports.conf这个文件里面，而网站的根目录是在上面的提到的
+
+    /etc/apache2/sites-available/default
+
+    这个文件中。 虽然也有httpd.conf这个文件，但是httpd.conf里面是空的，其实你可以在这里面加一些配置，因为apache2.conf里面会把httpd.conf加到它的文件里面。
+
+1. 安装mod_wsgi
+
+    安装mod_wsgi有3种方式，源码安装和二进制文件安装和命令安装。
+
+    + 命令安装：
+
+        目前unbuntu提供了2个源，一个针对2.x python，另外一个针对3.x python：
+
+        libapache2-mod-wsgi – Python WSGI adapter module for Apache
+
+        libapache2-mod-wsgi-py3 – Python 3 WSGI adapter module for Apache
+
+    + 二进制文件安装：
+
+        从下列地址下载二进制文件，然后把他们copy到对应的文件夹即可：
+
+        http://ftp.cn.debian.org/debian/pool/main/m/mod-wsgi/libapache2-mod-wsgi_3.3-4_i386.deb
+
+    + 源码安装：
+
+        通过下面的链接下载源码：
+      
+        http://code.google.com/p/modwsgi/downloads/detail?name=mod_wsgi-3.3.tar.gz
+
+        解压进入该目录，使用configure生成Makefile，
+
+        ./configure
+
+        发现有错误:
+
+        apxs: command not found
+
+        上网google一堆，发现有人说缺少httpd.devel等等之类的，发现都解决不了问题，后来在mod_wsgi的官网找到了答案：
+
+        http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
+
+        原来是要安装apache2-dev,使用下列命令安装：
+
+        sudo apt-get install apache2-dev
+
+        还有一个依赖库就是python-dev
+
+        sudo apt-get install python-dev
+
+        现在，再来一次configure，发现成功的生成了makefile
+
+        接下来就是
+
+        make
+
+        make install
+
+        如果没有什么错误这样我们就成功了安装了mod_wsgi
+
+        还有一个方法就是直接看看下面的文件存不存在：
+
+        /usr/lib/apache2/modules/mod_wsgi.so
+
+1. 配置apache来加载mod_wsgi
+
+    如果你的apache是在运行状态，先停止它
+
+    sudo service apache2 stop
+
+    然后配置apache， 在/etc/apache2/httpd.conf加入下面一行:
+
+    LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so
+
+    注意上面的/usr/lib/apache2/modules/mod_wsgi.so是我的安装路径，如果你的是安装其他的目录，应做出相应的调整，怎么查看这个so安装在什么位置，就用find命令：
+    
+    sudo find / -name mod_wsgi.so
+
+    重启apache
+
+    sudo service apache2 start
+    如果系统找不到你的mod_wsgi.so，apache服务就会启动失败。
+
+
+    在httpd.conf中或者sites-available/default中添加
+#+BEGIN_SRC sh
+	WSGIScriptAlias / /home/ubuntu/mysite2/mysite2/wsgi.py
+	<Directory /home/ubuntu/mysite2/mysite2>
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	Alias /static /home/ubuntu/mysite2/mysite2/static
+	<Directory /home/ubuntu/mysite2/mysite2/static>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+static:是网站中的静态文件，
+
+
+#+END_SRC
+
+在django的工程目录中，有个wsgi.py文件
+在里面添加
+#+BEGIN_SRC sh
+import os
+import sys
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
+
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
+If your project is not on your PYTHONPATH by default you can add:
+
+path = '/path/to/mysite'
+if path not in sys.path:
+    sys.path.append(path)
+
+#+END_SRC

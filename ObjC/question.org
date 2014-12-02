@@ -1,0 +1,134 @@
+#+TITLE: 在网上查找的问题
+
+
+* question 1 :Cast of 'int' to 'id' is disallowed with ARC
+** question
+各位大侠好，请教一个问题：
+我需要在代码中强制性地旋转到一个特定方向
+ios5以后不能直接使用setOrientation方法了,找了网上的贴子说可以通过下面的代码实现
+#+BEGIN_SRC C
+if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        [[UIDevice currentDevice] performSelector:@selector(setOrientation:)
+                                       withObject:(id)UIInterfaceOrientationLandscapeRight];
+    }
+#+END_SRC
+
+
+由于使用了ARC，系统会提示
+Cast of 'int' to 'id' is disallowed with ARC
+尝试了一些修饰词都还是不行,请大侠指点
+
+** answer
+还是cocoachina上高手多些，终于解决了,贴上来做个记号，一个叫maxwin的大帅解决的
+#+BEGIN_SRC C
+
+
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = UIInterfaceOrientationLandscapeRight;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+
+#+END_SRC
+
+
+* question 2 : how to use a tableView
+** question: how to use a tableView
+** answer:
+If you create the table view programmatically, and you're just using the default UITableViewCell, then you should register the class (in ViewDidLoad is a good place). You can alse do this for a custom class, but only if you create the cell (and its subviews) in code (use registerNib:forCellWithReuseIdentifier: if the cell is made in a xib file).
+
+- use main.storyboard to create a UITableViewController.
+- set its Custom Class in Identity Inspector.
+- in its m file, viewDidLoad or other place.
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"firstViewCell"];
+- in its m file, - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"firstViewCell" forIndexPath:indexPath];
+- must all is @"firstViewCell"
+
+
+* question 3: socket 传送的内容必须以\r\n结尾？
+
+* question 4: No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=arm64, VALID_ARCHS=armv7 armv7s).
+** answer:
+Build Active Architecture Only = No
+
+
+
+
+
+
+
+
+* 如果输入$ git remote add origin git@github.com:djqiang（github帐号名）/gitdemo（项目名）.git     提示出错信息：fatal: remote origin already exists.
+** answer
+  1、先输入$ git remote rm origin
+
+    2、再输入$ git remote add origin git@github.com:djqiang/gitdemo.git 就不会报错了！
+
+    3、如果输入$ git remote rm origin 还是报错的话，error: Could not remove config section 'remote.origin'. 我们需要修改gitconfig文件的内容
+
+    4、找到你的github的安装路径，我的是C:\Users\ASUS\AppData\Local\GitHub\PortableGit_ca477551eeb4aea0e4ae9fcd3358bd96720bb5c8\etc
+
+    5、找到一个名为gitconfig的文件，打开它把里面的[remote "origin"]那一行删掉就好了！
+
+
+* Byte* 与 char*的区别
+在做Socket这个工程的时候，把NSData转成 char *
+#+BEGIN_SRC C
+char * buf = (char*)malloc(1000);
+snprintf(buffer, [string length] + 1, "%s\n", (unsigned char*)[string bytes]);
+
+#+END_SRC
+最后发现不是Byte* 与 char* 的区别，而是不应该使用snprintf来拷贝。而应该使用memcpy
+
+
+* UIPageViewController 的切换类型
+** Page Curl
+    这个里面   不会   显示UIPageControl
+** Scroll
+    这个里面   会     显示UIPageControl
+
+* NSTimer
+完整的停止Timer的方式是这个，
+#+BEGIN_SRC C
+    [_timer invalidate];
+    self.timer = nil;//一定要制为nil
+
+#+END_SRC
+
+* UIActionSheet and UIPopOverController
+** UIActionSheet is used for iphone and ipad.
+** UIPopOverController is used for ipad only.
+
+
+* class_addProperty 可以动态增加类的属性
+
+* @property的特性
+** 原子性
+
+*** atomic（默认）：atomic意为操作是原子的，意味着只有一个线程访问实例变量。atomic是线程安全的，至少在当前的存取器上是安全的。它是一个默认的特性，但是很少使用，因为比较影响效率，这跟ARM平台和内部锁机制有关。
+*** nonatomic：nonatomic跟atomic刚好相反。表示非原子的，可以被多个线程访问。它的效率比atomic快。但不能保证在多线程环境下的安全性，在单线程和明确只有一个线程访问的情况下广泛使用。
+
+** 存取器控制
+
+*** readwrite（默认）：readwrite是默认值，表示该属性同时拥有setter和getter。
+*** readonly： readonly表示只有getter没有setter。
+
+** 内存管理
+*** assign（默认）：assign用于值类型，如int、float、double和NSInteger，CGFloat等表示单纯的复制。还包括不存在所有权关系的对象，比如常见的delegate。
+*** retian：在setter方法中，需要对传入的对象进行引用计数加1的操作。
+简单来说，就是对传入的对象拥有所有权，只要对该对象拥有所有权，该对象就不会被释放。如下代码所示：
+
+
+*** strong：strong是在IOS引入ARC的时候引入的关键字，是retain的一个可选的替代。表示实例变量对传入的对象要有所有权关系，即强引用。strong跟retain的意思相同并产生相同的代码，但是语意上更好更能体现对象的关系。
+*** weak：在setter方法中，需要对传入的对象不进行引用计数加1的操作。
+简单来说，就是对传入的对象没有所有权，当该对象引用计数为0时，即该对象被释放后，用weak声明的实例变量指向nil，即实例变量的值为0。
+
+注：weak关键字是IOS5引入的，IOS5之前是不能使用该关键字的。delegate 和 Outlet 一般用weak来声明。
+
+*** copy：与strong类似，但区别在于实例变量是对传入对象的副本拥有所有权，而非对象本身。
+

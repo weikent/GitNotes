@@ -1,0 +1,6 @@
+* 2014/11/25 16:31:24
+- 增加两张很好的理解 modified、staged、commited这三种状态的图式
+git1.png
+git2.png
+
+- 修改了git.org中的src的种类，由C -> sh

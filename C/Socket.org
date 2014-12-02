@@ -1,0 +1,160 @@
+#+TITLE: Linux下socket连接超时的设置
+
+
+
+
+#+BEGIN_SRC C
+目前各平台通用的设置套接字（socket）连接超时的办法是：
+创建套接字，将其设置成非阻塞状态。
+调用connect连接对端主机，如果失败，判断当时的errno是否为EINPROGRESS，也就是说是不是连接正在进行中，如果是，转到步骤3，如果不是，返回错误。
+用select在指定的超时时间内监听套接字的写就绪事件，如果select有监听到，证明连接成功，否则连接失败。
+　　以下是Linux环境下的示例代码:
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <errno.h>
+#include <time.h>
+
+int main(int argc, char *argv[])
+{
+        int fd, retval;
+        struct sockaddr_in addr;
+        struct timeval timeo = {3, 0};
+        socklen_t len = sizeof(timeo);
+        fd_set set;
+
+        fd = socket(AF_INET, SOCK_STREAM, 0);
+        if (argc == 4)
+                timeo.tv_sec = atoi(argv[3]);
+        fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+        addr.sin_family = AF_INET;
+        addr.sin_addr.s_addr = inet_addr(argv[1]);
+        addr.sin_port = htons(atoi(argv[2]));
+        printf("%dn", time(NULL));
+        if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == 0) {
+                printf("connectedn");
+                return 0;
+        }
+        if (errno != EINPROGRESS) {
+                perror("connect");
+                return -1;
+        }
+        FD_ZERO(&set);
+        FD_SET(fd, &set);
+        retval = select(fd + 1, NULL, &set, NULL, &timeo);
+        if (retval == -1) {
+                perror("select");
+                return -1;
+        } else if(retval == 0) {
+                fprintf(stderr, "timeoutn");
+                printf("%dn", time(NULL));
+                return 0;
+        }
+        printf("connectedn");
+
+        return 0;
+}
+
+
+　　实际运行结果如下:
+
+xiaosuo@gentux perl $ ./a.out 10.16.101.1 90
+1180289276
+timeout
+1180289279
+xiaosuo@gentux perl $ ./a.out 10.16.101.1 90 1
+1180289281
+timeout
+1180289282
+
+　　可以看到，以上代码工作的很好，并且如果你想知道连接发生错误时的确切信息的话，你可以用getsocketopt获得:
+
+int error;
+socklen_t errorlen = sizeof(error);
+
+getsockopt(fd, SOL_socket, SO_ERROR, &error, &errorlen);
+
+
+　　但是多少有些复杂，如果有象SO_SNDTIMO/SO_RCVTIMO一样的套接字参数可以让超时操作跳过select的话，世界将变得更美好。当然你还可以选用象apr一样提供了简单接口的库，但我这里要提的是另一种方法。
+
+　　呵呵，引子似乎太长了点儿。读Linux内核源码的时候偶然发现其connect的超时参数竟然和用SO_SNDTIMO操作的参数一致:
+
+　　File: net/ipv4/af_inet.c
+
+   559      timeo = sock_sndtimeo(sk, flags & O_NONBLOCK);
+   560
+   561      if ((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV)) {
+   562          /* Error code is set above */
+   563          if (!timeo || !inet_wait_for_connect(sk, timeo))
+   564              goto out;
+   565
+   566          err = sock_intr_errno(timeo);
+   567          if (signal_pending(current))
+   568              goto out;
+   569      }
+
+　　这意味着：在Linux平台下，可以通过在connect之前设置SO_SNDTIMO来达到控制连接超时的目的。简单的写了份测试代码:
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <errno.h>
+
+int main(int argc, char *argv[])
+{
+        int fd;
+        struct sockaddr_in addr;
+        struct timeval timeo = {3, 0};
+        socklen_t len = sizeof(timeo);
+
+        fd = socket(AF_INET, SOCK_STREAM, 0);
+        if (argc == 4)
+                timeo.tv_sec = atoi(argv[3]);
+        setsockopt(fd, SOL_socket, SO_SNDTIMEO, &timeo, len);
+        addr.sin_family = AF_INET;
+        addr.sin_addr.s_addr = inet_addr(argv[1]);
+        addr.sin_port = htons(atoi(argv[2]));
+        if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+                if (errno == EINPROGRESS) {
+                        fprintf(stderr, "timeoutn");
+                        return -1;
+                }
+                perror("connect");
+                return 0;
+        }
+        printf("connectedn");
+
+        return 0;
+}
+
+
+　　执行结果:
+
+xiaosuo@gentux perl $ ./a.out 10.16.101.1 90
+1180290583
+timeout
+1180290586
+xiaosuo@gentux perl $ ./a.out 10.16.101.1 90 2
+1180290590
+timeout
+1180290592
+　　和设想完全一致！
+
+#+END_SRC
+
+
+* Connection reset by peer
+经过测试，出现这个错误的情况是 
+- 服务器端进行了 send/write操作
+- 但客户端没有进行 read/recv来读取这些数据
+- 而是直接关闭了socket
+这样服务器端就会产生这个异常。

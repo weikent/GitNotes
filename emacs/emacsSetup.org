@@ -1,0 +1,228 @@
+#+TITLE: 配置emacs
+
+
+
+emacs主要用来
+- 记笔记
+- python 
+- C/C++
+
+使用到的插件
+- elget：用来自动安装el文件
+# - packages：类似elget。但在今天（2014/12/01) 使用package下载的文件有问题啊。文件不全，没有最后的  provide ...
+- color-theme： emacs配色
+- dired： emacs的目录
+- linum： 行号
+- grep：grep-find 查找功能
+- borwse-kill-ring：剪切板记录
+# - ido：C-x C-f的时候，提示
+# - semx：替代ido
+- helm： 替代 semx
+- tramp：用来在emacs中使用root权限打开文件
+- org：orgmode 用来记笔记
+# - cedet 和 ecb：cedet是安装ecb的基础，ecb是据说很好的浏览代码工具，实验中 
+- cscope： 也是用来浏览代码的。可以实现C/C++代码中函数、变量的跳转
+- auto-complete & yasnippet：通用的自动补全工具
+- auto-complete-clang：配合auto-complete来实现c/c++的代码补全，函数参数提示等
+- jedi：python的代码补全工具
+- ipython：python的命令行提示工具
+
+
+
+
+* 启动emacs前的准备
+- sudo apt-get install clang            : for c/c++
+- sudo apt-get install cscope           : for c/c++
+- sudo apt-get install python-dev       : for jedi
+- sudo apt-get install python-virtualenv : for jedi
+- sudo apt-get install ttf-inconslate     : ubuntu font
+- sudo apt-get install automake         : for el-get install doxymacs
+- sudo apt-get install libxml libxml2-dev : for el-get install doxymacs
+
+
+* 使用el-get.el 来安装所有（几乎所有）el文件。
+
+安装elget需要有git。
+安装master版本比较好。
+https://github.com/dimitri/el-get
+
+具体配置看init-elget.el 使用elget
+
+* 记笔记就用org-mode了。
++emacs自带的org即可，配置文件就是lisps目录中的org-mode-settings.el+
+几天开始使用elget来下载org了（2014/12/01）
+配置还是init-org.el
+
+
+* emacs 配置 python
+ 可以使用jedi来替代之前到rope / ropemacs /ropemode  组合。
+*** 使用el-get.el 安装jedi
+地址：https://github.com/davidhalter/jedi
+在ubuntu中安装好需要到软件之后，直接在M-x el-get-install RET jedi即可安装成功。
+
+在mac中。需要在系统自带的命令行中,jedi的目录中执行 make requestments 。之后在安装。 其他到基本和ubuntu一样。
+
+
+*** 需要用到ipython.el python-mode.el。
+
+ipython可以通过easy_install 安装。同时需要安装readline。
+sudo easy_install ipython readline
+    安装时如果遇到“Modules/2.x/readline.c:8:20: 致命错误： Python.h：没有那个文件或目录” 
+    需要执行 apt-get install python-dev
+
+
+python-mode可以在[[https://launchpad.net/python-mode/][官网]] 直接下载使用。
+
+
+配置文件就看lisps\python\init_python.el init_ipython.el init_initjedi.el
+
+* emacs 中安装auto-complete 和 auto-complete-clang
+可以查看 [[http://blog.csdn.net/winterttr/article/details/7524336][ emacs中使用auto-complete的详细设置]]
+
+[[http://blog.csdn.net/winterttr/article/details/7273345][ emacs下使用clang补全C++]]
+[[http://blog.csdn.net/cherylnatsu/article/details/7670445][Emacs+auto-complete+clang进行代码补全]]
+
+M-x el-get-install RET auto-complete 
+M-x el-get-install RET popup
+M-x el-get-install RET fuzzy
+M-x el-get-install RET pos-tip
+M-x el-get-install RET auto-complete-clang
+使用上面命令，可以直接用el-get安装。
+- auto-complete:是auto-complete的主要源码
+- popup: auto-complete的popup列表
+- fuzzy: auto-complete的模糊查找功能
+- pos-tip: 用来调整popup函数提示信息的位置。
+- auto-complete-clang:配合auto-complete的C/C++自动补全插件。
+    需要在机器中安装clang工具。
+mac上好像自带clang
+
+ubuntu上使用apt-get install clang 可以安装。
+
+
+@<font color="#ff0000">echo "" | g++ -v -x c++ -E -   可以得到系统中所有的头文件目录@</font>
+
+
+配置文件就看init_initjede.el了。
+
+
+
+* emacs Mac中安装Cscope
+- 在http://cscope.sourceforge.net 中下载最新版本
+- 解压
+- 修改cscope 源文件
+    - vim src/constants.h
+    - 在111行后添加
+         #undef TERMINFO
+         #define TERMINFO
+- ./configure && make && make install
+* emacs 使用Cscope
+生成索引文件才能使用Cscope的强大功能。
+1.  首先需要在源码根目录执行
+    #+begin_src c
+    cscope-indexer -r
+    #+end_src
+    -r 表示递归检索子目录。会生成2个文件
+    - cscope.files：文件列表。即根目录下所有文件名
+    - cscope.out：数据库
+1.  一般执行上一步之后就足够了，项目中的所有源文件都在文件列表里了。但不能跳转到/usr/include目录。如：想看到printf函数的定义，需要跳转到/usr/include/printf.h文件。
+    这时就需要手动把/usr/include下的.h文件都添加到cscope.files文件中。
+    使用
+    #+begin_src c
+      find /usr/include -name "*.h" -o -name "*.c" -o -name "*.cc"  -o -name "*.cpp" -o -name "*.hpp" > cscope.files
+    #+end_src
+    然后执行下一步
+1.  使用cscope -Rb 重新生成cscope.out文件。
+    - -R: 在生成索引文件时，搜索子目录树中的代码
+    - -b: 只生成索引文件，不进入cscope的界面
+    - -k: 在生成索引文件时，不搜索/usr/include目录
+    - -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
+    - -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用“-”，表示由标准输入获得文件列表。
+    - -I dir: 在-I选项指出的目录中查找头文件
+    - -u: 扫描所有文件，重新生成交叉索引文件
+    - -C: 在搜索时忽略大小写
+    - -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了
+    Cscope只在第一次解析时扫描全部文件，以后再调用cscope，它只扫描那些改动过的文件，这大大提高了cscope生成索引的速度。 
+    在缺省情况下，cscope在生成数据库后就会进入它自己的查询界面，我们一般不用这个界面，所以使用了“-b”选项。如果你已经进入了这个界面，按CTRL-D退出。
+
+    Cscope在生成数据库中，在你的项目目录中未找到的头文件，会自动到/usr/include目录中查找。如果你想阻止它这样做，使用“-k”选项。
+
+    Cscope缺省只解析C文件(.c和.h)、lex文件(.l)和yacc文件(.y)，虽然它也可以支持C++以及Java，但它在扫描目录时会跳过 C++及Java后缀的文件。如果你希望cscope解析C++或Java文件，需要把这些文件的名字和路径保存在一个名为cscope.files的文 件。当cscope发现在当前目录中存在cscope.files时，就会为cscope.files中列出的所有文件生成索引数据库。
+    #+begin_src c
+      find /usr/include -name "*.h" -o -name "*.c" -o -name "*.cc"  -o -name "*.cpp" -o -name "*.hpp" > cscope.files
+      cscope -bkq -i cscope.files   
+     #+end_src
+
+1. Cscope默认在每次进行查找时更新cscope.out。当工程十分庞大时，建议关闭该选项以提高查找速度。方法是在~/.emacs文件中加入
+    #+begin_src c  
+    (setq cscope-do-not-update-database t)
+    #+end_src
+1. Cscope可以通过创建反向索引加速查找，方法是调用Cscope时，使用-q参数。真的假的，一试便知。修改cscope-indexer脚本，将
+    cscope -b -i $LIST_FILE -f $DATABASE_FILE
+    替换为
+    cscope -q -b -i $LIST_FILE -f $DATABASE_FILE
+
+
+@<font color="#ff0000">有的时候会出现建立完索引之后也不能用cscope进行查找，这是可以看看在.c文件的目录中是不是也包含cscope.out这个文件。它会覆盖掉根目录下的cscope.out。导致cscope只在当前目录查找。@</font>
+
+
+* emacs 字体
+inconsolata 确实是很帅的字体。
+
+使用 sudo apt-get install ttf-inconsolata
+安装 inconsolata字体
+
+在.emacs文件中 (set-default-font "Inconsolata-12") 设置emacs的默认字体。
+
+
+* 密码显示成***号
+#+BEGIN_SRC lisp
+(add-hook 'comint-output-filter-functions
+          'comint-watch-for-password-prompt)
+
+#+END_SRC
+* emacs中强制使用空格代替TAB
+    在emacs中可以强制使用空格代替TAB，网上也有许多资料了，我这里说到的是有时在.emacs文件中加入了(setq indent-tabs-mode nil)之后也不管用，编辑时依然会插入TAB。
+    我在配置cc-mode时就出现了这样的问题，配置文件中加入了(setq indent-tabs-mode nil)，但依然插入TAB。
+    这时其实应该查看下这个变量的值，是不是真的已经设置为了nil。用C-h v再输入indent-tabs-mode查看之后，应该这个值还是t。即它并没有被设置为nil。
+    如果你使用了cc-mode的配置，会发现在cc-mode的style定义中加入(setq indent-tabs-mode nil)是无效的，而在其hook定义中加入就是有效的：
+(defconst mystyle
+   '((setq indent-tabs-mode nil))
+    "mystyle" )
+(c-add-style "mystyle" mystyle)
+(defun myhook()
+(c-set-style "mystyle"))
+(add-hook 'c++-mode-hook 'myhook)
+    这样设置后，打开一个新文件，查看indent-tabs-mode的值，还是t。如下的设置才是正确的设置：
+(defconst mystyle
+   '(......)
+    "mystyle" )
+(c-add-style "mystyle" mystyle)
+(defun myhook()
+   (setq indent-tabs-mode nil)
+(c-set-style "mystyle"))
+(add-hook 'c++-mode-hook 'myhook)
+
+
+* emacs 设置C语言编辑
+设置c-set-style可以制定类似tab/4空格 缩进，大括号缩进之类的东西。
+
+[[http://www.emacswiki.org/emacs/IndentingC][C语言缩进网站]]
+#+begin_src emacs-lisp
+(setq-default c-indent-tabs-mode t     ; Pressing TAB should cause indentation
+                c-indent-level 4         ; A TAB is equivilent to four spaces
+                c-argdecl-indent 0       ; Do not indent argument decl's extra
+                c-tab-always-indent t
+                backward-delete-function nil) ; DO NOT expand tabs when deleting
+  (c-add-style "my-c-style" '((c-continued-statement-offset 4))) ; If a statement continues on the next line, indent the continuation by 4
+  (defun my-c-mode-hook ()
+    (c-set-style "my-c-style")
+    (c-set-offset 'substatement-open '0) ; brackets should be at same indentation level as the statements they open
+    (c-set-offset 'inline-open '+)
+    (c-set-offset 'block-open '+)
+    (c-set-offset 'brace-list-open '+)   ; all "opens" should be indented by the c-indent-level
+    (c-set-offset 'case-label '+))       ; indent case labels by c-indent-level, too
+  (add-hook 'c-mode-hook 'my-c-mode-hook)
+  (add-hook 'c++-mode-hook 'my-c-mode-hook)
+
+#+end_src
+* 记一个题外话，今天突然想起来可以设置clang的include路径。。。。。

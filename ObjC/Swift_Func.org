@@ -1,0 +1,125 @@
+#+TITLE: Swift 函数
+
+* 函数
+func funcName(para1 : String, para2: Int, para3: String) -> String {
+}
+上面表达式：定义一个包含3个参数(分别是String类型的para1， Int类型的para2，String类型的para3)。返回类型是一个String类型的 函数，函数名是funcName
+
+
+** 一个函数可以返回多个返回值
+#+BEGIN_SRC C
+func getGasPrices() -> (Double, Double, Double) {
+    return (3.59, 3.69, 3.79)
+}
+getGasPrices()
+
+这是一个没有参数的，返回3个Double类型的元组的函数。
+#+END_SRC
+
+** 一个函数可以有任意多个参数，这个多个参数按照数组的形式来处理
+#+BEGIN_SRC C
+func sumOf(numbers: Int...) -> Int {
+    var sum = 0
+    for number in numbers {
+        sum += number
+    }
+    return sum
+}
+sumOf()
+sumOf(42, 597, 12)
+但是不能直接传一个数组做参数
+
+var a = [1,2,3,4]
+sumOf(a) //会出错
+
+#+END_SRC
+
+** 一个函数也可以把另一个函数做为返回值
+#+BEGIN_SRC C
+func makeIncrementer() -> ((Int,Int) -> Int) {
+    func addOne(number: Int, number2 : Int) -> Int {
+        return 1 + number + number2
+    }
+    return addOne
+}
+var increment = makeIncrementer()
+increment(7,5)
+
+返回一个有2个Int参数，返回值是Int类型的函数
+
+
+#+END_SRC
+
+** 一个函数也可以把一个函数作为参数
+#+BEGIN_SRC C
+func hasAnyMatches(list: Int[], condition: (Int,Int )-> Bool) -> Bool {
+    for item in list {
+        if condition(item, 4) {
+            return true
+        }
+    }
+    return false
+}
+func lessThanTen(number: Int, number2:Int) -> Bool {
+    return number < 10
+}
+var numbers = [20, 19, 7, 12]
+hasAnyMatches(numbers, lessThanTen)
+
+#+END_SRC
+
+** 常量参数和变量参数
+
+函数参数的默认值都是常量。试图改变一个函数参数的值会让这个函数体内部产生一个编译时错误。这意味着您不能错误地改变参数的值。
+
+但是，有时函数有一个参数的值的变量副本是非常有用的。您可以通过指定一个或多个参数作为变量参数，而不是避免在函数内部为自己定义一个新的变量。变量参数可以是变量而不是常量,并给函数中新修改的参数的值的提供一个副本。
+
+在参数名称前用关键字var定义变量参数：
+#+BEGIN_SRC C
+func alignRight(var string: String, count: Int, pad: Character) -> String {
+    let amountToPad = count - countElements(string)
+    for _ in 1...amountToPad {
+        string = pad + string
+}
+return string
+}
+let originalString = "hello"
+let paddedString = alignRight(originalString, 10, "-")
+// paddedString is equal to "-----hello"
+// originalString is still equal to "hello"
+
+#+END_SRC
+
+注意
+一个变量参数的变化没有超出了每个调用函数,所以对外部函数体是不可见的。变量参数只能存在于函数调用
+的生命周期里。
+
+
+** 输入-输出参数
+
+可变参数，如上所述，只能在函数本身内改变。如果你想有一个函数来修改参数的值，并且想让这些变化要坚持在函数调用结束后，你就可以定义输入-输出参数来代替。
+
+通过在其参数定义的开始添加inout关键字写用来标明输入-输出参数。一个在输入-输出参数都有一个传递给函数的值，由函数修改后，并从函数返回来替换原来的值。
+
+
+@<font color="#ff0000">
+注意
+// 注意第一个参数使用 ‘inout’ 
+// 注意传递的originalString前面有一个‘&’
+@</font>
+
+#+BEGIN_SRC C
+func alignRight(inout string: String, count: Int, pad: Character) -> String {
+    let amountToPad = count - countElements(string)
+    for _ in 1...amountToPad {
+        string = pad + string
+    }
+    return string
+}
+var originalString = "hello"
+let paddingString = alignRight(&originalString, 10, "-") 
+
+
+originalString
+
+#+END_SRC

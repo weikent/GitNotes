@@ -1,0 +1,115 @@
+#+TITLE: Git 
+
+* 解决冲突的办法
+** 内容冲突
+直接编辑有冲突的文件。编辑成正确的格式。
+** 树冲突
+文件名修改造成的冲突，称为树冲突。
+比如，a用户把文件改名为a.c，b用户把同一个文件改名为b.c，那么b将这两个commit合并时，会产生冲突。
+$ git status
+    added by us:    b.c
+    both deleted:   origin-name.c
+    added by them:  a.c
+如果最终确定用b.c，那么解决办法如下：
+git rm a.c
+git rm origin-name.c
+git add b.c
+git commit
+执行前面两个git rm时，会告警“file-name : needs merge”，可以不必理会。
+ 
+树冲突也可以用git mergetool来解决，但整个解决过程是在交互式问答中完成的，用d 删除不要的文件，用c保留需要的文件。
+最后执行git commit提交即可。
+
+
+
+* git 
+** 初始化git目录
+git init
+
+** 添加文件
+#+BEGIN_SRC sh
+touch ReadMe.txt
+echo "some text" >> ReadMe.txt
+git add ReadMe.txt   或者用 git add -A添加所有
+git commit -m "inital"    或者用 git commit -a -m "inital" 同时添加所有并提交
+#+END_SRC
+
+这个是一个很好的理解 modified、staged、commited这三种状态的图式
+[[./git1.png]]
+
+
+[[./git2.png]]
+
+** 远程仓库
+1 创建SSH Key, 在主用户目录查看有没有 .ssh 目录，再看目录下面有没有id_rsa和id_rsa.pub这两个文件没有则创建
+#+BEGIN_SRC sh
+ssh-keygen -t rsa -C "weishijian@gmail.com"
+#+END_SRC
+
+1 在github中，Ａccount Settings -> SSH Keys -> Add SSH Key 中添加id_rsa.pub中的内容。
+
+** 在本地仓库添加一个“远程仓库”，当然远程仓库还是你自己的这个目录
+执行
+git remote add origin(此名称可以任意更换)  https://github.com/path/.git为仓库的实际、绝对路径
+例如：
+#+BEGIN_SRC sh
+git remote add origin https://github.com/weikent/learngit.git
+此命令要在git仓库的目录下，及.git的同层目录下执行方可成功, origin可以为任意字符串，只是远程仓库的一个名称。
+#+END_SRC
+
+** 把本地仓库的master分支跟踪到远程分支上
+#+BEGIN_SRC sh
+git push origin <LocalBranchName> : <RemoteBranchName>
+
+git push -u origin master
+如果本地有其他分支，也可以推送到远程服务器上
+git push -u origin branch1
+#+END_SRC
+
+** 获取服务器的某个分支
+#+BEGIN_SRC sh
+git checkout -b <LocalBranchName> <RemoteBranchName>
+或者用
+git checkout -t <RemoteBranchName> 创建一个与远程分支名称相同的本地分支
+
+远程分支名是诸如 "origin/branchname" 
+#+END_SRC
+
+** 删除远程分支和tag
+#+BEGIN_SRC C
+git push origin --delete <branchname>
+git push origin --delete tag <tagname>
+
+#+END_SRC
+也可以用这种方式
+#+BEGIN_SRC sh
+git push origin :<RemoteBranchName> 
+上面方式的原始语法是
+git push origin <LocalBranchName> : <RemoteBranchName>
+
+当本地发呢只为空的时候，可以理解为推送一个空分支到远程分支，即删除远程分支
+#+END_SRC
+
+
+
+
+
+* 解决中文乱码
+#+BEGIN_SRC sh
+git config --global core.quotepath false
+
+#+END_SRC
+
+core.quotepath 设置为false的话， 就不会对0 * 80以上的字符进行quote。 中文正常现实
+
+[[http://zengrong.net/post/1249.htm][GIT乱码解决方案]]
+
+* git添加ssh
+1. ssh-keygen -t rsa -C "youremail@example.com"
+2. 在~/.ssh目录下把公钥上传到github
+
+
+
+** 可能出现的错误
+1. Agent admitted failure to sign using the key
+在命令行执行 ssh-add即可
