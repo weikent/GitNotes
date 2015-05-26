@@ -1,0 +1,949 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0058)http://blog.csdn.net/xiaoshengyige/article/details/7577244 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    
+    <script type="text/javascript" async="" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ga.js"></script><script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/tracking.js" charset="utf-8"></script>  
+
+    <script type="text/javascript">
+        var protocol = window.location.protocol;
+        document.write('<script type="text/javascript" src="' + protocol + '//csdnimg.cn/pubfooter/js/repoAddr2.js?v=' + Math.random() + '"></' + 'script>');
+    </script><script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/repoAddr2.js"></script>
+
+
+    <script id="allmobilize" charset="utf-8" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/allmobilize.min.js"></script><style type="text/css"></style>
+ <meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" media="handheld" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#">
+
+    <title>zigbee学习笔记---入门 - xiaoshengyige的专栏
+        - 博客频道 - CSDN.NET</title>
+    
+    <meta name="description" content="首先，本人是一名在读本科生，因为要参加本年度的物联网比赛，故需要掌握一定的Z-Stack知识。一周前本人对Z-Stack了解是完全空白，当时连什么是ZigBee都没听说过，不过本人是本校的物理实验室的常驻人员，有一定的单片机基础。经过近一周的学习现在对Z-Stack也只能说是刚刚入门，把自己的学习笔记分享出来，也算给广大菜鸟级入门童鞋一些参考的东西吧。由于本人本来是做海洋类开发的，兼顾单片机嵌入式">
+    <script src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ad.js"></script>
+        <!--new top-->
+       
+        <link rel="stylesheet" href="http://static.csdn.net/public/common/toolbar/css/index.css">
+        <!--new top-->
+
+    <link rel="Stylesheet" type="text/css" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/style.css">
+    <link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/xiaoshengyige/rss/list">
+    <link rel="shortcut icon" href="http://csdnimg.cn/public/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/default.css">
+ 
+
+
+<script src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/share.js"></script><script type="text/javascript" charset="utf-8" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/main.js"></script><link rel="stylesheet" type="text/css" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/style(1).css"><script charset="utf-8" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/sm.min.js" async=""></script><script src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/logger.js"></script><link rel="stylesheet" type="text/css" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/style(2).css"><link href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/bdsstyle.css" rel="stylesheet" type="text/css"><style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style><link rel="stylesheet" href="http://bdimg.share.baidu.com/static/api/css/share_style0_16.css?v=1c17c4fd.css"></head>
+<body><iframe frameborder="0" style="display: none;"></iframe>
+    
+   
+      <!--new top-->
+    <script id="toolbar-tpl-scriptId" fixed="true" prod="blog" skin="black" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/html.js" type="text/javascript"></script><div class="csdn-toolbar csdn-toolbar-skin-black ">        <div class="container row center-block ">          <div class="col-md-3 pull-left logo clearfix"><a href="http://www.csdn.net/?ref=toolbar" title="CSDN首页" target="_blank" class="icon"></a><a title="频道首页" href="http://blog.csdn.net/?ref=toolbar_logo" target="_blank" class="img blog-icon"></a></div>          <div class="pull-right login-wrap ">            <ul class="btns">              <li class="loginlink"><a href="https://passport.csdn.net/account/login?ref=toolbar" target="_top">登录&nbsp;</a>|<a target="_top" href="https://passport.csdn.net/account/register?ref=toolbar">&nbsp;注册</a></li>              <li class="search">                <div class="icon on-search-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <form action="http://so.csdn.net/search" method="get" target="_blank">                      <input type="hidden" value="toolbar" name="ref" accesskey="2">                      <div class="border">                        <input placeholder="搜索" type="text" value="" name="q" accesskey="2"><span class="icon-enter-sm"></span>                      </div>                    </form>                  </div>                </div>              </li>              <li class="favor">                <div class="icon on-favor-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div style="display:none;" class="favor-success"><span class="msg">收藏成功</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <div style="display:none;" class="favor-failed"><span class="icon-danger-lg"></span><span class="msg">收藏失败，请重新收藏</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <form role="form" class="form-horizontal favor-form">                      <div class="form-group">                        <div class="clearfix">                          <label for="input-title" class="col-sm-2 control-label">标题</label>                          <div class="col-sm-10">                            <input id="inputTitle" type="text" placeholder="" class="title form-control">                          </div>                        </div>                        <div class="alert alert-danger"><strong></strong>标题不能为空</div>                      </div>                      <div class="form-group">                        <label for="input-url" class="col-sm-2 control-label">网址</label>                        <div class="col-sm-10">                          <input id="input-url" type="text" placeholder="" class="url form-control">                        </div>                      </div>                      <div class="form-group">                        <label for="input-tag" class="col-sm-2 tag control-label">标签</label>                        <div class="col-sm-10">                          <input id="input-tag" type="text" class="form-control tag">                        </div>                      </div>                      <div class="form-group">                        <label for="input-description" class="description col-sm-2 control-label">摘要</label>                        <div class="col-sm-10">                          <textarea id="input-description" class="form-control description"></textarea>                        </div>                      </div>                      <div class="form-group">                        <div class="col-sm-offset-2 col-sm-10 ft">                          <div class="col-sm-4 pull-left">                            <div class="checkbox">                              <label>                                <input type="checkbox" name="share" checked="checked" class="share">公开                              </label>                            </div>                          </div>                          <div class="col-sm-8 pull-right favor-btns">                            <button type="button" class="cancel btn btn-default">取消</button>                            <button type="submit" class="submit btn btn-primary">收藏</button>                          </div>                        </div>                      </div>                    </form>                  </div>                </div>              </li>              <li class="notify">                <div style="display:none" class="number"></div>                <div style="" class="icon-hasnotes-sm"></div>                <div id="header_notice_num"><div class="icon-hasnotes" style=""></div></div>                <div class="icon on-notify-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div id="note1" class="csdn_note" style="left: -212px; top: 497px; display: none;">                      <div class="box"><div class="notifications notice_list_con curr">  <div class="menu_title">    <span class="title"><a href="http://msg.csdn.net/letters" target="_blank" class="read_all">查看所有私信</a><a href="http://msg.csdn.net/" target="_blank" class="go_all">查看所有通知</a></span>  </div>  <div class="loading"></div>  <div class="empty">暂没有新通知</div>  <div class="notice_content"></div></div><div class="notifications detail_con" style="display: none">  <div class="menu_title">    <span class="title">      <a class="go_back" href="javascript:void 0;">返回通知列表</a>      <a class="notifications_page_none nextnote" href="javascript:void 0;">下一条</a>      <a class="notifications_page prvnote" href="javascript:void 0;">上一条</a>    </span>  </div>  <div class="notice_content"></div></div><div class="error"></div></div>                    <iframe src="about:block" frameborder="0" allowtransparency="true" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe></div>                  </div>                </div>              </li>              <li class="ugc">                <div class="icon on-ugc-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <dl>                      <dt><a href="http://geek.csdn.net/news/expert?ref=toolbar" target="_blank" class="p-news clearfix"><em class="icon"></em><span>分享资讯</span></a></dt>                      <dt><a href="http://share.csdn.net/slides/new?ref=toolbar" target="_blank" class="p-doc clearfix"><em class="icon"></em><span>传PPT/文档</span></a></dt>                      <dt><a href="http://bbs.csdn.net/topics/new?ref=toolbar" target="_blank" class="p-ask clearfix"><em class="icon"></em><span>提问题</span></a></dt>                      <dt><a href="http://write.blog.csdn.net/postedit?ref=toolbar" target="_blank" class="p-blog clearfix"><em class="icon"></em><span>写博客</span></a></dt>                      <dt><a href="http://u.download.csdn.net/upload?ref=toolbar" target="_blank" class="p-src clearfix"><em class="icon"></em><span>传资源</span></a></dt>                      <dt><a href="https://code.csdn.net/projects/new?ref=toolbar" target="_blank" class="c-obj clearfix"><em class="icon"></em><span>创建项目</span></a></dt>                      <dt><a href="https://code.csdn.net/snippets/new?ref=toolbar" target="_blank" class="c-code clearfix"><em class="icon"></em><span>创建代码片</span></a></dt>                    </dl>                  </div>                </div>              </li>              <li class="profile">                <div class="icon on-profile-icon"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/2_weishijian.jpg" class="curr-icon-img">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div class="bd">                      <dl class="clearfix">                        <dt class="pull-left img"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="avatar"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/2_weishijian.jpg"></a></dt>                        <dd class="info"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="nickname">weishijian</a><span class="dec"><a class="fill-dec" href="http://my.csdn.net/" target="_blank">编辑自我介绍，让更多人了解你<span class="write-icon"></span></a></span></dd>                      </dl>                    </div>                    <div class="ft clearfix"><a target="_blank" href="http://my.csdn.net/my/account/changepwd?ref=toolbar" class="pull-left"><span class="icon-cog"></span>帐号设置</a><a href="https://passport.csdn.net/account/logout?ref=toolbar" target="_top" class="pull-left" style="margin-left:132px; width:18px; height:27px; white-space:nowrap; overflow:hidden;"><span class="icon-signout"></span><span class="out">退出</span></a></div>                  </div>                </div>              </li>              <li class="apps">                <div id="chasnew123" class="hasnew"></div>                <div id="cappsarea123" class="icon on-apps-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>社区</h5>                      </dt>                      <dd> <a href="http://blog.csdn.net/?ref=toolbar" target="_blank">博客</a></dd>                      <dd> <a href="http://bbs.csdn.net/?ref=toolbar" target="_blank">论坛</a></dd>                      <dd> <a href="http://download.csdn.net/?ref=toolbar" target="_blank">下载</a></dd>                      <dd><a href="http://ask.csdn.net/?ref=toolbar" target="_blank">技术问答</a></dd>                      <dd><a href="http://geek.csdn.net/?ref=toolbar" target="_blank">极客头条</a></dd>                    </dl>                  </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>服务</h5>                      </dt>                      <dd> <a href="https://code.csdn.net/?ref=toolbar" target="_blank">CODE</a></dd>                      <dd> <a href="http://hero.csdn.net/?ref=toolbar" target="_blank">英雄会</a></dd>                      <dd> <a href="http://huiyi.csdn.net/?ref=toolbar" target="_blank">活动</a></dd>                      <dd> <a href="http://www.csto.com/?ref=toolbar" target="_blank">CSTO</a></dd>                      <dd> <a href="http://mall.csdn.net/?ref=toolbar" target="_blank">C币兑换<img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/new.gif" style="margin-top: -26px;"></a></dd>                    </dl>                  </div>                  <div class="detail last">                    <dl>                      <dt>                        <h5>俱乐部</h5>                      </dt>                      <dd> <a href="http://cto.csdn.net/?ref=toolbar" target="_blank">CTO俱乐部</a></dd>                      <dd> <a href="http://student.csdn.net/?ref=toolbar" target="_blank">高校俱乐部</a></dd>                    </dl>                  </div>                </div>              </div>            </li>            </ul>          </div>        </div>    </div>
+     <!--new top-->
+    <div id="container">
+        <div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h2>
+                <a href="http://blog.csdn.net/xiaoshengyige">xiaoshengyige的专栏</a></h2>
+            <h3></h3>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg">
+    </div>
+    <div class="navigator">
+        <ul>
+                <li id="btnContents"><a href="http://blog.csdn.net/xiaoshengyige?viewmode=contents"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_mulu&#39;])">
+                    <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+                <li id="btnView"><a href="http://blog.csdn.net/xiaoshengyige?viewmode=list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_zhaiyao&#39;])">
+                    <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+                <li id="btnRss"><a href="http://blog.csdn.net/xiaoshengyige/rss/list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_RSS&#39;])">
+                    <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>                
+
+            </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "xiaoshengyige";
+    var _blogger = username;
+    var blog_address = "http://blog.csdn.net/xiaoshengyige";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "weishijian";  
+</script>
+
+        <div id="body">
+            <div id="main">
+                <div class="main">
+                        <div class="ad_class">
+<div class="notice tracking-ad" data-mod="popu_3"> 
+
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/41944891" target="_blank">
+<font color="blue">2015年4月微软MVP申请</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/41842837" target="_blank">
+<font color="red">《京东技术解密》有奖试读，礼品大放送
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/42172979" target="_blank">
+<font color="blue">“我的2014”年度征文活动火爆开启
+</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://vote.blog.csdn.net/" target="_blank">
+<font color="red">CSDN 2014博客之星
+</font></a>
+</div>                        </div>
+                        
+
+  
+<link href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/comment1.css" type="text/css" rel="stylesheet">
+<link href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/style1.css" type="text/css" rel="stylesheet">
+<script language="JavaScript" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/jquery.cookie.js"></script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/main(1).js"></script>
+  <script type="text/ecmascript">
+      window.quickReplyflag = true;
+    </script>
+<div id="article_details" class="details">
+    <div class="article_title">   
+         <span class="ico ico_type_Repost"></span>
+
+
+    <h1>
+        <span class="link_title"><a href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET.html">
+        zigbee学习笔记---入门
+        </a></span>
+    </h1>
+</div>
+
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/xiaoshengyige/article/category/923754" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_fenlei&#39;]);">嵌入式学习</a> 
+        </span>
+    <span class="link_postdate">2012-05-17 17:22</span>
+    <span class="link_view" title="阅读次数">2747人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#comments" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_pinglun&#39;])">评论</a>(5)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shoucang&#39;]);collectArticle(&#39;zigbee学习笔记---入门&#39;,&#39;7577244&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_jubao&#39;]);report(7577244,2);return false;" title="举报">举报</a></span>
+    
+</div>
+<div class="tag2box"><a href="http://www.csdn.net/tag/%e7%bd%91%e7%bb%9c" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">网络</a><a href="http://www.csdn.net/tag/%e8%b7%af%e7%94%b1%e5%99%a8" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">路由器</a><a href="http://www.csdn.net/tag/tools" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">tools</a><a href="http://www.csdn.net/tag/%e4%bb%bb%e5%8a%a1" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">任务</a><a href="http://www.csdn.net/tag/%e7%bb%88%e7%ab%af" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">终端</a><a href="http://www.csdn.net/tag/%e5%b7%a5%e4%bd%9c" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">工作</a></div>
+
+  
+    
+<div id="article_content" class="article_content">
+
+<table cellspacing="0" cellpadding="0" style="word-wrap:break-word; empty-cells:show; border-collapse:collapse; table-layout:fixed; width:757px; color:rgb(68,68,68); font-family:Tahoma,Helvetica,SimSun,sans-serif; font-size:12px; line-height:18px">
+<tbody style="word-wrap:break-word">
+<tr style="word-wrap:break-word">
+<td class="t_f" id="postmessage_8605" style="word-wrap:break-word; font-size:14px">
+首先，本人是一名在读本科生，因为要参加本年度的物联网比赛，故需要掌握一定的Z-Stack知识。一周前本人对Z-Stack了解是完全空白，当时连什么是ZigBee都没听说过，不过本人是本校的物理实验室的常驻人员，有一定的单片机基础。经过近一周的学习现在对Z-Stack也只能说是刚刚入门，把自己的学习笔记分享出来，也算给广大菜鸟级入门童鞋一些参考的东西吧。由于本人本来是做海洋类开发的，兼顾单片机嵌入式系统的学习，所以基础知识各方面不比各位程序员，有些稚嫩，甚至可能有些错误，让大家见笑了，也只能是给如我一般的菜鸟入门的时候做一个参考吧。<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp; 好，闲话少叙，下面是我的学习笔记。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<span style="word-wrap:break-word; font-weight:700">一、&nbsp; &nbsp; &nbsp; &nbsp; 基础定义及知识。</span>1、&nbsp; &nbsp; &nbsp; &nbsp; 何为ZigBee,与普通的RF技术有何区别？<br style="word-wrap:break-word">
+ZigBee是一种具有低成本低复杂度低功耗的小范围低速率的无线传输技术。<br style="word-wrap:break-word">
+相对于普通的RF技术，其重要的特点是;<br style="word-wrap:break-word">
+(1) 低功耗，速率低数据量少。、<br style="word-wrap:break-word">
+（2）自组织网络，可适应网络拓扑结构动态变化。<br style="word-wrap:break-word">
+（3）高可扩充，在有协调器加入的情况下，最高可达65535个ZigBee节点。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+2、何为IEEE 802.15.4，其特点。<br style="word-wrap:break-word">
+&nbsp; &nbsp;是ZigBee无限传感器网络通信标准，具有短距离（10m），低功耗，低速率，低成本的特点，支持单跳星形（10m内）和多跳对等（&gt;10m）两种网络拓扑。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+3、何为Z-Stack？<br style="word-wrap:break-word">
+&nbsp; &nbsp;Z-Stack是TI公司开发的ZigBee协议栈，并且经过了ZigBee联盟的认可而为全球众多开发商所广泛采用。Z-Stack实际上是帮助程序员方便开发ZigBee的一套系统，它采用轮转查询式操作系统，包括两个主要流程（如图）：系统初始化和执行操作系统。系统初始化完成后，就进入执行操作系统，并且在其中是一个死循环。执行操作系统中主函数即为轮询式操作系统的主体部分，也是我们需要重点开发、调用、掌握的部分。欲知其详，且听下文分解。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+有关第一部分的题外话，笔者在学习的时候，还是详细看了ZigBee概述和IEEE 802.15.4通信标准的，不过事后发现，如果只是想达到能调用Z-Stack中的函数进行简单的程序编写，尤其像我们这样为了比赛而准备的短期突击学习来说，并没有太大必要去详细了解这些标准，不过看了这些标准之后，的确会对后面的学习有些帮助。另，为了能看懂一些Z-Stack资料，需要知道很多的名词定义和缩写，这部分我就放在了第四章，如果有看不懂的地方，可以先跳到第四章查询。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+二、开发Z-Stack须知。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+1、ZigBee的体系，数据及管理的方式和方向。ZigBee网络构架。<br style="word-wrap:break-word">
+<img id="aimg_930" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/11070322236e41d5f355343dc4.jpg" class="zoom" width="553" alt="ZigBee协议体系结构.jpg" title="ZigBee协议体系结构.jpg" style="word-wrap:break-word">&nbsp;<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+上图是ZigBee协议的体系结构。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+上图是zigbee网络构架。黑色是协调器，红色是路由器，白色是终端设备。协调器是网络核心、不休眠、FFD，路由器是接力和扩展信号传输范围、不休眠、FFD，终端可选择睡眠或唤醒、可FFD或RFD。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+2、Z-Stack在开发ZigBee中起到的作用，使用Z-Stack开发ZigBee我们需要做什么？<br style="word-wrap:break-word">
+&nbsp; &nbsp;如刚才的ZigBee协议体系图所示，ZigBee中包括很多的层和各个层之间的数据管理信息传输。如此庞大的体系，如果人为手动编写程序将是一个很浩大的工程。而Z-Stack则在其系统中为我们提供了详细的各个子模块的工作程序。那么我们在开发ZigBee项目的时候，其实我们只需要添加三个文件：主文件，主文件的头文件，操作系统接口文件。<br style="word-wrap:break-word">
+<img id="aimg_931" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/11070322235f9b77f6ba983161.jpg" class="zoom" width="240" alt="App目录结构.jpg" title="App目录结构.jpg" style="word-wrap:break-word">&nbsp;<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+3、Z-Stack轮询结构函数工作方式及顺序。<br style="word-wrap:break-word">
+下图是轮询结构工作流程图。进入轮询结构后，Z-Stack开始根据处理任务的优先级一级级向下查询是否有任务要执行，如果需要，就调用该任务的子函数，如果没有就继续询问，最后再循环。这就是轮转查询结构。<br style="word-wrap:break-word">
+<img id="aimg_933" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/110703222306022f2d34a1ac5c.jpg" class="zoom" width="522" alt="轮询结构图.jpg" title="轮询结构图.jpg" style="word-wrap:break-word">&nbsp;<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+第二章题外话：如果说第一章基本是科普的话，是为了让行外人也知道我们在干嘛，那么第二章就是在对行内人科普，我在这一阶段的学习基本就是为了搞懂，对于Z-Stack，我到底要从何处下手，到底那些是需要我修改编译的，哪些是可以直接引用的。而真正开始开发，是在第三章。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+三、Z-Stack学习，调用，修改，开发。&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+1、各层文件意义。<br style="word-wrap:break-word">
+<img id="aimg_936" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/1107032228a5ba7c1e80b44ac7.jpg" class="zoom" width="354" alt="Z-Stack的目录结构.jpg" title="Z-Stack的目录结构.jpg" style="word-wrap:break-word">&nbsp;<br style="word-wrap:break-word">
+（1）&nbsp; &nbsp; &nbsp; &nbsp; APP：应用层目录，即我们需要开发修改的部分。<br style="word-wrap:break-word">
+（2）HAL：硬件层目录。&nbsp; &nbsp; （3）MAC：MAC层目录。<br style="word-wrap:break-word">
+（4）MT：监控调试层目录。&nbsp;&nbsp;（5）NWK:网络层目录。<br style="word-wrap:break-word">
+（6）OSAL：协议栈的操作系统。（7）Profile：AF层目录。<br style="word-wrap:break-word">
+（8）Security：安全层目录。&nbsp; &nbsp;&nbsp;<br style="word-wrap:break-word">
+（9）Services：设备地址处理函数目录。<br style="word-wrap:break-word">
+（10）Tools：工程配置目录。 （11）ZDO：ZigBee设备对象。<br style="word-wrap:break-word">
+（12）ZMac：Z-Stack MAC导出层接口文件。<br style="word-wrap:break-word">
+（13）ZMain：项目入口函数，对外控制接口函数。<br style="word-wrap:break-word">
+（14）Output：输出文件目录。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+2、PANID设定。<br style="word-wrap:break-word">
+&nbsp; &nbsp;若ZDAPP_CONFIG_PAN_ID值不为0xFFFF时，PANID由其指定，若ZDAPP_CONFIG_PAN_ID为0xFFFF，那么设备将随机加入网络。<br style="word-wrap:break-word">
+通过选择DEFAULT_CHANLIST不同的值可以选择不同频道。<br style="word-wrap:break-word">
+Tools\CC2530DB目录下的f8wConfig.cfg文件中有相应设置。<br style="word-wrap:break-word">
+<img id="aimg_935" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/1107032228cc7696a9b50b3a11.jpg" class="zoom" width="486" alt="f8wConfig即PANID设定.jpg" title="f8wConfig即PANID设定.jpg" style="word-wrap:break-word">&nbsp;<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+第三章题外话：目前笔者还在处于学习如何修改APP目录下函数的阶段，虽然有些笔记也做了，但是还无法确定是否正确，就不拿出来误人子弟了。可能已经发出来也有错误，还请大家多多指正，如果反响还不错的话，我会继续更新的。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+四、细节知识、名词解释及备注。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+1、ZigBee是树寻址，PRO是随机寻址，PRO更适用于变动的网络，如由多个移动终端组成的网络。只有PRO可以支持多对一路由选项。大多数情况下，ZigBee和ZigBee PRO无法在同一网络上同时使用。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+2、&nbsp; &nbsp; &nbsp; &nbsp; 自我组态功能：让系统中所有的节点，根据现场的网络讯号状态决定要加入的父节点。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+3、描述符：ZigBee网络中的所有设备都有一些描述符，用来描述设备类型和应用方式。描述符的定义和创建配置项在文件ZDOCConfig.h和ZDOConfig.c中完成。<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+备注：PHY：物理层&nbsp; &nbsp;MAC：媒体介质访问层&nbsp; &nbsp; NWK：网络层&nbsp; &nbsp;&nbsp;&nbsp;APL：应用层&nbsp;<br style="word-wrap:break-word">
+APS:应用支持子层&nbsp;&nbsp;AF：应用框架&nbsp;&nbsp;KVP：键值对服务类型&nbsp;&nbsp;MSG：报文服务类型<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;LR-WPAN：低速率无限个人区域网 DSSS：直接序列扩频 ISM：工业科学医学频段<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;CSMA-CA：碰撞避免&nbsp; &nbsp;GTS：保证时隙&nbsp; &nbsp; ID：个人域网选择信道和识别符<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;SAP：服务接入点 MCPS：数据传输服务 MLME：管理服务 NLDE：数据服务实体<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;NLME：管理服务实体&nbsp; &nbsp;NIB：网络层信息数据库&nbsp; &nbsp; MLDE：MAC子层数据服务&nbsp;&nbsp;<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;ZDO：ZigBee设备对象&nbsp; &nbsp;FFD：全功能设备&nbsp;&nbsp;RFD：精简功能设备<br style="word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;API：应用程序编程接口&nbsp; &nbsp;HAL：硬件抽象层<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+<br style="word-wrap:break-word">
+再来个题外话：本人的确是从零开始，所以看到这么简单和初级东西请不要笑我。而且本人也不知道文章中是否有错误瑕疵，如果有，还请大家多多指正，互相帮助共同进步。由于本人近日也在准备比赛而赶进度，所以笔记略显简洁和潦草，日后我会更加丰富和完善一下。如果大家觉得还不错的话，我会继续更新。另外，请注重版权意识，转载请注明出处。<br style="word-wrap:break-word">
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; ————上海海洋大学A421实验室&nbsp;&nbsp;小左同学</td>
+</tr>
+</tbody>
+</table>
+<div class="pattl" style="word-wrap:break-word; overflow-x:hidden; overflow-y:hidden; padding-top:1em; padding-right:0px; padding-bottom:1em; padding-left:0px; width:757px; border-bottom-width:1px!important; border-bottom-style:dashed!important; border-bottom-color:rgb(205,205,205)!important; color:rgb(68,68,68); font-family:Tahoma,Helvetica,SimSun,sans-serif; line-height:18px">
+<dl class="tattl attm" style="word-wrap:break-word; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; padding-top:10px; padding-right:10px; padding-bottom:10px; padding-left:0px; float:none; overflow-x:visible; overflow-y:visible; width:580px; height:auto">
+<dt style="word-wrap:break-word; float:left; width:0px; font-weight:700"></dt><dd style="word-wrap:break-word; margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; padding-left:0px; color:rgb(153,153,153)">
+<p class="mbn" style="word-wrap:break-word; margin-top:0px; margin-bottom:5px!important; padding-top:0px; padding-bottom:0px">
+<a href="http://bbs.feibit.com/forum.php?mod=attachment&aid=OTM0fDQ3MjVkNDNjfDEzMzcyNDYxOTN8ODMxOXwyNzYx&nothumb=yes" id="aid934" class="xw1" target="_blank" style="word-wrap:break-word; color:rgb(51,102,153); font-weight:700">ZigBee网络示意图.jpg</a>&nbsp;<span class="xg1" style="word-wrap:break-word; font-style:normal; color:rgb(102,102,102)">(12.75
+ KB, 下载次数: 2)</span></p>
+<p class="mbn" style="word-wrap:break-word; margin-top:0px; margin-bottom:5px!important; padding-top:0px; padding-bottom:0px">
+</p>
+<p class="mbn" style="word-wrap:break-word; margin-top:0px; margin-bottom:5px!important; padding-top:0px; padding-bottom:0px">
+<img id="aimg_934" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/1107032224ef7e463b71a18f5f.jpg" class="zoom" width="270" alt="ZigBee网络示意图.jpg" title="ZigBee网络示意图.jpg" style="word-wrap:break-word"></p>
+</dd></dl>
+</div>
+
+</div>
+
+
+
+
+<!-- Baidu Button BEGIN -->
+
+<div class="bdsharebuttonbox bdshare-button-style0-16" style="float: right;" data-bd-bind="1420361407403">
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_more" data-cmd="more" style="background-position:0 0 !important; background-image: url(http://bdimg.share.baidu.com/static/api/img/share/icons_0_16.png?v=d754dcc0.png) !important"></a>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="background-position:0 -52px !important"></a>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="background-position:0 -104px !important"></a>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博" style="background-position:0 -260px !important"></a>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_renren" data-cmd="renren" title="分享到人人网" style="background-position:0 -208px !important"></a>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="background-position:0 -1612px !important"></a>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+<!-- Baidu Button END -->
+
+<!--192.168.100.33-->
+<ul class="article_next_prev">
+            <li class="prev_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;]);location.href=&#39;/xiaoshengyige/article/details/7577123&#39;;">上一篇</span><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577123" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;])">zigbee学习笔记-----zstack中发现PANID冲突的解决办法。</a></li>
+            <li class="next_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;]);location.href=&#39;/xiaoshengyige/article/details/7577584&#39;;">下一篇</span><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577584" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;])">PCB抗干扰设计</a></li>
+</ul>
+
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1536434" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/bds_s_v2.js"></script>
+
+<script type="text/javascript">
+    document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+
+</div>
+      <dl class="blog-associat-tag">
+        <dt>主题推荐</dt>
+        <dd>
+                <a href="http://www.csdn.net/tag/%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%BB%9F" target="_blank" class="blog-tage-red">嵌入式系统</a> 
+                <a href="http://www.csdn.net/tag/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" target="_blank" class="blog-tage-red">应用程序</a> 
+                <a href="http://www.csdn.net/tag/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86" target="_blank" class="blog-tage-red">数据管理</a> 
+                <a href="http://www.csdn.net/tag/%E7%A7%BB%E5%8A%A8%E7%BB%88%E7%AB%AF" target="_blank" class="blog-tage-red">移动终端</a> 
+                <a href="http://www.csdn.net/tag/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" target="_blank" class="blog-tage-red">操作系统</a> 
+        </dd>
+    </dl> 
+
+
+<dl class="blog-ass-articl tracking-ad" data-mod="popu_36" id="res-relatived"> 
+     <dt><span>猜你在找</span></dt>    
+<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577123" title="zigbee学习笔记-----zstack中发现PANID冲突的解决办法" strategy="CFRecommendAlgorithm" target="_blank">zigbee学习笔记-----zstack中发现PANID冲突的解决办法</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/G1036583997/article/details/16944289" title="Zigbee设备节点" strategy="CFRecommendAlgorithm" target="_blank">Zigbee设备节点</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/chenxinqiang2005/article/details/38555581" title="zigbee抓包实验过程" strategy="CFRecommendAlgorithm" target="_blank">zigbee抓包实验过程</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/andrew323/article/details/5864673" title="ZigBee组网机制以及数据的发送和接收" strategy="CFRecommendAlgorithm" target="_blank">ZigBee组网机制以及数据的发送和接收</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/hitxiaya/article/details/7552563" title="IAR调试时出现The stack CSTACK is filled to 100问题及解决办法" strategy="CFRecommendAlgorithm" target="_blank">IAR调试时出现The stack CSTACK is filled to 100问题及解决办法</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/u010095741/article/details/39495711" title="stm32FatFs移植spi_flash报错FR_NO_FILESYSTEM" strategy="CFRecommendAlgorithm" target="_blank">stm32FatFs移植spi_flash报错FR_NO_FILESYSTEM</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/lovingshu/article/details/38613971" title="比较热门的两款noSQLRedis &amp; mongoDB产品读写性能对比" strategy="CFRecommendAlgorithm" target="_blank">比较热门的两款noSQLRedis &amp; mongoDB产品读写性能对比</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/RunBoying/article/details/7209623" title="LINUX下用户登录脚本" strategy="CFRecommendAlgorithm" target="_blank">LINUX下用户登录脚本</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/lhf0921/article/details/4822597" title="Zigbee技术在应用中存在的问题" strategy="CFRecommendAlgorithm" target="_blank">Zigbee技术在应用中存在的问题</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/pickless/article/details/11752309" title="LeetCodeUnique Binary Search Trees" strategy="CFRecommendAlgorithm" target="_blank">LeetCodeUnique Binary Search Trees</a></dd></dl>
+
+<script type="text/javascript">
+    var searchtitletags = 'zigbee学习笔记---入门' + ',' + '嵌入式系统,应用程序,数据管理,移动终端,操作系统';
+    searchService({
+        index: 'blog',
+        query: searchtitletags,
+        from: 10,
+        size: 10,
+        appendTo: '#res-relatived',
+        url: 'recommend',
+        his: 2,
+        client: "blog_cf_enhance",
+        tmpl: '<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="#{ url }" title="#{ title }" strategy="#{ strategy }">#{ title }</a></dd>'
+    });
+
+ </script>   
+
+
+    <div id="ad_cen">
+   
+          <script type="text/javascript">
+              new Ad(4, 'ad_cen');
+          </script>
+    <iframe id="ad_frm_0" frameborder="0" scrolling="no" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ad(1).html" style="border-width: 0px; overflow: hidden; width: 984px; height: 90px;"></iframe></div>
+<div class="comment_class">
+    <div id="comment_title" class="panel_head">
+        <span class="see_comment">查看评论</span><a name="comments"></a></div>
+    <div id="comment_list"><dl class="comment_item comment_topic" id="comment_item_4547337"><dt class="comment_head" floor="3">3楼 <span class="user"><a class="username" href="http://blog.csdn.net/wcjycgcom" target="_blank">Fture-</a> <span class="ptime">2014-11-25 16:24发表</span>  <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="4547337" username="wcjycgcom"> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/wcjycgcom" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/3_wcjycgcom.jpg" width="40" height="40"></a></dd><dd class="comment_body">我也在准备物联网竞赛！</dd></dl><dl class="comment_item comment_topic" id="comment_item_2501284"><dt class="comment_head" floor="2">2楼 <span class="user"><a class="username" href="http://blog.csdn.net/ly200727112" target="_blank">ly200727112</a> <span class="ptime">2013-01-11 17:49发表</span>  <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none;" commentid="2501284" username="ly200727112"> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/ly200727112" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/3_ly200727112.jpg" width="40" height="40"></a></dd><dd class="comment_body">想和你技术方面交流，怎么没有办法关注你呢？点击点不上。</dd><dl class="comment_item comment_reply" id="comment_item_2511009"><dt class="comment_head" floor="2">Re: <span class="user"><a class="username" href="http://blog.csdn.net/xiaoshengyige" target="_blank">xiaoshengyige</a> <span class="ptime">2013-01-21 14:24发表</span>  <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none;" commentid="2511009" username="xiaoshengyige"> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/xiaoshengyige" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/3_xiaoshengyige.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复ly200727112：是交流zigbee吗 我前一阵就搞了一段 共同学习</dd></dl></dl><dl class="comment_item comment_topic" id="comment_item_2470078"><dt class="comment_head" floor="1">1楼 <span class="user"><a class="username" href="http://blog.csdn.net/huang654572703" target="_blank">黄佛爱</a> <span class="ptime">2012-12-15 15:42发表</span>  <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="2470078" username="huang654572703"> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/huang654572703" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/3_huang654572703.jpg" width="40" height="40"></a></dd><dd class="comment_body">您好,我也想学学zigbee,但是不知道怎么开始了?怎么搭建平台,我不计划买模块,板子,我只是想通过那些实力学习协议栈</dd><dl class="comment_item comment_reply" id="comment_item_2511008"><dt class="comment_head" floor="1">Re: <span class="user"><a class="username" href="http://blog.csdn.net/xiaoshengyige" target="_blank">xiaoshengyige</a> <span class="ptime">2013-01-21 14:24发表</span>  <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="2511008" username="xiaoshengyige"> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/xiaoshengyige" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/3_xiaoshengyige.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复huang654572703：没板子不好学吧</dd></dl></dl><div class="clear"></div></div>
+    <div id="comment_bar" style="display: none;">
+    </div>
+    <div id="comment_form"><a name="commentbox"></a><a name="reply"></a><a name="quote"></a><form action="http://blog.csdn.net/xiaoshengyige/comment/submit?id=7577244" method="post" onsubmit="return subform(this);"><div class="commentform"><div class="panel_head">发表评论</div><ul><li class="left">用 户 名：</li><li class="right">weishijian</li></ul><ul><li class="left">评论内容：</li><li class="right" style="position:relative;"><div id="ubbtools"><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#insertcode" code="code"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/code.gif" border="0" alt="插入代码" title="插入代码"></a></div><div id="lang_list" style="position: absolute; top: 28px; left: 0px; display: none;"><a class="long_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#html">HTML/XML</a><a class="long_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#objc">objective-c</a><a class="zhong_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#delphi">Delphi</a><a class="zhong_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#ruby">Ruby</a><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#php">PHP</a><a class="duan_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#csharp">C#</a><a style=" border-right: none;" class="duan_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#cpp">C++</a><a style=" border-bottom:none;" class="long_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#javascript">JavaScript</a><a style=" border-bottom:none;" class="long_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#vb">Visual Basic</a><a style=" border-bottom:none;" class="zhong_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#python">Python</a><a style=" border-bottom:none;" class="zhong_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#java">Java</a><a style="border-bottom:none;" class="duan_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#css">CSS</a><a style="border-bottom:none;" class="duan_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#sql">SQL</a><a style="border:none;" class="duan_name" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#plain">其它</a></div><textarea class="comment_content" name="comment_content" id="comment_content" style="width: 400px; height: 200px;"></textarea></li></ul><ul><input type="hidden" id="comment_replyId" name="comment_replyId"><input type="hidden" id="comment_userId" name="comment_userId" value="521203"><input type="hidden" id="commentId" name="commentId" value=""><input type="submit" class="comment_btn" value="提交">&nbsp;&nbsp;<span id="tip_comment" style="color: Red; display: none;"></span></ul></div></form></div>
+
+    <div class="announce">
+        * 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+</div>
+
+<script type="text/javascript">
+    var fileName = '7577244';
+    var commentscount = 5;
+    var islock = false
+</script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/comment.js"></script>
+    <div id="ad_bot">
+    <iframe id="ad_frm_1" frameborder="0" scrolling="no" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ad(2).html" style="border-width: 0px; overflow: hidden; width: 984px; height: 0px;"></iframe></div>
+    <script type="text/javascript">
+    new Ad(5, 'ad_bot');
+    </script>
+<div id="report_dialog">
+</div>
+
+<div id="d-top" style="bottom:60px;">
+        <a id="quick-reply" class="btn btn-top q-reply" title="快速回复" style="display:none;">
+            <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/blog-icon-reply.png" alt="快速回复">
+        </a>    
+
+    <a id="d-top-a" class="btn btn-top backtop" style="display: none;" title="返回顶部" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_huidaodingbu&#39;])">         
+         <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/top.png" alt="TOP">
+    </a>
+</div>
+<script type="text/javascript">
+    $(function ()
+    {
+        $("#ad_frm_0").height("90px");
+        
+        setTimeout(function(){
+            $("#ad_frm_2").height("200px");
+        },1000);
+        
+        /*
+        if($("#comment_content").length>0)
+        {
+            $("#quick-reply").show();
+
+            $("#quick-reply").click(function(){
+                setEditorFocus();
+            });
+        }       
+     
+        var d_top = $('#d-top-a');
+
+        document.onscroll = function ()
+        {
+            var scrTop = (document.body.scrollTop || document.documentElement.scrollTop);
+            if (scrTop > 500)
+            {
+                d_top.show();
+            } else
+            {
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function ()
+        {
+            scrollTo(0, 0);
+            this.blur();
+            return false;
+        });
+        */
+    });
+  
+</script>
+<style type="text/css">
+    .tag_list
+    {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #D7CBC1;
+        color: #000000;
+        font-size: 12px;
+        line-height: 20px;
+        list-style: none outside none;
+        margin: 10px 2% 0 1%;
+        padding: 1px;
+    }
+    .tag_list h5
+    {
+        background: none repeat scroll 0 0 #E0DBD3;
+        color: #47381C;
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 5px;
+        margin: 0;
+    }
+    .tag_list h5 a
+    {
+        color: #47381C;
+    }
+    .classify
+    {
+        margin: 10px 0;
+        padding: 4px 12px 8px;
+    }
+    .classify a
+    {
+        margin-right: 20px;
+        white-space: nowrap;
+    }
+</style>
+<div class="tag_list">
+    <h5>
+        <a href="http://www.csdn.net/tag/" target="_blank">核心技术类目</a></h5>
+    <div class="classify">
+<a title="全部主题" href="http://www.csdn.net/tag" target="_blank" onclick="LogClickCount(this,336);">全部主题</a>
+<a title="Hadoop" href="http://g.csdn.net/5272865" target="_blank" onclick="LogClickCount(this,336);">Hadoop</a>
+<a title="AWS" href="http://g.csdn.net/5272866" target="_blank" onclick="LogClickCount(this,336);">AWS</a>
+<a title="移动游戏" href="http://g.csdn.net/5272870" target="_blank" onclick="LogClickCount(this,336);">移动游戏</a>
+<a title="Java" href="http://g.csdn.net/5272871" target="_blank" onclick="LogClickCount(this,336);">Java</a>
+<a title="Android" href="http://g.csdn.net/5272872" target="_blank" onclick="LogClickCount(this,336);">Android</a>
+<a title="iOS" href="http://g.csdn.net/5272873" target="_blank" onclick="LogClickCount(this,336);">iOS</a>
+<a title="Swift" href="http://g.csdn.net/5272868" target="_blank" onclick="LogClickCount(this,336);">Swift</a>
+<a title="智能硬件" href="http://g.csdn.net/5272869" target="_blank" onclick="LogClickCount(this,336);">智能硬件</a>
+<a title="Docker" href="http://g.csdn.net/5272867" target="_blank" onclick="LogClickCount(this,336);">Docker</a>
+<a title="OpenStack" href="http://g.csdn.net/5272925" target="_blank" onclick="LogClickCount(this,336);">OpenStack</a>
+<a title="VPN" href="http://www.csdn.net/tag/vpn" target="_blank" onclick="LogClickCount(this,336);">VPN</a>
+<a title="Spark" href="http://g.csdn.net/5272924" target="_blank" onclick="LogClickCount(this,336);">Spark</a>
+<a title="ERP" href="http://www.csdn.net/tag/erp" target="_blank" onclick="LogClickCount(this,336);">ERP</a>
+<a title="IE10" href="http://www.csdn.net/tag/ie10" target="_blank" onclick="LogClickCount(this,336);">IE10</a>
+<a title="Eclipse" href="http://www.csdn.net/tag/eclipse" target="_blank" onclick="LogClickCount(this,336);">Eclipse</a>
+<a title="CRM" href="http://www.csdn.net/tag/crm" target="_blank" onclick="LogClickCount(this,336);">CRM</a>
+<a title="JavaScript" href="http://www.csdn.net/tag/javascript" target="_blank" onclick="LogClickCount(this,336);">JavaScript</a>
+<a title="数据库" href="http://www.csdn.net/tag/%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank" onclick="LogClickCount(this,336);">数据库</a>
+<a title="Ubuntu" href="http://www.csdn.net/tag/ubuntu" target="_blank" onclick="LogClickCount(this,336);">Ubuntu</a>
+<a title="NFC" href="http://www.csdn.net/tag/nfc" target="_blank" onclick="LogClickCount(this,336);">NFC</a>
+<a title="WAP" href="http://www.csdn.net/tag/wap" target="_blank" onclick="LogClickCount(this,336);">WAP</a>
+<a title="jQuery" href="http://www.csdn.net/tag/jquery" target="_blank" onclick="LogClickCount(this,336);">jQuery</a>
+<a title="BI" href="http://www.csdn.net/tag/bi" target="_blank" onclick="LogClickCount(this,336);">BI</a>
+<a title="HTML5" href="http://www.csdn.net/tag/html5" target="_blank" onclick="LogClickCount(this,336);">HTML5</a>
+<a title="Spring" href="http://www.csdn.net/tag/spring" target="_blank" onclick="LogClickCount(this,336);">Spring</a>
+<a title="Apache" href="http://www.csdn.net/tag/apache" target="_blank" onclick="LogClickCount(this,336);">Apache</a>
+<a title=".NET" href="http://www.csdn.net/tag/.net" target="_blank" onclick="LogClickCount(this,336);">.NET</a>
+<a title="API" href="http://www.csdn.net/tag/api" target="_blank" onclick="LogClickCount(this,336);">API</a>
+<a title="HTML" href="http://www.csdn.net/tag/html" target="_blank" onclick="LogClickCount(this,336);">HTML</a>
+<a title="SDK" href="http://www.csdn.net/tag/sdk" target="_blank" onclick="LogClickCount(this,336);">SDK</a>
+<a title="IIS" href="http://www.csdn.net/tag/iis" target="_blank" onclick="LogClickCount(this,336);">IIS</a>
+<a title="Fedora" href="http://www.csdn.net/tag/fedora" target="_blank" onclick="LogClickCount(this,336);">Fedora</a>
+<a title="XML" href="http://www.csdn.net/tag/xml" target="_blank" onclick="LogClickCount(this,336);">XML</a>
+<a title="LBS" href="http://www.csdn.net/tag/lbs" target="_blank" onclick="LogClickCount(this,336);">LBS</a>
+<a title="Unity" href="http://www.csdn.net/tag/unity" target="_blank" onclick="LogClickCount(this,336);">Unity</a>
+<a title="Splashtop" href="http://www.csdn.net/tag/splashtop" target="_blank" onclick="LogClickCount(this,336);">Splashtop</a>
+<a title="UML" href="http://www.csdn.net/tag/uml" target="_blank" onclick="LogClickCount(this,336);">UML</a>
+<a title="components" href="http://www.csdn.net/tag/components" target="_blank" onclick="LogClickCount(this,336);">components</a>
+<a title="Windows Mobile" href="http://www.csdn.net/tag/windowsmobile" target="_blank" onclick="LogClickCount(this,336);">Windows Mobile</a>
+<a title="Rails" href="http://www.csdn.net/tag/rails" target="_blank" onclick="LogClickCount(this,336);">Rails</a>
+<a title="QEMU" href="http://www.csdn.net/tag/qemu" target="_blank" onclick="LogClickCount(this,336);">QEMU</a>
+<a title="KDE" href="http://www.csdn.net/tag/kde" target="_blank" onclick="LogClickCount(this,336);">KDE</a>
+<a title="Cassandra" href="http://www.csdn.net/tag/cassandra" target="_blank" onclick="LogClickCount(this,336);">Cassandra</a>
+<a title="CloudStack" href="http://www.csdn.net/tag/cloudstack" target="_blank" onclick="LogClickCount(this,336);">CloudStack</a>
+<a title="FTC" href="http://www.csdn.net/tag/ftc" target="_blank" onclick="LogClickCount(this,336);">FTC</a>
+<a title="coremail" href="http://www.csdn.net/tag/coremail" target="_blank" onclick="LogClickCount(this,336);">coremail</a>
+<a title="OPhone " href="http://www.csdn.net/tag/ophone" target="_blank" onclick="LogClickCount(this,336);">OPhone </a>
+<a title="CouchBase" href="http://www.csdn.net/tag/couchbase" target="_blank" onclick="LogClickCount(this,336);">CouchBase</a>
+<a title="云计算" href="http://www.csdn.net/tag/%E4%BA%91%E8%AE%A1%E7%AE%97" target="_blank" onclick="LogClickCount(this,336);">云计算</a>
+<a title="iOS6" href="http://www.csdn.net/tag/iOS6" target="_blank" onclick="LogClickCount(this,336);">iOS6</a>
+<a title="Rackspace " href="http://www.csdn.net/tag/rackspace" target="_blank" onclick="LogClickCount(this,336);">Rackspace </a>
+<a title="Web App" href="http://www.csdn.net/tag/webapp" target="_blank" onclick="LogClickCount(this,336);">Web App</a>
+<a title="SpringSide" href="http://www.csdn.net/tag/springside" target="_blank" onclick="LogClickCount(this,336);">SpringSide</a>
+<a title="Maemo" href="http://www.csdn.net/tag/maemo" target="_blank" onclick="LogClickCount(this,336);">Maemo</a>
+<a title="Compuware" href="http://www.csdn.net/tag/compuware" target="_blank" onclick="LogClickCount(this,336);">Compuware</a>
+<a title="大数据" href="http://www.csdn.net/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE" target="_blank" onclick="LogClickCount(this,336);">大数据</a>
+<a title="aptech" href="http://www.csdn.net/tag/aptech" target="_blank" onclick="LogClickCount(this,336);">aptech</a>
+<a title="Perl" href="http://www.csdn.net/tag/perl" target="_blank" onclick="LogClickCount(this,336);">Perl</a>
+<a title="Tornado" href="http://www.csdn.net/tag/tornado" target="_blank" onclick="LogClickCount(this,336);">Tornado</a>
+<a title="Ruby" href="http://www.csdn.net/tag/ruby" target="_blank" onclick="LogClickCount(this,336);">Ruby</a>
+<a title="Hibernate" href="http://www.csdn.net/hibernate" target="_blank" onclick="LogClickCount(this,336);">Hibernate</a>
+<a title="ThinkPHP" href="http://www.csdn.net/tag/thinkphp" target="_blank" onclick="LogClickCount(this,336);">ThinkPHP</a>
+<a title="HBase" href="http://www.csdn.net/tag/hbase" target="_blank" onclick="LogClickCount(this,336);">HBase</a>
+<a title="Pure" href="http://www.csdn.net/tag/pure" target="_blank" onclick="LogClickCount(this,336);">Pure</a>
+<a title="Solr" href="http://www.csdn.net/tag/solr" target="_blank" onclick="LogClickCount(this,336);">Solr</a>
+<a title="Angular" href="http://www.csdn.net/tag/angular" target="_blank" onclick="LogClickCount(this,336);">Angular</a>
+<a title="Cloud Foundry" href="http://www.csdn.net/tag/cloudfoundry" target="_blank" onclick="LogClickCount(this,336);">Cloud Foundry</a>
+<a title="Redis" href="http://www.csdn.net/tag/redis" target="_blank" onclick="LogClickCount(this,336);">Redis</a>
+<a title="Scala" href="http://www.csdn.net/tag/scala" target="_blank" onclick="LogClickCount(this,336);">Scala</a>
+<a title="Django" href="http://www.csdn.net/tag/django" target="_blank" onclick="LogClickCount(this,336);">Django</a>
+<a title="Bootstrap" href="http://www.csdn.net/tag/bootstrap" target="_blank" onclick="LogClickCount(this,336);">Bootstrap</a>
+    </div>
+</div>
+
+<div id="pop_win" style="display:none ;position: absolute; z-index: 10000; border: 1px solid rgb(220, 220, 220); top: 222.5px; left: 630px; opacity: 1; background: none 0px 0px repeat scroll rgb(255, 255, 255);">
+    
+</div>
+<div id="popup_mask"></div>
+<style>
+    #popup_mask
+    {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        left: 0px;
+        top: 0px;
+        opacity: 0.3;
+        filter: alpha(opacity=30);
+        display: none;
+    }
+
+</style>
+
+
+
+
+<script type="text/javascript">
+    $(function(){
+        setTimeout(function(){
+            $(".comment_body:contains('回复')").each(function(index,item){
+                var u=$(this).text().split('：')[0].toString().replace("回复","")
+                var thisComment=$(this);
+                if(u)
+                {
+                    $.getJSON("https://passport.csdn.net/get/nick?callback=?", {users: u}, function(a) {
+                        if(a!=null&&a.data!=null&&a.data.length>0)
+                        {
+                            nick=a.data[0].n; 
+                            if(u!=nick)
+                            {
+                                thisComment.text(thisComment.text().replace(u,nick));  
+                            }
+                        }       
+                    });  
+                }
+            });
+        },200);  
+        
+        setTimeout(function(){
+            $("a img[src='http://js.tongji.linezing.com/stats.gif']").parent().css({"position":"absolute","left":"50%"});
+        },300);
+    });
+
+    function loginbox(){
+        var $logpop=$("#pop_win");
+        $logpop.html('<iframe src="https://passport.csdn.net/account/loginbox?service=http://static.blog.csdn.net/callback.htm" frameborder="0" height="600" width="400" scrolling="no"></iframe>');
+
+        $('#popup_mask').css({
+            opacity: 0.5,
+            width: $( document ).width() + 'px',
+            height:  $( document ).height() + 'px'
+        });
+        $('#popup_mask').css("display","block");
+ 
+        $logpop.css( {
+            top: ($( window ).height() - $logpop.height())/ 2  + $( window 
+       ).scrollTop() + 'px',
+            left:($( window ).width() - $logpop.width())/ 2
+        } );
+ 
+        setTimeout( function () {
+            $logpop.show();
+            $logpop.css( {
+                opacity: 1
+            } );
+        }, 200 );
+ 
+        $('#popup_mask').unbind("click");
+        $('#popup_mask').bind("click", function(){
+            $('#popup_mask').hide();
+            var $clopop = $("#pop_win");
+            $("#common_ask_div_sc").css("display","none");
+            $clopop.css( {
+                opacity: 0
+            } );
+            setTimeout( function () {
+                $clopop.hide();
+            }, 350 );
+            return false;
+        });
+    }    
+
+</script>
+                        <div class="clear">
+                        </div>
+                    </div>                   
+                
+            </div>
+            <div id="side">
+    <div class="side">
+<div id="panel_Profile" class="panel">
+<ul class="panel_head"><span>个人资料</span></ul>
+<ul class="panel_body profile">
+<div id="blog_userface">
+    <a href="http://my.csdn.net/xiaoshengyige" target="_blank">
+    <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/1_xiaoshengyige.jpg" title="访问我的空间" style="max-width:90%">
+    </a>
+    <br>
+    <span><a href="http://my.csdn.net/xiaoshengyige" class="user_name" target="_blank">xiaoshengyige</a></span>
+</div>
+<div class="interact">
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_guanzhu&#39;])"></a>
+
+ <a href="javascript:void(0);" class="letter" title="[发私信]" onclick="window.open(&#39;http://msg.csdn.net/letters/model?receiver=xiaoshengyige&#39;,&#39;_blank&#39;,&#39;height=350,width=700&#39;);_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_sixin&#39;])"></a>  
+</div>
+<div id="blog_medal">
+                <div id="bms_box">
+               </div>
+</div>
+<ul id="blog_rank">
+    <li>访问：<span>49729次</span></li>
+    <li>积分：<span>753</span> </li>    
+    <li>等级： <span style="position:relative;display:inline-block;z-index:1">
+            <img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/blog3.png" alt="" style="vertical-align: middle;" id="leveImg">
+            <div id="smallTittle" style=" position: absolute;  left: -24px;  top: 25px;  text-align: center;  width: 101px;  height: 32px;  background-color: #fff;  line-height: 32px;  border: 2px #DDDDDD solid;  box-shadow: 0px 2px 2px rgba (0,0,0,0.1);  display: none;   z-index: 999;">
+            <div style="left: 42%;  top: -8px;  position: absolute;  width: 0;  height: 0;  border-left: 10px solid transparent;  border-right: 10px solid transparent;  border-bottom: 8px solid #EAEAEA;"></div>
+            积分：753 </div>
+        </span>  </li>
+    <li>排名：<span>千里之外</span></li>
+</ul>
+<ul id="blog_statistics">
+    <li>原创：<span>19篇</span></li>
+    <li>转载：<span>48篇</span></li>
+    <li>译文：<span>0篇</span></li>
+    <li>评论：<span>23条</span></li>
+</ul>
+</ul>
+</div>
+
+
+<div class="panel" id="panel_Search">
+    <ul class="panel_head"><span>文章搜索</span></ul>
+    <ul class="panel_body">
+        <form id="frmSearch" action="http://so.csdn.net/search" class="form_search" target="_blank">
+        <span><input id="inputSearch" type="text" class="blogsearch" title="请输入关键字"></span>
+        <input id="btnSubmit" type="button" value="搜索" title="search in blog">
+        <input type="hidden" name="q" id="inputQ">
+        <input type="hidden" name="t" value="blog">
+        <a id="btnSearchBlog" target="_blank"></a>
+        </form>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {           
+            search();
+        });
+
+        $("#frmSearch").submit(function () {
+            search();
+            return false;
+        });
+
+        function search()
+        {
+            var url = "http://so.csdn.net/so/search/s.do?q=" + encodeURIComponent($("#inputSearch").val()) + "&u=" + username + "&t=blog";
+            window.location.href = url;
+        }   
+    });
+</script>
+<div id="panel_Category" class="panel">
+<ul class="panel_head"><span>文章分类</span></ul>
+<ul class="panel_body">
+             <li>
+                <a href="http://blog.csdn.net/xiaoshengyige/article/category/842230" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">C#学习笔记</a><span>(4)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/xiaoshengyige/article/category/894065" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">c++笔记</a><span>(31)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/xiaoshengyige/article/category/923754" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">嵌入式学习</a><span>(29)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/xiaoshengyige/article/category/1150482" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">物联网</a><span>(4)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/xiaoshengyige/article/category/2360159" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">java</a><span>(1)</span>
+            </li>
+</ul>
+</div><div id="panel_Archive" class="panel">
+<ul class="panel_head"><span>文章存档</span></ul>
+<ul class="panel_body">
+<div id="archive_list"><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2014/07">2014年07月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2014/06">2014年06月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/12">2013年12月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/10">2013年10月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/09">2013年09月</a><span>(4)</span></li><span class="hidelist" style="display:none;"><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/08">2013年08月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/07">2013年07月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/05">2013年05月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/04">2013年04月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/03">2013年03月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/02">2013年02月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2013/01">2013年01月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/12">2012年12月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/11">2012年11月</a><span>(8)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/10">2012年10月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/08">2012年08月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/07">2012年07月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/06">2012年06月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/05">2012年05月</a><span>(6)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/04">2012年04月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/03">2012年03月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2012/02">2012年02月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2011/11">2011年11月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2011/10">2011年10月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2011/09">2011年09月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2011/07">2011年07月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xiaoshengyige/article/month/2011/06">2011年06月</a><span>(1)</span></li></span><div id="archive_list_button" class="list_closed">展开</div></div>
+</ul>
+</div>
+<div id="hotarticls" class="panel">
+<ul class="panel_head">
+    <span>       
+阅读排行    </span>
+</ul>
+
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7684084" title="left side of asn-op not an lvalue错误解决方法">left side of asn-op not an lvalue错误解决方法</a><span>(4799)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/11896419" title="嵌入式软件工程师经典笔试题">嵌入式软件工程师经典笔试题</a><span>(4446)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577115" title="zigbee学习笔记---Channel、PANID、发射功率及其它参数">zigbee学习笔记---Channel、PANID、发射功率及其它参数</a><span>(4183)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7609846" title="zigbee学习笔记--电源管理OSAL机制的ZigBee低功耗管理(CC2530)">zigbee学习笔记--电源管理OSAL机制的ZigBee低功耗管理(CC2530)</a><span>(2769)</span>
+</li>
+<li>
+<a href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET.html" title="zigbee学习笔记---入门">zigbee学习笔记---入门</a><span>(2744)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/6882957" title="c++画圆的程序">c++画圆的程序</a><span>(2267)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577123" title="zigbee学习笔记-----zstack中发现PANID冲突的解决办法。">zigbee学习笔记-----zstack中发现PANID冲突的解决办法。</a><span>(2226)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7819051" title="C8051F学习笔记3：优先权交叉开关译码器">C8051F学习笔记3：优先权交叉开关译码器</a><span>(1262)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/6882944" title="c++写的MFC中截特定区域图像的程序">c++写的MFC中截特定区域图像的程序</a><span>(1261)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/8524690" title="office VBA 学习">office VBA 学习</a><span>(1197)</span>
+</li>
+</ul>
+</div>
+<div id="hotarticls2" class="panel">
+<ul class="panel_head"><span>评论排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/6882944" title="c++写的MFC中截特定区域图像的程序">c++写的MFC中截特定区域图像的程序</a><span>(7)</span>
+</li>
+<li>
+<a href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET.html" title="zigbee学习笔记---入门">zigbee学习笔记---入门</a><span>(5)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/6769827" title="用c#写的DFT和FFT变换的程序">用c#写的DFT和FFT变换的程序</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7246457" title="STM32中何时需要开启AFIO？">STM32中何时需要开启AFIO？</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7819051" title="C8051F学习笔记3：优先权交叉开关译码器">C8051F学习笔记3：优先权交叉开关译码器</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/11896419" title="嵌入式软件工程师经典笔试题">嵌入式软件工程师经典笔试题</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7609846" title="zigbee学习笔记--电源管理OSAL机制的ZigBee低功耗管理(CC2530)">zigbee学习笔记--电源管理OSAL机制的ZigBee低功耗管理(CC2530)</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/7577115" title="zigbee学习笔记---Channel、PANID、发射功率及其它参数">zigbee学习笔记---Channel、PANID、发射功率及其它参数</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/8278253" title="C++中关于new和delete的使用">C++中关于new和delete的使用</a><span>(0)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/xiaoshengyige/article/details/8787962" title="浮点数转换成二进制数">浮点数转换成二进制数</a><span>(0)</span>
+</li>
+</ul>
+</div>
+<div id="homepageArticles" class="panel tracking-ad" data-mod="popu_4">
+<ul class="panel_head"><span>推荐文章</span></ul>
+<ul class="panel_body" id="ad_commend"><iframe id="ad_frm_2" frameborder="0" scrolling="no" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ad.html" style="border-width: 0px; overflow: hidden; width: 194px; height: 200px;"></iframe></ul>
+</div>
+<script type="text/javascript">
+ new Ad(12, 'ad_commend');
+</script><div id="newcomments" class="panel">
+<ul class="panel_head"><span>最新评论</span></ul>
+<ul class="panel_body itemlist">
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#comments">zigbee学习笔记---入门</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/wcjycgcom" class="user_name">Fture-</a>:
+我也在准备物联网竞赛！
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/11896419#comments">嵌入式软件工程师经典笔试题</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/u013794365" class="user_name">威客凌</a>:
+前辈写的真好，发现只有几道题会做，其他的都是.....明天就要去中南比试了，谢谢前辈的题目
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/11896419#comments">嵌入式软件工程师经典笔试题</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/u013794365" class="user_name">威客凌</a>:
+前辈写的真好，发现只有几道题会做，其他的都是.....明天就要去中南比试了，谢谢前辈的题目
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/6882944#comments">c++写的MFC中截特定区域图像的程序</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/gyf201007829" class="user_name">gyf201007829</a>:
+请问博主，void screenShot(CRect rect,int left,int top,c...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7609846#comments">zigbee学习笔记--电源管理OSAL机制的ZigBee低功耗管理(CC2530)</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/que418754178" class="user_name">que418754178</a>:
+楼主开发的时候用的什么平台？组网了没有？一个网络中有多少终端？多少路由器？还是点对点通信？我最近也在...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7577115#comments">zigbee学习笔记---Channel、PANID、发射功率及其它参数</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/zjjsfm" class="user_name">zjjsfm</a>:
+想问下#defineMAC_RADIO_CHANNEL_DEFAULT               ...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7819051#comments">C8051F学习笔记3：优先权交叉开关译码器</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/wangtao19932008" class="user_name">wangtao19932008</a>:
+谢谢！
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7819051#comments">C8051F学习笔记3：优先权交叉开关译码器</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/andylfg" class="user_name">phoenixl1910</a>:
+谢谢博主，写的很好
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7246457#comments">STM32中何时需要开启AFIO？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/jy02326166" class="user_name">Nestler</a>:
+重映射知道，但中断为啥也要开？
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/xiaoshengyige/article/details/7246457#comments">STM32中何时需要开启AFIO？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/xiaoshengyige" class="user_name">xiaoshengyige</a>:
+@lyfly_away:。。。。
+    </p>
+    </li>
+</ul>
+</div>
+    </div>
+    <div class="clear">
+    </div>
+</div>
+
+            <div class="clear">
+            </div>
+        </div>
+        
+
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/cnick.js"></script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/newblog.min.js"></script>
+
+
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/JavaScript1.js"></script><link rel="stylesheet" type="text/css" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/pub_footer_2014.css"><div class="pub_fo"><div id="pub_footerall" class="pub_footer_new"><dl><dt></dt> <dd class="foot_sub_menu"><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a><span>|</span><a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a><span>|</span><a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a><span>|</span><a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a><span>|</span><a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a><span>|</span><a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a><span>|</span><a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a><span>|</span><a href="mailto:webmaster@csdn.net">问题报告</a><span>|</span><a target="_blank" href="http://www.csdn.net/friendlink.html">合作伙伴</a><span>|</span><a href="http://bbs.csdn.net/forums/Service" target="_blank">论坛反馈</a></dd><dd class="foot_contact"><a href="http://wpa.qq.com/msgrd?v=3&uin=2355263776&site=qq&menu=yes" target="_blank" class="qq">网站客服</a><a href="http://wpa.qq.com/msgrd?v=3&uin=2251809102&site=qq&menu=yes" target="_blank" class="qq">杂志客服</a><a href="http://e.weibo.com/csdnsupport/profile" target="_blank" class="weibo">微博客服</a><a href="mailto:webmaster@csdn.net" class="email" title="联系邮箱">webmaster@csdn.net</a><span class="phone" title="服务热线">400-600-2320</span><span class="interval">|</span><span>北京创新乐知信息技术有限公司 版权所有</span><span class="interval">|</span><span>江苏乐知网络技术有限公司 提供商务支持</span></dd><dd class="foot_copyright"><span>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</span><span class="interval">|</span><span>Copyright © 1999-2014, CSDN.NET, All Rights Reserved&nbsp;</span><a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div></div><div id="note1" class="csdn_note" style="display:none; position:absolute; z-index:9999; width:440px">  <span class="notice_top_arrow"><span class="inner"></span></span>  <div class="box"></div></div><div class="csdn_notice_tip" style="position: absolute; z-index: 9990; width: 170px; left: -72px; top: 490px; display: block;">  <iframe src="about:blank" frameborder="0" scrolling="no" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe>  <div class="tip_text">您有<strong>1</strong>条新通知</div>  <a href="javascript:void 0" class="close2"></a></div><script id="noticeScript" type="text/javascript" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/notify.js"></script>
+
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/pv.aspx" border="0" width="0" height="0">
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ad-blog.js"></script>
+<script type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/count.js"></script><iframe src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/logs.html" frameborder="0" width="0" height="0"></iframe>
+<script type="text/javascript">
+    $(function () {
+        function __get_code_toolbar(snippet_id) {
+            return $("<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "' target='_blank' title='在CODE上查看代码片' style='text-indent:0;'><img src='https://code.csdn.net/assets/CODE_ico.png' width=12 height=12 alt='在CODE上查看代码片' style='position:relative;top:1px;left:2px;'/></a>"
+                    + "<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "/fork' target='_blank' title='派生到我的代码片'  style='text-indent:0;'><img src='https://code.csdn.net/assets/ico_fork.svg' width=12 height=12 alt='派生到我的代码片' style='position:relative;top:2px;left:2px;'/></a>");
+        }
+        
+        $("[code_snippet_id]").each(function () {
+            __s_id = $(this).attr("code_snippet_id");
+            if (__s_id != null && __s_id != "" && __s_id != 0 && parseInt(__s_id) > 70020) {
+                __code_tool = __get_code_toolbar(__s_id);
+                $(this).prev().find(".tools").append(__code_tool);
+            }
+        });
+    });
+</script>
+
+    </div><input type="hidden" id="aa_g_data_ids">
+      <!--new top-->
+    
+    <script id="csdn-toolbar-id" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/toolbar.js"></script>
+     <!--new top-->
+   
+    <link href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ask_float_block.css" type="text/css" rel="stylesheet">
+    <script language="JavaScript" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/wmd.js"></script>
+    <script language="JavaScript" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/showdown.js"></script>
+    <script language="JavaScript" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/prettify.js"></script>
+    <script language="JavaScript" type="text/javascript" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ask_float_block.js"></script>
+
+
+
+<link rel="stylesheet" type="text/css" media="screen" href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/ask_float_fonts_css-6b30a53970eb5c3a2a045e3df585b475.css"><div data-mod="popu_64" class="tracking-ad" chg-blk="0"><a id="com-ask-float-block" title="提问按钮" style="top:398px"></a><a id="com-quick-reply" title="快速回复" style="top:439px"></a><a id="com-d-top-a" style="top: 480px; display: none;" title="返回顶部" onclick=""></a> </div><div class="pop_edit ask_second comm_ask_second"><h3>提问</h3><span class="ask_float_span">您的问题将会被发布在“<a class="ask_float_channel" href="http://ask.csdn.net/" target="_blank" style="cursor:pointer">技术问答</a>”频道</span><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" nodetype="close" class="close">×</a><div class="context"><div class="err_div"><span class="err_ico"></span><span class="err_txt">该问题已存在，请勿重复提问</span></div><div class="input_div"><input id="askInputSecond" type="text" style="font-size:14px;" placeholder="问题标题"></div><div class="cm_box"><div class="cm_dialog"></div> <div class="pop_cm cm_add_link"><input type="text" placeholder="链接内容" id="af_cm_link_txt"><input type="text" placeholder="链接地址" id="af_cm_link_url"><input type="text" placeholder="链接提示" id="af_cm_link_tit"><div class="text-right"><span class="btn btn-default btn-sm" id="add_link_btn">插入链接</span> </div> </div><div class="pop_cm cm_add_img"><div class="nav-tabs"><a class="img_tab active" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#tab_upload">本地上传</a><a class="img_tab" href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#tab_weburl">网络图片</a></div><div class="tab_panel active" id="tab_upload"><div class="set_img"><iframe src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/upload.html"></iframe></div></div><div class="tab_panel" id="tab_weburl"><input type="text" placeholder="图片地址" id="af_cm_img_url"><input type="text" placeholder="图片说明" id="af_cm_img_alt"><div class="text-right"><span class="btn btn-default btn-sm" id="add_img_btn">插入图片</span> </div></div> </div></div> <textarea id="editor_all" rows="8" style="display: none;"></textarea><div class="editor-toolbar"><i class="separator">|</i><a class="icon-headline" title="标题一（Ctrl+Alt+1）"></a><a class="icon-heading" title="标题二（Ctrl+Alt+2）"></a><a class="icon-bold" title="粗体（Ctrl+B）"></a><a class="icon-italic" title="斜体（Ctrl+I）"></a><i class="separator">|</i><a class="icon-quote-left" title="引用（Ctrl+’）"></a><a class="icon-code" title="插入代码片（Ctrl+,）"></a><a class="icon-list-ul" title="无序列表（Ctrl+L）"></a><a class="icon-list-ol" title="有序列表（Ctrl+Alt+L）"></a><i class="separator">|</i><a class="icon-link" title="添加链接（Ctrl+K）"></a><a class="icon-picture" title="添加图片（Ctrl+Alt+I）"></a><i class="separator">|</i><a class="icon-reply" title="撤退（Ctrl+Z）"></a><a class="icon-share-alt" title="前进（Ctrl+Shift+Z）"></a><i class="separator">|</i><a class="icon-info" href="http://ask.csdn.net/pages/markdown" target="_blank" title="markdown语法参考"></a><a class="icon-preview" title="预览"></a><i class="separator">|</i></div><div class="CodeMirror cm-s-paper CodeMirror-focused"><div style="overflow: hidden; position: relative; width: 3px; height: 0px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none; font-size: 4px;" tabindex="0"></textarea></div><div class="CodeMirror-hscrollbar"><div style="height: 1px;"></div></div><div class="CodeMirror-vscrollbar"><div style="width: 1px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="min-width: 33px;"><div style="position: relative;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>&nbsp;<span style="display: inline-block; width: 1px; margin-right: -1px;">&nbsp;</span></pre></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"></div><div class="CodeMirror-cursor">&nbsp;</div><div class="CodeMirror-cursor CodeMirror-secondarycursor">&nbsp;</div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px;"></div><div class="CodeMirror-gutters" style="display: none;"></div></div></div><div class="editor-statusbar"><span class="lines">0</span><span class="words">0</span><span class="cursor">0:0</span></div><div class="div_tags clearfix"><div id="divSearchTags" class="tags_con"><input type="text"></div><input type="hidden" name="txtSearchTags"></div><div id="ask2_tagRecomm_div" class="drt_tagRecomm"><span class="drt_tit">推荐标签：</span></div></div><div class="success"><div class="left_area"><input id="chk_cb" type="checkbox"><span class="wyxs">我要悬赏</span><input id="cb_num" class="cb_num" readonly="true"><span class="phib_rii"><span> 币</span></span></div><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" nodetype="cancel" class="cancel">取消</a><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" nodetype="ok" class="ok">发布</a></div></div><div id="common_ask_div_sc" class="searchContainer"><div class="sTitle">可能存在类似的问题：</div><div class="sFooter"><a class="sFirstNewAsk">我想提一个新问题</a></div></div><div id="tag-suggest-pop">
+  <div class="relative">
+    <div class="close"></div>
+    <div class="content"></div>
+  </div>
+</div><div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入单词表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出单词表"></a><a href="http://blog.csdn.net/xiaoshengyige/article/details/7577244#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div><link href="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/message_pop.css" rel="stylesheet" type="text/css"><div id="_popup_msg_container" style="display: block;">
+
+<div wistate="max" id="im_popupWindow_miniMsg" class="im_popupWindow" style="display: block; height: 250px;">
+	<h6 class="wi_draggable"><span>
+</span><a onclick="_message_tips_pop(&#39;down&#39;);return false;"><img alt="close" class="founctionpic3" src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/pic_close.gif"></a></h6>
+    <div id="im_popupWindow_miniMsgContent" class="wi_content">
+		<div class="kuai">
+			<div style="width:280px;"><a href="http://vote.blog.csdn.net/" target="_blank"><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/iPad大奖来袭280.188.jpg" alt="" border="0" style="border:0;" title=""></a></div>
+		</div>
+	</div>
+<div class="content_qq"><span onclick="window.open(&#39;&#39;)" target="_blank"><font color="red">
+</font></span>
+ </div>
+ 
+ 
+</div>
+</div><img src="./zigbee学习笔记---入门 - xiaoshengyige的专栏 - 博客频道 - CSDN.NET_files/count_new.php" style="display: none;"></body></html>

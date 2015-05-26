@@ -132,3 +132,13 @@ snprintf(buffer, [string length] + 1, "%s\n", (unsigned char*)[string bytes]);
 
 *** copy：与strong类似，但区别在于实例变量是对传入对象的副本拥有所有权，而非对象本身。
 
+* navigationcontroller 返回
+
+#+BEGIN_SRC objc
+//返回到上一个视图，比如用户单击导航栏的Back按钮
+[[self navigationController] popViewControllerAnimated:YES]
+//返回到根视图
+[[self navigationController] popToRootViewControllerAnimated:YES];
+//返回到任意视图
+[[self navigationController] popToViewController:destiationViewController animated:YES];
+#+END_SRC

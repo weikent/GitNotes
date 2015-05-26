@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://www.cocoachina.com/ios/20140915/9620.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	
+	<title>Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 -  CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区</title>
+    <meta name="keywords" content="ARM,移动处理器,指令集iPhone开发,iOS开发,iPad开发,Mac开发,苹果开发中文站,iPhone开发中文站,CocoaChina首页, Mac OS开发, Cocoa介绍,移动互联网,触控科技,Cocoa,Apple,developer,iOS,iPhone,iPad,iMac,iPod Touch,iPhone5,iPhone4S,iPad3,招聘,iPhone程序员,Objective-c,iPhone应用外包,ios6,ios面试,Cocos2d-x,cocos2d,iTunes,App Store,苹果开发">
+	<meta name="description" content=" - CocoaChina 开发讨论区 最热的iOS开发论坛| 最热的Mac开发论坛 | 最热的iPhone开发论坛 | 最热的iPad开发论坛">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="baidu-tc-cerfication" content="3300a939a1098c27e94457b75a0bb8c1">		
+	<link rel="stylesheet" href="http://www.cocoachina.com/cms/templets/style/global.css?20151" media="all">	
+	<link rel="stylesheet" href="http://www.cocoachina.com/cms/templets/style/index.css?2015" media="all">	
+	<link href="http://www.cocoachina.com/cms/templets/style/module.css?2015" rel="stylesheet">
+	<link href="http://www.cocoachina.com/cms/templets/style/style.css?20151" rel="stylesheet">
+	<script type="text/javascript" async="" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/ga.js"></script><script type="text/javascript" async="" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/ga.js"></script><script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/hm.js"></script><script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/abase.js"></script><script type="text/javascript" charset="gbk" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/prebat.php"></script>
+	
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?88399e4c4cf744609c4fc8c3a8935691";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>	
+<script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/share.js"></script><style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style><link rel="stylesheet" href="http://bdimg.share.baidu.com/static/api/css/share_style1_32.css"></head>
+<body>
+<!--top-->
+<div class="top">
+	<div id="topshow" class="t-wrap"><ul class="t-shortc"><li><a title="" target="_blank" href="http://open.cocoachina.com/">Cocos开发者平台</a></li><li><a title="" target="_blank" href="http://cn.cocos2d-x.org/">Cocos引擎中文官网</a></li><li><a title="" target="_blank" href="http://h5.cocoachina.com/">H5轻游戏平台</a></li></ul><div class="t-login"><a href="http://www.cocoachina.com/bbs/login.php" title="">登录</a><a class="reg" href="http://www.cocoachina.com/bbs/register.php" title="">注册</a></div></div>
+</div>	
+<!--./top-->
+<div class="header">
+	<div class="h-wrap">
+    	<div class="h-logo">
+        	<a href="http://www.cocoachina.com/" title="" style="margin: 0 37px 0 10px;float:left;"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/logo.png" height="53"></a>
+            <div class="search">
+            	<form action="http://www.cocoachina.com/cms/plus/search.php" id="searchform" name="formsearch" method="post" target="_blank">
+					<input type="hidden" name="kwtype" value="0">
+					<input type="hidden" name="searchtype" value="titlekeyword">				
+					<input name="keyword" value="" type="text" id="search_keyword" placeholder="站内搜索">
+                    <input type="button" class="ser-btn" value="" onclick="search_check()">
+				</form>
+                <div class="h-tags clearfix">
+                	<a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=iOS+8&searchtype=titlekeyword" title="" target="_blank">iOS 8</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=Swift&searchtype=titlekeyword" title="" target="_blank">Swift</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=App%20Store&searchtype=titlekeyword" title="" target="_blank">App Store</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=Apple%20Watch&searchtype=titlekeyword" title="" target="_blank">Apple Watch</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=Metal&searchtype=titlekeyword" title="" target="_blank">Metal</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=Cocos%E5%BC%95%E6%93%8E&searchtype=titlekeyword" title="" target="_blank">Cocos引擎</a>
+                    <a href="http://www.cocoachina.com/cms/plus/search.php?kwtype=0&keyword=%E6%89%8B%E6%B8%B8&searchtype=titlekeyword" title="" target="_blank">手游</a>
+                </div>
+            </div>
+            <div class="cc-ad1">
+				<script>CNZZ_SLOT_RENDER('323844');</script><script type="text/javascript" charset="gbk" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/appgcm.php"></script><div id="cnzz_slot_323844" style="border:none;margin:0px;padding:0px;overflow:hidden;"><a href="http://click.am1.adm.cnzz.net/click.php?m4c=_SEbuqSxL46XPQj4rOjOZQsfFQVbGB4rC1FwR0pCL1hFSylIWBxQWFcUWEBRdClTUFFFFAARVBcCBVhTAAJlSx9wTFFMLDMVEXMeDQY5BQoJAxQXUWkFBgdeVWJRYVM." target="_blank"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/1b42d7507d863b7f593979d8d4776.jpg" width="340" height="52" border="0"></a></div>
+            </div>
+        </div>
+        
+        <div class="h-nav">        	          	
+            <ul class="h-navl">
+               	<li class="navl-1"><a id="ios" href="http://www.cocoachina.com/ios/" title="ios" class="light">iOS开发</a></li>
+                <li class="navl-2"><a id="app_store" href="http://www.cocoachina.com/appstore/" title="appstore">App Store研究</a></li>
+                <li class="navl-3"><a id="mac" href="http://www.cocoachina.com/mac/" title="mac">Mac开发</a></li>
+                <li class="navl-4"><a id="design" href="http://www.cocoachina.com/design/" title="design">产品设计</a></li>
+                <li class="navl-5"><a id="cocos" href="http://www.cocoachina.com/cocos/" title="cocos">Cocos引擎</a></li>
+                <li class="navl-6"><a id="webapp" href="http://www.cocoachina.com/webapp/" title="webapp">WebApp</a></li>
+                <li class="navl-1"><a id="swift" href="http://www.cocoachina.com/swift/" title="swift">Swift</a></li>
+                <li class="navl-2"><a id="game" href="http://www.cocoachina.com/game/" title="game">游戏开发</a></li>
+                <li class="navl-3"><a id="apple" href="http://www.cocoachina.com/apple/" title="apple">苹果相关</a></li>
+                <li class="navl-4"><a id="market" href="http://www.cocoachina.com/market/" title="market">营销推广</a></li>
+                <li class="navl-5"><a id="industry" href="http://www.cocoachina.com/industry/" title="industry">业界动态</a></li>
+                <li class="navl-6"><a id="programmer" href="http://www.cocoachina.com/programmer/" title="programmer">程序人生</a></li>
+            </ul> 
+            <ul class="h-navr">
+               	<li><a target="_blank" href="http://www.cocoachina.com/bbs/" title="bbs">论坛</a></li>
+                <li><a target="_blank" href="http://code.cocoachina.com/" title="code">代码</a></li>
+                <li><a target="_blank" href="http://www.cocoachina.com/special/index.html" title="special">专题</a></li>
+                <li><a target="_blank" href="http://www.cocoachina.com/events/" title="events">活动</a></li>
+                <li class="navr-last"><a target="_blank" href="http://job.cocoachina.com/" title="job">招聘</a></li>
+            </ul>          
+        </div>
+    </div>
+</div>
+
+
+<script language="javascript">
+    function IsPC() { 
+		var userAgentInfo = navigator.userAgent; 
+		var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPod"); 
+		var flag = true; 
+		for (var v = 0; v < Agents.length; v++) { 
+		if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; } 
+		} 
+		return flag; 
+	}
+    if (!IsPC()){
+           window.location.href = "http://www.cocoachina.com/cms/wap.php?action=article&id=9620"; 
+    }
+	
+</script>
+<!--middle-->
+<div class="middle clearfix">
+	<div class="m-wrap">
+		<!--left-->
+		<div class="detail-left float-l">
+			<p class="crumbs"><a href="http://www.cocoachina.com/" title="首页">首页</a> &gt;<a href="http://www.cocoachina.com/ios" title="iOS开发"><span id="type_name">iOS开发</span></a></p>  	       
+			<div class="detail-main">
+			<h2>Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64</h2>
+			<div class="p-ico clearfix">
+				<div>
+					<span class="ml0">2014-09-15 09:35</span>
+					<span>编辑：
+					<a href="http://www.cocoachina.com/bbs/u.php?action=feed&uid=340873" id="field_author" target="_blank">suiling</a></span>
+					<span>分类：<a href="http://www.cocoachina.com/ios/" target="_blank">iOS开发</a></span>
+					<span id="source">来源：CocoaChina</span>
+
+					<div class="float-r">
+						<span><i></i> <script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/count.php"></script>0</span>
+						<span><i class="view"></i><script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/count(1).php" language="javascript"></script>4429</span>
+				</div>
+				</div>
+			</div>
+			<div class="p-ico clearfix">
+				<p class="related float-l"><a href="http://www.cocoachina.com/cms/tags.php?/ARM/" target="_blank">ARM</a><a href="http://www.cocoachina.com/cms/tags.php?/%E7%A7%BB%E5%8A%A8%E5%A4%84%E7%90%86%E5%99%A8/" target="_blank">移动处理器</a><a href="http://www.cocoachina.com/cms/tags.php?/%E6%8C%87%E4%BB%A4%E9%9B%86/" target="_blank">指令集</a></p>
+				<input type="hidden" id="article_id" value="9620">
+			</div>
+			<div class="adsbox clearfix">
+				<div class="float-l">
+					<div class="float-l"><b>招聘信息：</b></div>
+					<ul class="float-l" id="invitelist" style="margin-top: 0px;"><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277514" target="_blank">女性社交app，求优秀java后台攻城狮啦。公司美女多，有期权和股票</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277516" target="_blank">z</a></li></ul>
+				</div>
+				<div class="float-r">
+					<a href="javascript:void(0)" class="prev"></a>
+					<a href="javascript:void(0)" class="next"></a>
+				</div>
+			</div>
+			<div id="detailbody" class="field_body">
+				<div style="text-align: center;"><img width="491" height="354" border="0" onclick="window.open(&#39;/cms/uploads/allimg/140915/4673_140915094221_1.jpg&#39;)" style="cursor:pointer" alt="" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/4673_140915094221_1.jpg"></div>
+<p>（via <a href="http://www.cnblogs.com/mylizh/" target="_blank">雅香小筑</a>）</p>
+<p>&nbsp;</p>
+<p>Arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。</p>
+<p>&nbsp;</p>
+<p>Armv6、armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。</p>
+<p>&nbsp;</p>
+<p>需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
+<p>&nbsp;</p>
+<p><strong>目前为止Apple移动设备默认指令集</strong>（2014.8.22）</p>
+<p>-------------------------------------------------------------------------------------</p>
+<p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</p>
+<p>armv7 设备：&nbsp;iPhone3GS,&nbsp;iPhone4,&nbsp;iPhone4S</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; iPad, iPad2, iPad3(The New iPad), iPad mini</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; iPod Touch 3G, iPod Touch4</p>
+<p>armv7s设备：&nbsp;iPhone5,&nbsp;iPhone5C, iPad4(iPad with Retina Display)</p>
+<p>arm64 设备：&nbsp;iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)</p>
+<p>-------------------------------------------------------------------------------------</p>
+<p><strong>XCode中与指令集相关的选项</strong>（Build Settings 面板下 Architectures）：</p>
+<p>&nbsp;</p>
+<p>Architectures： &nbsp; &nbsp; &nbsp;</p>
+<p>指明选定Target要求被编译生成的二进制包所支持的指令集支持指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
+<p>&nbsp;</p>
+<p>Valid Architectures：</p>
+<p>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures和Architectures列表的交集，才是XCode最终生成二进制包所支持的指令集。</p>
+<p>&nbsp;</p>
+<p>比如，将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid&nbsp;Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s 。&nbsp;</p>
+<p>&nbsp;</p>
+<p>Build Active Architecture Only:</p>
+<p>指明是否只编译当前连接设备所支持的指令集</p>
+<p>该选项起作用的条件有两个，必须同时满足才会起作用：</p>
+<p>1. 其值设置为YES</p>
+<p>2. XCode成功连接调试设备</p>
+<p>假定我们将Build Active Architecture Only值设置为YES，同时XCode连接上手机iPhone5S（匹配指令集arm64）</p>
+<p>&nbsp;</p>
+<p><strong>1. 第一种情况</strong></p>
+<p>Architectures:&nbsp; armv7, armv7s, arm64</p>
+<p>ValidArchitectures: &nbsp;armv6, armv7s, arm64</p>
+<p>生成二进制包支持的指令集： arm64&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>2. 第二种情况</strong></p>
+<p>Architectures: armv6, armv7, armv7s</p>
+<p>Valid&nbsp;Architectures: &nbsp;armv6, armv7s, arm64</p>
+<p>生成二进制包支持的指令集： armv7s&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>3. 第三种情况</strong></p>
+<p>Architectures:&nbsp; armv6, armv7</p>
+<p>Valid&nbsp;Architectures: armv6, armv7s, arm64</p>
+<p>生成二进制包支持的指令集： armv7</p>
+<p>&nbsp;</p>
+<p><strong>4. 第四种情况</strong></p>
+<p>Architectures: armv6</p>
+<p>Valid&nbsp;Architectures: armv6, armv7s, arm64</p>
+<p>生成二进制包支持的指令集： 虽然编译成功了，但是并没有任何目标生成，&nbsp;因为从XCode4.5开始，就不再支持armv6指令集，所以列表中写了也是白写。</p>
+<p>&nbsp;</p>
+<p><strong>5. 第五种情况</strong></p>
+<p>Architectures: armv7, armv7s, arm64</p>
+<p>Valid&nbsp;Architectures: armv7，armv7s</p>
+<p>生成二进制包支持的指令集： 编译出错信息</p>
+<pre><ol class="dp-c"><li class="alt"><span><span>No&nbsp;architectures&nbsp;to&nbsp;compile&nbsp;</span><span class="keyword">for</span><span>&nbsp;(ONLY_ACTIVE_ARCH=YES,&nbsp;active&nbsp;arch=arm64,&nbsp;VALID_ARCHS=armv7&nbsp;armv7s)&nbsp;</span></span></li></ol></pre>
+<p>可以看出：当Build Active Architecture Only起作用时：</p>
+<p>连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。</p>
+<p>&nbsp;</p>
+<p>如连接手机为iPhone5S，其默认指令集为arm64，若Architectures列表为armv7, armv7s,则会选取armv7s指令集为目标指令集，如果此时Valid&nbsp;Architectures列表中包含该指令集，则成功生成的二进制包只支持armv7s指令集，若alid&nbsp;Architectures列表不包含此指令集，则编译将会出错：</p>
+<pre><ol class="dp-c"><li class="alt"><span><span>No&nbsp;architectures&nbsp;to&nbsp;compile&nbsp;</span><span class="keyword">for</span><span>&nbsp;(ONLY_ACTIVE_ARCH=YES,&nbsp;active&nbsp;arch=armv7s,&nbsp;VALID_ARCHS=armv7&nbsp;arm64)&nbsp;</span></span></li></ol></pre>
+<p>&nbsp;</p>
+<p>同样的，若Architectures列表为armv7，则会选取armv7作为目标指令集，若Valid&nbsp;Architectures列表中包含了armv7指令集，则能够成功生成二进制包，其支持的指令集只有armv7，若Valid&nbsp;Architectures列表中不包含armv7，则编译失败。</p>
+<p>建议：通常Debug模式设置值为Yes，Release模式设置为No</p>
+			</div>
+			<div id="page" style="padding:0"></div>
+                
+			<div class="wx_article">	
+				<div class="article_weixin">				
+					<img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/article_weixin.jpg" width="131" height="131" alt="搜索CocoaChina微信公众号：CocoaChina">
+					<div class="article_scan">微信扫一扫</div>
+					<div class="article_txt"><span style="color:#999999">订阅每日移动开发及APP推广热点资讯<br>公众号：</span>CocoaChina</div>
+				</div>
+			</div>
+			
+		   <div class="clearfix tgbox">
+				<a href="http://www.cocoachina.com/deliver.php" class="tg float-l" target="_blank">我要投稿</a>&nbsp;&nbsp;
+				<a style="margin-left:10px" href="javascript:void(0)" onclick="add_favors(9620,&#39;Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64&#39;)" class="tg float-l">收藏文章</a>
+				<div class="share float-r">分享到：
+					<div class="bdsharebuttonbox" id="sharediv" data-bd-bind="1418959009543"><a href="http://www.cocoachina.com/ios/20140915/9620.html#" class="bds_more" data-cmd="more"></a> <a href="http://www.cocoachina.com/ios/20140915/9620.html#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="http://www.cocoachina.com/ios/20140915/9620.html#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> <a href="http://www.cocoachina.com/ios/20140915/9620.html#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+				</div>
+			</div>			
+			
+			
+			<a class="zanbox" href="javascript:void(0)" id="zanbox" onclick="postDigg(&#39;good&#39;,9620)" title="哎呦，不错噢，赞一个">
+				<strong id="newdigg">
+				 <script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/count(2).php" language="javascript"></script>13
+				</strong>
+			</a>			
+		</div>
+    
+        	<div class="article-prev">上一篇：<a href="http://www.cocoachina.com/ios/20140912/9606.html">预览：Mac上的FTP客户端Transmit将登陆iOS 8</a> </div>
+            <div class="article-next">下一篇：<a href="http://www.cocoachina.com/ios/20140915/9621.html">iOS开发之画图板(贝塞尔曲线)</a> </div>
+      	
+		<!--相关资讯-->
+		<div class="part-wrap clearfix">
+			<h3>相关资讯</h3>
+			<ul class="info-list clearfix">
+            	<li>
+                	<a href="http://www.cocoachina.com/ios/20141013/9897.html" target="_blank" title="最近一次的Xcode 6更新默认不再支持arm7s架构，究竟是要废除不用呢还是仅仅只是一个疏忽？
+目前的Xcode 6配置里定义${ARCHS_STANDARD}为armv7, arm64，当然这个定义前提是它会一再要求你删除掉你原本设定的构">Xcode 6更新默认不支持armv7s架构</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20140826/9454.html" target="_blank" title="OCamlXARM 4.0.2是OCaml 4.01.0的交叉编译版本，已经在OS X 10.9.4上的Xcode 5.1.1上试验运行，你可以下载二进制安装包 OCamlXARM 4.0.2 Installer for OS X 10.9 你可以从SVN获得源码： svn://svn.psellos.com/tags/ocamlxarm-"> OCaml 发布 iOS 7 版编译器（OCamlXARM 4.0.2）</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20130927/7078.html" target="_blank" title="ARM 技术推广工程师彭晓波：ARM最早有V5架构，做嵌入式的人都知道，最早的是功能机，ARM7、ARM9，现在有Cortex系列。在CPU领域，ARM在智能设备商官方的数据，今年是95%以上，实际上步之这个份额">2013（秋季）CocoaChina开发者大会实录：彭晓波《助力游戏开发：ARM Neon技术及N</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20130624/6463.html" target="_blank" title="注：本文由破船译自：raywenderlich。感谢唐巧抽出时间对本文进行double-check。 我们写的Objective-C代码，最终会被转换为机器代码 由ARM处理器能识别的1和0组成。实际上，在机器代码之间，还有一"> iOS汇编教程：ARM(1)和ARM(2)</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20130527/6284.html" target="_blank" title="去年做了一个项目，需要用ffmpeg对h264视频流进行解码。当时折腾了很久只在armv7编译通过。调试必须用真机，很麻烦。
+后来我将编译整理成脚本，现在支持 armv7, armv7s, i386(模拟器)。">iOS下完美编译ffmpeg+x264，支持armv7, armv7s, 模拟器</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20130414/6007.html" target="_blank" title="同样在技术研讨分会场，ARM战略联盟软件架构师章立讲了一些趋势性的内容，比如在虚拟现实无处不在的情况下，游戏如何发展...... 章立：今天下午的演讲都是有些技术化，这次我们直接从I">CocoaChina2013春季开发者大会：ARM战略联盟软件架构师章立-Mali GPU对手机游戏所做</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20111128/3620.html" target="_blank" title="11月28日消息,据国外媒体报道，苹果正期待着招聘具有使用高级加工技术生产芯片组经验的高级工程师。这个迹象表明苹果将生产用于iPad 3等下一代移动设备的处理器。苹果正在寻求一个">苹果招高级工程师为开发下一代移动处理器准备</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20100720/1891.html" target="_blank" title="NEON 技术是 ARM V7 架构中相对于 Atom 处理器很有竞争力的一个技术。它支持了非常丰富的128位向量计算，实现了 SIMD 技术特征。那我们如何在苹果 iPhone 3GS 或更高版本；iPod Touch 3 代或更">在iPhone/iPad/iPod touch中使用ARM处理器的NEON技术</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20100426/1208.html" target="_blank" title="本代码示例由CocoaChina会员 zenny_chen 分享，帖子地址 http://www.cocoachina.com/bbs/read.php?tid-19290.html 下面工程中的汇编文件为arm7.asm，用 的是系统汇编器。注意，后缀名必须为.asm。 在编译规则">在iPhone项目中放入汇编文件，并用C与汇编代码混</a>          
+             	</li>
+<li>
+                	<a href="http://www.cocoachina.com/ios/20100423/1182.html" target="_blank" title="近几天盛传苹果将收购ARM，从而掌控移动设备芯片技术，ARM的股价甚至因此狂涨。但美国IT媒体《硅谷观察》对此事进行了分析，最终认为，苹果不会收购ARM。原因主要有以下几点：">国外媒体分析称苹果不会收购ARM</a>          
+             	</li>
+			
+			</ul>
+		</div>  
+		<iframe id="comiframe" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/get_comments.html" width="750" frameborder="0" scrolling="no" height="431"></iframe>
+		<script type="text/javascript">
+			var reinit;
+
+			function reinitIframe(){
+				var iframe = document.getElementById("comiframe");
+				var src = $("#comiframe").attr('src');
+				try{
+				var indexof = src.indexOf("cn.cocos2d-x.org/comment/get_comments");
+				if(src!='' && indexof<0 ){
+					var bHeight = iframe.contentWindow.document.body.scrollHeight;
+					
+					var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				
+					var height = Math.max(bHeight, dHeight);
+					iframe.height =  parseInt(height)+180;
+					if(height!='150'){
+					var src_new=src.replace("www.cocoachina.com/comment.php","cn.cocos2d-x.org/comment/get_comments");
+					$("#comiframe").attr("src",src_new);
+
+					clearInterval(reinit);
+					}
+				}
+				}catch(ex){
+				}
+			}
+			reinit = window.setInterval("reinitIframe()", 1200);
+		</script>	
+		
+		
+	</div>
+    <!--./left-->
+            <!--侧边栏-->
+            <div class="clearfix newslist">
+                <div class="rightSide detail-right float-r">                                       
+                    <!--两周热门资讯推荐-->
+                    <div> 
+                        <div class="part-wrap clearfix">
+                            <h3>热门资讯</h3>
+                            <ul class="related-hot">
+								<li class="clearfix"><a href="http://www.cocoachina.com/ios/20141205/10534.html" class="float-l pic" target="_blank" title="iPhone 6/6 Plus 出现后，如何改进工作流以实现一份设计稿支持多个尺寸？"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/e515d1e34a434b6eb5fdc20d9a435ddc.jpg" style="max-height:60px" alt="iPhone 6/6 Plus 出现后，如何改进工作流以实现一份设计稿支持多个尺寸？"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/ios/20141205/10534.html" target="_blank" title="iPhone 6/6 Plus 出现后，如何改进工作流以实现一份设计稿支持多个尺寸？">iPhone 6/6 Plus 出现后，如何改进工作流以实现一份设计稿支持多个尺寸？</a></p><p class="hits">点击量<span>10353</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/ios/20141212/10626.html" class="float-l pic" target="_blank" title="Xcode概览（Xcode 6版）：循序渐进认识Xcode"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/65901f4c7007a672ab899376da70e882.jpg" style="max-height:60px" alt="Xcode概览（Xcode 6版）：循序渐进认识Xcode"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/ios/20141212/10626.html" target="_blank" title="Xcode概览（Xcode 6版）：循序渐进认识Xcode">Xcode概览（Xcode 6版）：循序渐进认识Xcode</a></p><p class="hits">点击量<span>8833</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/programmer/20141212/10615.html" class="float-l pic" target="_blank" title="程序员养生：代码和身体都要健康"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/586774e34c0f86b9f943d186966f5845.jpg" style="max-height:60px" alt="程序员养生：代码和身体都要健康"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/programmer/20141212/10615.html" target="_blank" title="程序员养生：代码和身体都要健康">程序员养生：代码和身体都要健康</a></p><p class="hits">点击量<span>7098</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/appstore/20141209/10565.html" class="float-l pic" target="_blank" title="提醒：因假期原因，苹果12.22-29将暂时关闭iTunes Connect"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/62caf59284d1aaacd1b8d327e638a865.jpg" style="max-height:60px" alt="提醒：因假期原因，苹果12.22-29将暂时关闭iTunes Connect"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/appstore/20141209/10565.html" target="_blank" title="提醒：因假期原因，苹果12.22-29将暂时关闭iTunes Connect">提醒：因假期原因，苹果12.22-29将暂时关闭iTunes Connect</a></p><p class="hits">点击量<span>5278</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/programmer/20141208/10556.html" class="float-l pic" target="_blank" title="TIOBE 2014年12月排行榜：R和Swift语言有望角逐年度编程语言"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/7f6579ed27b383f6b82253f381ee7099.jpg" style="max-height:60px" alt="TIOBE 2014年12月排行榜：R和Swift语言有望角逐年度编程语言"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/programmer/20141208/10556.html" target="_blank" title="TIOBE 2014年12月排行榜：R和Swift语言有望角逐年度编程语言">TIOBE 2014年12月排行榜：R和Swift语言有望角逐年度编程语言</a></p><p class="hits">点击量<span>4914</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/programmer/20141215/10635.html" class="float-l pic" target="_blank" title="软件工程师的鄙视链"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/5995b405028d51538b293735be28fb59.jpg" style="max-height:60px" alt="软件工程师的鄙视链"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/programmer/20141215/10635.html" target="_blank" title="软件工程师的鄙视链">软件工程师的鄙视链</a></p><p class="hits">点击量<span>4100</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/programmer/20141210/10580.html" class="float-l pic" target="_blank" title="腾讯微信产品经理面试题，你也来答答？"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/576feb6a5b1ec77c5994bda6ad6225b6.jpg" style="max-height:60px" alt="腾讯微信产品经理面试题，你也来答答？"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/programmer/20141210/10580.html" target="_blank" title="腾讯微信产品经理面试题，你也来答答？">腾讯微信产品经理面试题，你也来答答？</a></p><p class="hits">点击量<span>3863</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/design/20141205/10538.html" class="float-l pic" target="_blank" title="学习iOS设计--iOS8的颜色、文字和布局学习"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/4ab9b6d61b81855f15cf05a17ad229b7.jpg" style="max-height:60px" alt="学习iOS设计--iOS8的颜色、文字和布局学习"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/design/20141205/10538.html" target="_blank" title="学习iOS设计--iOS8的颜色、文字和布局学习">学习iOS设计--iOS8的颜色、文字和布局学习</a></p><p class="hits">点击量<span>3506</span></p></div></li><li class="clearfix"><a href="http://www.cocoachina.com/ios/20141210/10587.html" class="float-l pic" target="_blank" title="Xcode概览：添加图标、图像和特效"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/26db7f786a31b8e930e0aa0ef494676a.jpg" style="max-height:60px" alt="Xcode概览：添加图标、图像和特效"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/ios/20141210/10587.html" target="_blank" title="Xcode概览：添加图标、图像和特效">Xcode概览：添加图标、图像和特效</a></p><p class="hits">点击量<span>2984</span></p></div></li><li class="clearfix noborder-b"><a href="http://www.cocoachina.com/ios/20141215/10634.html" class="float-l pic" target="_blank" title="屏幕适配的那些坑"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/2960357355cf73a740c4260d6830f9ae.jpg" style="max-height:60px" alt="屏幕适配的那些坑"></a><div style="margin-left:86px"><p class="related-intro"><a href="http://www.cocoachina.com/ios/20141215/10634.html" target="_blank" title="屏幕适配的那些坑">屏幕适配的那些坑</a></p><p class="hits">点击量<span>2827</span></p></div></li>	                             
+                            </ul>
+                        </div>
+                   </div>
+                   <!--./两周热门资讯推荐-->
+                    <!-- 广告位：资讯频道列表页面右侧300*90-->
+                    <div class="job-ad"><script>CNZZ_SLOT_RENDER('324555');</script><script type="text/javascript" charset="gbk" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/appgcm(1).php"></script><div id="cnzz_slot_324555" style="border:none;margin:0px;padding:0px;overflow:hidden;"><a href="http://click.am1.adm.cnzz.net/click.php?m4c=pMVrIyCkpkJI,ZPl8JilUwsfFQVbGB4rC1FwR0pCL0xISi9IF1FcWhVLT0BOMjgZUFFEbltTX1ZeVH9TBwNvTRJUFhYXdQoXKXAsCQ.." target="_blank"><img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/0cfd54e4b67f0b4995ebafcac3f9c.jpg" width="230" height="80" border="0"></a></div></div>
+                   <!--综合评论--> 
+                    <div class="part-wrap clearfix" style="margin-top: 15px;">
+                        <h3>综合评论</h3>
+                        <ul class="related-comment clearfix">
+							<li><span class="hide_comment">写的很详细，楼主码的好仔细</span><br><p><span>zero123</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141212/10604.html" title="使用 Swift 构建自定义的ActivityIn..." target="_blank"><span>使用 Swift 构建自定义的ActivityIn...</span></a></p></li><li><span class="hide_comment">写了这么多，有用的就是UITableViewAutomaticDimension和layout.estimatedItemSize两句</span><br><p><span>dymx101</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141218/10687.html" title="iOS 8 自适应 Cell" target="_blank"><span>iOS 8 自适应 Cell</span></a></p></li><li><span class="hide_comment">回复 <a target="_blank" href="http://www.cocoachina.com/bbs/u.php?uid=127563">aaa13622905937： </a>2D</span><br><p><span>owenhong</span><span>评论了</span><a href="http://www.cocoachina.com/game/20141218/10684.html" title="独立开发者：新手做2D手游该用哪些工具" target="_blank"><span>独立开发者：新手做2D手游该用哪些工具</span></a></p></li><li><span class="hide_comment">autolayout坑,这个不算,本来那个设置就只是给预览用的,并没有什么实际作用,注意约束是根supview联系的还是根bottomlayout联系的就好了.</span><br><p><span>king2142</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141218/10681.html" title="总结iOS 8和Xcode 6的各种坑" target="_blank"><span>总结iOS 8和Xcode 6的各种坑</span></a></p></li><li><span class="hide_comment">回复 <a target="_blank" href="http://www.cocoachina.com/bbs/u.php?uid=65595">taofang： </a>原文是: 10%的编程活动是为了解决问题。 另外90% 是用来理解代码是如何解决问题的。
+
+真不知道你看到哪里去了
+</span><br><p><span>qq350116542</span><span>评论了</span><a href="http://www.cocoachina.com/programmer/20141218/10677.html" title="为什么我要竖向对齐程序代码(你也应该这样做)" target="_blank"><span>为什么我要竖向对齐程序代码(你也应该这样做)</span></a></p></li><li><span class="hide_comment">warning: values of type 'NSUInteger' should not be used as format arguments; add an explicit cast to 'unsigned long' instead 这个怎么去掉</span><br><p><span>xiaokai</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141218/10678.html" title="怎么去掉Xcode工程中的某种类型的警告" target="_blank"><span>怎么去掉Xcode工程中的某种类型的警告</span></a></p></li><li><span class="hide_comment">其实我大可不必去担心这些「基础知识」，把它们先放在一边，用到多少，便学多少。</span><br><p><span>稻花香</span><span>评论了</span><a href="http://www.cocoachina.com/programmer/20141217/10665.html" title="如何快速掌握一门技术" target="_blank"><span>如何快速掌握一门技术</span></a></p></li><li><span class="hide_comment">求中文版，哈哈哈
+</span><br><p><span>bourne_weng</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141217/10671.html" title="最直观的Xcode快捷键展示" target="_blank"><span>最直观的Xcode快捷键展示</span></a></p></li><li><span class="hide_comment">给的Demo（leak app）,在Xcode5.1.1和Xcode6.1.1运行Leaks不会显示有内存泄露啊</span><br><p><span>棋若</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141203/10519.html" title="一步步调试解决iOS内存泄漏" target="_blank"><span>一步步调试解决iOS内存泄漏</span></a></p></li><li class="noborder-b"><span class="hide_comment">讲的很细致，期待继续更新</span><br><p><span>heyehao2008</span><span>评论了</span><a href="http://www.cocoachina.com/ios/20141216/10645.html" title="UIScrollView 实践经验" target="_blank"><span>UIScrollView 实践经验</span></a></p></li>						   
+                        </ul>
+                    </div>
+                    <!--./综合评论-->
+                    <!--相关帖子--> 
+                    <div class="part-wrap clearfix" style="margin:15px 0 15px 0;">
+                        <h3>相关帖子</h3>
+                        <ul class="related-comment clearfix">
+							<script charset="gb2312" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/new.php"></script><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277598" target="_blank">证书的问题</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277595" target="_blank">关于ios app&nbsp;&nbsp;开发那些事</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277593" target="_blank">什么时候支持3d物理引擎</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277592" target="_blank">浅谈手游测试从1.0到3.0进化过程！！！这个行业发展迅猛啊！！！</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277591" target="_blank">证书的revoke</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277590" target="_blank">cocos2dexternalcurlprebuiltandroidAndroid.mk</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277589" target="_blank">大家好，请问在这里下载的示例怎样导入在VS中运行？</a></li><li><a href="http://www.cocoachina.com/bbs/read.php?tid=277588" target="_blank">我为什么发不了帖子</a></li><li class="clearfix noborder-b"><a href="http://www.cocoachina.com/bbs/read.php?tid=277587" target="_blank">怎么判断iphone6 iphone6+用户使用放大模式没啊</a></li>						
+                        </ul>
+                    </div>
+                    <!--./相关帖子-->  
+					<iframe width="230" height="550" class="share_self" frameborder="0" scrolling="no" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/index.html"></iframe>
+                </div>
+            </div> 
+            <!--./侧边栏-->           
+		</div>
+<div id="coco-store" style="display:none">
+	<div class="storebox">
+    	<h5>提示</h5>
+        <h3>已经收藏该篇文章</h3>
+        <p class="p1"><a href="http://www.cocoachina.com/bbs/u.php?action=favor&tag=1" target="_blank">去我的收藏夹</a></p>
+        <p class="p2"><a href="http://www.cocoachina.com/bbs/login.php">请登录</a></p>
+    </div>
+</div> <!--收藏提示-->       
+
+<script type="text/javascript">
+
+function postDigg(ftype,aid)
+{
+	var taget_obj = document.getElementById('newdigg'); 
+	var saveid = GetCookie('diggid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==aid && hasid) continue;
+			else {
+				if(saveids[i]==aid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==20 && hasid) break;
+				if(j==19 && !hasid) break;
+			}
+		}
+		if(hasid) { alert("您已经顶过该帖，请不要重复顶帖 ！"); return; }
+		else saveid += ','+aid;
+		SetCookie('diggid',saveid,1);
+	}
+	else
+	{
+		SetCookie('diggid',aid,1);
+	}
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	var url = "/cms/plus/digg_ajax.php?action="+ftype+"&id="+aid;
+	myajax.SendGet2(url);
+	DedeXHTTP = null;
+	$('#zanbox').addClass('zanbox-selected');	
+}
+function getDigg(aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/cms/plus/digg_ajax.php?id="+aid);
+	DedeXHTTP = null;
+}
+
+
+//显示对应的导航：
+$(function(){
+	var article_id = $('#article_id').val();
+	var saveid = GetCookie('diggid');
+
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==article_id && hasid) continue;
+			else {
+				if(saveids[i]==article_id && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==20 && hasid) break;
+				if(j==19 && !hasid) break;
+			}
+		}
+		
+		if(hasid) 
+		{ 
+			$('#zanbox').addClass('zanbox-selected');			
+		}
+
+	}	
+
+
+	// 根据作者名更新链接
+	
+	function updateAuthor(name) {
+		if(name != "pockry" && name!= "suiling" && name!= "wupeng") {
+			name = "suiling";
+		}
+		var urls = {
+			"pockry": "http://www.cocoachina.com/bbs/u.php?action=feed&username=pockry",
+			"suiling": "http://www.cocoachina.com/bbs/u.php?action=feed&uid=340873",
+			"wupeng": "http://www.cocoachina.com/bbs/u.php?action=feed&uid=304691"
+		};
+		$("#field_author").attr("href", urls[name]).html(name);
+	}
+	updateAuthor("wanglei");
+
+});
+
+window.onload = function() {
+	
+	$('#sharediv').removeClass('bdshare-button-style1-32');
+	$('#sharediv').attr('class','bdsharebuttonbox');
+}; 
+</script>
+<script type="text/javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/shCore.js"></script>
+	<script type="text/javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/brush.js"></script>
+	<link type="text/css" rel="stylesheet" href="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/shCoreDefault.css">
+	<script type="text/javascript">
+	//SyntaxHighlighter.config.clipboardSwf = '/js/scripts/clipboard.swf';
+
+	SyntaxHighlighter.all();</script>
+
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - 来自CocoaChina苹果开发中文站@CocoaChina","bdMini":"2","bdMiniList":false,"bdPic":"/cms/uploads/allimg/140915/4673-1409150945430-L.png","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api//js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<!--./cont-->
+
+</div>    
+<!--右侧浮动-->
+    <div class="r-bar" style="position: fixed; top: inherit; bottom: 10px;">
+        <img src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/coco_weixin.png" class="weixin">
+    	<a href="http://weibo.com/cocoachina" target="_blank" title="" class="weibo">sina</a>
+        <a href="javascript:void(0);" target="_blank" title="" class="feedback">weixin</a>
+        <a href="mailto:support@cocoachina.com" title="" class="kefu">mail</a>
+        <a href="javascript:;" title="回到顶部" class="returntop" style="display: none;">回到顶部</a>
+    </div>
+
+<script type="text/javascript">
+$(function(){
+	function search_check()
+	{
+		var search_keyword = $('#search_keyword').val();
+
+		if( search_keyword.length < 2 )
+		{
+			alert("搜索关键字不能少于2个字节，请重新输入。");
+		}
+		else
+		{
+			$('#searchform').submit();
+		}
+	}
+
+
+	var type = $('#type_name').html();
+	if(type)
+	{	
+		switch( type )
+		{
+			case 'iOS开发':
+				$('#ios').addClass('light');
+				break;
+			case 'AppStore研究':
+				$('#app_store').addClass('light');
+				break;
+			case 'Mac开发':
+				$('#mac').addClass('light');
+				break;
+			case '产品设计':
+				$('#design').addClass('light');
+				break;
+			case 'Cocos引擎':
+				$('#cocos').addClass('light');
+				break;
+			case 'WebApp':
+				$('#webapp').addClass('light');
+				break;
+			case 'Swift':
+				$('#swift').addClass('light');
+				break;
+			case '游戏开发':
+				$('#game').addClass('light');
+				break;
+			case '苹果相关':
+				$('#apple').addClass('light');
+				break;
+			case '营销推广':
+				$('#market').addClass('light');
+				break;		
+			case '业界动态':
+				$('#industry').addClass('light');
+				break;	
+			case '程序人生':
+				$('#programmer').addClass('light');
+				break;																																
+				
+		}
+	}
+});
+</script>
+<!--./cont-->
+<script type="text/javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/index.js"></script>
+<script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/jquery.colorbox-min.js" type="text/javascript"></script>
+<script language="javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/bbsauth_new2015.php" type="text/javascript"></script>
+<script src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+			jQuery(function()
+			{
+				//更改文章来源
+				var source = $('#source a').html();								
+				if( source == '未知' )
+					jQuery('#source a').html('CocoaChina');
+				if( jQuery('#source a').attr('href')=='')
+					jQuery('#source').html('来源：'+source);
+				
+				//获取用户登录的id
+				var content = jQuery('.t-lid').attr("href");
+				var uid = 0;
+				if( content )
+				{
+					content = content.split('=');
+					uid = content[1];
+				}
+				var timestamp = new Date().getTime();	
+				var uid2 = parseInt(uid);
+				if(uid2==uid && uid2!=0){
+					uid = uid<<2;			
+					uid = uid+''+timestamp;
+				}else{
+					uid = "";
+				}
+				var oIframe=document.getElementById("comiframe");
+				if(oIframe){
+					var oUrl=window.location.href;
+					oUrl = encodeURIComponent(oUrl);
+
+					oIframe.src="http://www.cocoachina.com/comment.php?url="+oUrl+"&uid="+uid;
+				}
+				
+			});
+		</script>
+<!--footer-->
+<div class="footer clearfix">
+    <div class="footer-b">
+    	<div><a href="http://www.cocoachina.com/aboutus/index.html" target="_blank">关于我们</a><a href="http://www.cocoachina.com/contactus/index.html" target="_blank">广告合作</a><a target="_blank" href="mailto:support@cocoachina.com">联系我们</a></div>
+    	<p>©CocoaChina 2010-2014 
+        <i> <a href="http://www.miibeian.gov.cn/" target="_blank">京ICP备 11006519号 　京ICP证 100954号</a> 京公网安备11010502020289</i></p>
+    </div>    
+</div>
+<!--./footer-->
+<script language="javascript" type="text/javascript" src="./Apple移动设备处理器指令集 armv6、armv7、armv7s及arm64 - CocoaChina 苹果开发中文站 - 最热的iPhone开发社区 最热的苹果开发社区 最热的iPad开发社区_files/dedeajax2-min.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16940817-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  
+ 
+function search_check()
+{
+	var search_keyword = $('#search_keyword').val();
+
+	if( search_keyword.length < 2 )
+	{
+		alert("搜索关键字不能少于2个字节，请重新输入。");
+	}
+	else
+	{
+		$('#searchform').submit();
+	}
+}
+
+</script>
+
+
+
+<div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" style="display: none;"><div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxLoadedContent" style="width: 0px; height: 0px; overflow: hidden; float: left;"></div><div id="cboxLoadingOverlay" style="float: left;"></div><div id="cboxLoadingGraphic" style="float: left;"></div><div id="cboxTitle" style="float: left;"></div><div id="cboxCurrent" style="float: left;"></div><div id="cboxNext" style="float: left;"></div><div id="cboxPrevious" style="float: left;"></div><div id="cboxSlideshow" style="float: left;"></div><div id="cboxClose" style="float: left;"></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div></div><div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入单词表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出单词表"></a><a href="http://www.cocoachina.com/ios/20140915/9620.html#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>

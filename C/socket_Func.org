@@ -1,0 +1,1690 @@
+#+TITLE: Socket函数说明
+
+#+OPTIONS: ^:nil
+
+
+
+
+
+
+* 链接
+ [[http://learn.tsinghua.edu.cn/kejian/data/9281/54841/tcpip/TCP/SocketHSSM.htm][Socket函数说明]]
+
+* 网页内容
+** 库函数综述
+*** 套接字函数
+表6.1  Windows Sockets 1.1版本的Berkeley Sockets
+| 命令           | 说明                                                                               |
+|----------------+------------------------------------------------------------------------------------|
+| accept()*      | 确认外来连接，并将它与一个立即建立的数据套接字联系起来。原始套接字返回到监听状态。 |
+| bind()         | 给未命名套接字赋一个本地名。                                                       |
+| closesocket()* | 从进程对象参考表中删去一个套接字，只有当SO_LINGER设置时才阻塞。                    |
+| connect()*     | 在指定套接字上初始化连接。                                                         |
+| getpeername()  | 获取与指定套接字连接的对等方的名字。                                               |
+| getsockname()  | 获取指定套接字的当前名字。                                                         |
+| getsockopt()   | 获取与指定套接字相关的选项。                                                       |
+| htonl()        | 将一个32位数从主机字节顺序转换为网络字节顺序。                                     |
+| htons()        | 将一个16位数从主机字节顺序转换为网络字节顺序。                                     |
+| inet_addr()    | 将一个用网际标准点分表示法表示的字符串地址转换成网际地址值。                       |
+| inet_ntoa()    | 将一个网际地址值转换成一个用点分十进制表示法表示的字符串地址                       |
+| ioctlsocket()  | 为套接字提供控制。                                                                 |
+| listen()       | 在指定套接字上监听外来连接。                                                       |
+| ntohl()        | 将一个32位数从网络字节顺序转换为主机字节顺序。                                     |
+| ntohs()        | 将一个16位数从网络字节顺序转换为主机字节顺序。                                     |
+| recv()*        | 从一个连接的套接字上接收数据。                                                     |
+| recvfrom()*    | 从一个连接或未连接的套接字上接收数据。                                             |
+| select()*      | 执行多路同步I/O。                                                                  |
+| send()*        | 给一个连接套接字发送数据。                                                         |
+| sendto()*      | 给一个连接或未连接套接字发送数据。                                                 |
+| setsockopt()   | 设置与指定套接字相关的选项。                                                       |
+| shutdown()     | 关闭全双工连接的一部分。                                                           |
+| socket()       | 建立一个通讯用的末端点，返回一个套接字。                                           |
+       * = 如果作用于阻塞套接字上，此例程可用阻塞。
+ 
+       这些函数根据功能的不同可以分为如下几类：
+
+       (1) 套接字函数。此类函数包括sockets()，bind()，getpeername()，getsockname()和closesocket()，它们主要完成创建，关闭套接字功能，以及对套接字命名与名字获取。
+
+       (2) 网络连接函数。此类函数包括listen()，accept()，connect()和shutdown()，它们完成网络连接（如虚电路）的建立与关闭。此类函数中有部分可阻塞。
+
+       (3) 数据传输函数。此类函数包括send()，recv()，sendto()和recvfrom()，它们完成网络数据的发送与接收，全部是可以阻塞的函数。
+
+       (4) 字节定序函数。此类函数包括htonl()，htons()，ntohl()和ntohs()，它们完成主机和网络之间数据字节顺序的转换。
+
+       (5) 地址转换函数。此类函数包括inet_addr()，inet_ntoa()，它们完成网络字符串地址和Internet地址之间的转换。
+
+       (6) 套接字控制函数。此类函数包括getsockopt()，setsockopt()，ioctlsocket()和select()，它们设置/获取套接字的选项，控制/检测套接字的工作状态。其中select()函数在必要时可能阻塞。
+
+       只使用了上述函数的Berkeley Sockets源程序基本上可以不加修改地移植到Windows Sockets环境中来。但是，移植过来的程序有一个最大的问题是“阻塞”。在Berkeley Sockets中，套接字默认的工作模式是操作处于阻塞方式，一个阻塞操作可能阻塞整个Windows环境。在非抢先Windows环境，强烈推荐程序员使用非阻塞（异步）操作，也就是说，推荐使用Windows Sockets提供的异步选择函数代替可能阻塞的select()函数，并且用网络事件消息来驱动可能阻塞的网络连接函数（accept()和connect()）和数据传输函数，这样设计的程序能更好地工作。
+*** 数据库函数
+       Windows Sockets定义了如表6.2所示的“数据库”函数：
+ 表6.2  Windows Sockets 1.1版本定义的“数据库”函数
+| 名称                | 说明                                   |
+|---------------------+----------------------------------------|
+| gethostbyaddr()*    | 通过网络地址获取主机名字和地址等信息。 |
+| gethostbyname()*    | 通过主机名字获取主机名字和地址等信息。 |
+| gethostname()       | 获取本地主机名。                       |
+| getprotobyname()*   | 通过协议名获取协议名和协议号等信息。   |
+| getprotobynumber()* | 通过协议号获取协议名和协议号等信息。   |
+| getservbyname()*    | 通过服务名获取服务的名字和端口等信息。 |
+| getservbyport()*    | 通过端口获取服务的名字和端口等信息。   |
+       * = 在某些条下此例程可能阻塞。
+ 
+       提供这类函数是为了获取网络特定的信息，在最初的Berkeley版本中，它们是作为在文本数据库文件中寻找信息的机构。在Windows Sockets实现中，可能使用了不依赖于本地数据库文件的方法（如域名服务），但是对应用程序来说请求这些信息的格式是一致的，并且对应用程序来说是透明的。
+       调用这些例程所获得的信息存放在由Windows Sockets实现分配的一个结构中，函数返回此结构的地址。因此，应用程序可以通过此结构指针获取所需要的信息，但它决不能试图修改此结构，更不能释放结构的任一部分。另外，对一个线程来说，Windows Sockets实现只分配了结构的一个备份，任何Windows Sockets API调用都可能修改此结构。也就是说，结构指针指向的数据只在此线程的下一次Windows Sockets API调用之前才是正确的，应用程序应该在发布任何其它Windows Sockets API调用之前将任何需要的信息拷贝出来。
+       数据库函数除了gethostname()之外都是阻塞的，Windows Sockets提供它们是为了Berkeley Sockets网络程序的可移植性。在设计实现Windows Sockets应用程序时，推荐使用Windows Sockets提供的数据库函数的异步版本（见下节）。
+** 标准Socket函数
+6.2.1  accept()
+语法：   SOCKET WSAAPI 
+#+BEGIN_SRC C
+         accept (
+                     IN          SOCKET                            s, 
+                     OUT              struct sockaddr FAR*        addr,
+                     OUT              int  FAR*                  addrlen
+             );
+
+#+END_SRC
+           此函数用于从套接字上接收一个连接。它提取挂在套接字s 上的连接队列中的第一个连接，创建一个和s有相同属性（包括使用函数WSAAsyncSelect()或WSAEventSelect()注册的异步事件，但不包括监听套接字的套接字组ID）的新数据套接字，并返回一个指向新套接字的句柄。如果连接队列上没有等待的连接，并且套接字没有标志为非阻塞，那么accept()阻塞调用直到出现一个连接。如果套接字标志为非阻塞，并且队列上没有等待的连接，那么accept()返回错误WSAEWOULDBLOCK。新创建的数据套接字不能用来接收更多的连接，它只能用于数据传输；原来的套接字仍然打开，处于监听连接状态。
+ 
+参数描述
+- s
+这是一个套接字描述符，该套接字在用作accept()函数的参数前必须先调用过listen()函数，此时它正处于监听连接的状态。
+- addr
+一个可选的指向缓冲区的指针，用来接收连接实体的地址，在通讯层使用。addr的确切格式由套接字创建时建立的地址族决定。
+- addrlen
+一个可选的指向整数的指针，它调用时含有地址addr指向的空间的大小，返回时含有返回的地址的确切长度（字节数）。
+ 
+- 返回值:
+如果没有错误发生，accept()返回一个SOCKET类型的值，表示接收到的套接字的描述符。否则返回值INVALID_SOCKET，错误码可通过调用WSAGetLastError()函数得到。
+ 
+- 错误码：     
+    - WSANOTINITIALISED
+        未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+    - WSAENETDOWN
+        Windows Sockets 实现检测到网络系统已经失败。
+    - WSAEFAULT
+        参数addrlen太小（小于结构sockaddr的大小），或参数addr不是用户地址空间的合法部分。
+    - WSAEINTR
+        此（阻塞）调用已被WSACancelBlockingCall()函数取消。
+    - WSAEINPROGRESS
+        一个阻塞的Windows Sockets 操作正在进行。
+    - WSAEINVAL
+        在accept()调用之前没有执行过listen()。
+    - WSAEMFILE
+        accept()队列入口空，但没有文件描述符可用。即打开的文件描述符过多。
+    - WSAENOBUFS
+        无缓冲区空间可用。
+    - WSAENOTSOCK
+        描述符s不是套接字描述符。
+    - WSAEOPNOTSUPP
+        s指向的套接字不是一种支持面向连接服务类型的套接字。
+    - WSAEWOULDBLOCK  
+        套接字标志为非阻塞，但现在没有接收到连接。
+ 
+注释：   该调用只能和基于连接的套接字类型如SOCK_STREAM一起使用。如果参数addr 和／或addrlen等于NULL， 那么没有关于接收套接字的远程地址信息返回。
+ 
+参见：bind(), connect(), listen(), select(), socket(), WSAAsyncSelect(), WSAAccept()。
+6.2.2  bind()
+语法：   int WSAAPI 
+             bind ( 
+                     IN   SOCKET                                   s, 
+                     IN   const struct sockaddr FAR*       name, 
+                     IN   int                                      namelen
+             );
+       此函数用于未连接的数据报或流套接字，它将一本地地址与套接字连接，即建立半相关。当一套接字用socket()创建后，它存在于一名字空间（地址族）, 但它没有赋予名字。bind()通过将一本地名字赋予一未命名的套接字, 建立起套接字的本地连接(主机地址／端口号）。
+ 
+参  数
+描      述
+s
+指示未连接的数据报或流套接字的描述符。
+name
+赋给套接字的本地地址（名字）。结构sockaddr定义如下：
+struct sockaddr {
+              u_short   sa_family;
+              char        sa_data[14];
+       };
+除 sa_family外，其它内容都以网络字节顺序表示。
+namelen
+地址缓冲区长度。
+ 
+返回值：      如果没有错误发生，bind()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEADDRINUSE
+指定的地址已经在使用（参见setsockopt()中的SO_REUSEADDR套接字选项）。
+WSAEADDRNOTAVAIL
+对于本机器来说，指定的地址是非法地址（WinSock 2）。
+WSAEFAULT
+参数namelen太小（小于结构sockaddr的长度）；参数name或namelen不是用户地址空间的合法部分；参数name包含了相关的地址族来说是不正确的地址格式；参数name指向的内存块的前两个字节与套接字描述符s相关的地址族不匹配。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEAFNOSUPPORT
+此套接字不能使用指定地址族中的地址（WinSock 1.1）。
+WSAEINVAL
+此套接字已经捆扎到了一个地址。
+WSAENOBUFS
+无缓冲区空间可用，连接太多。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+ 
+注释： 在Internet地址族中，一个名字有几个部分 。对于SOCK_DGRAM和SOCK_STREAM类型的套接字来说，名字分为三部分：主机地址，协议号（分别默认设置为UDP和TCP），以及一个标志应用程序的端口号。在WinSock 2中，参数name并不严格地解释为指向“sockaddr”结构的指针，但为了与Windows Sockets的兼容性仍用这种表示。服务提供者可以把它当作一个指向长度为namelen的内存块而自由处理，在此内存块的前两个字节（对应结构sockaddr定义中的sa_family元素）必须为包含建立套接字的地址族，否则将产生错误WSAEFAULT。
+      如果应用程序不关心赋予它的地址，则可指定一个等于常数INADDR_ANY的网际地址，和／或等于0的端口。 如果网际地址等于INADDR_ANY，任何合适的网络接口都可用，这就简化了在多宿主机上的应用程序设计。当一个服务器向几个网络提供服务时，这将变得很重要。在不指定地址的情况下，服务器可以接收发向其端口的所有UDP数据包和TCP连接请求，而不必关心请求是从哪一个网络接口到达的。如果端口指定为0，Windows Sockets实现将为应用程序指定一界于1024和5000之间的端口值。应用程序可在bind()后使用getsockname()来得到赋给它的地址，但要注意的是，对于网际地址等于INADDR_ANY的情况，getsockname()只有当套接字连接后才填入网际地址（Internet address），原因是当主机是多地址家族时，几个网际地址都是合法的。对客户应用程序来说，不鼓励将其绑扎到一个指定的端口，因为这样存在与已经使用了该端口的其它套接字冲突的危险。
+       由于Windows Sockets只支持AF_INET地址域，因此名字缓冲区的格式只能是sockaddr_in结构。此结构在winsock.h中定义如下：
+         struct in_addr
+         {
+                   u_long  s_addr;
+         };
+ 
+         struct sockaddr_in
+         {
+                   u_char               sin_len;
+                   u_char               sin_family;
+                   u_short               sin_port;
+                   struct in_addr     sin_addr;
+                   char                             sin_zero[8];
+         };
+ 
+· sin_family字段只能置为AF_INET。
+· sin_port字段为应用程序必须连接的端口号。
+· sin_addr字段为主机网际地址。
+· sin_zero字段未用，留待以后扩充，必须全置为0。
+注意，此结构的任何字段均为网络字节顺序。
+       在WinSock 2，支持的地址族得到扩展，因此结构sockaddr不只解释为sockaddr_in，根据不同的地址族，它有不同的确切格式。
+ 
+参见： WSACancelBlockingCall(), connect(), listen(), getsockname(), setsockopt(), socket()。
+6.2.3  closesocket()
+语法：   int WSAAPI 
+             closesocket ( 
+                     IN   SOCKET       s
+             );
+       此函数关闭套接字s，并释放分配给该套接字的资源，以后对s 的引用都将产生错误WSAENOTSOCK。如果s涉及一个打开的TCP连接，该连接被释放。
+ 
+参  数
+描      述
+s
+待关闭的套接字描述符。
+ 
+返回值：      如果没有错误发生，closesocket()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEINTR
+此（阻塞）调用已被WSACancelBlockingCall()函数取消。
+WSAEWOULDBLOCK  
+套接字标志为非阻塞并且SO_LINGER设置为非零超时。
+ 
+注释：closesocket()函数的语义受套接字选项SO_LINGER和SO_DONTLINGER的影响，具体见下表（默认情况下是允许SO_DONTLINGER）：
+ 
+选    项
+间  隔
+关闭类型
+等待关闭？
+SO_DONTLINGER
+不用
+Graceful
+No
+SO_LINGER
+零
+Hard
+No
+SO_LINGER
+非零
+Graceful
+Yes
+ 
+       如果SO_LINGER设置(例如，linger结构的l_onoff域非零）并且超时间隔为零(l_linger为零），那么即使队列数据尚未发送或确认，closesocket()函数也不会阻塞。这称作强制（“hard”或“abortive”）关闭，因为套接字的虚电路立即复位，任何未发送的数据都将丢失，并且在虚电路远程方的任何recv()调用都将以WSAECONNRESET失败。在这种情况下，套接字不进入TCP状态机的三次握手流程，系统资源被立即释放。这对于服务器应用程序非正常退出后希望能立即启动很有用，当正常通信中不鼓励使用。
+       如果SO_LINGER设置超时间隔为非零，closesocket()函数将阻塞，直到剩余的数据都发送完毕或直到超时退出，这称作“雅致”（graceful）关闭。注意如果套接字设置为非阻塞并且SO_LINGER设置为非零超时，调用closesocket()将失败，错误码为WSAEWOULDBLOCK。
+       如果SO_DONTLINGER设置在流套接字上（例如，linger结构的l_onoff域为零）, closesocket()调用将立即返回。然而，排队等待传送的任何数据如果可能的话都将在该套接字关闭前发送出去，这也称作“雅致”关闭。注意在这些情况下，Windows Sockets实现可能会在任意时间内不释放套接字和其他资源, 这可能影响希望使用全部可用套接字的应用程序。如果应用程序要确保连接上的所有数据都被发送或接收到，则应该在调用closesocket()函数之前调用shutdown()函数。
+       下面给出closesocket()函数的小结：
+·   如果SO_DONTLINGER允许（默认设置），且不会出现错误WSAEWOULDBLOCK──连接在后台“雅致”关闭；
+·   如果SO_LINGER允许并且超时间隔为0，则总是立即返回──连接被重置或终止；
+·   如果SO_LINGER允许并且超时间隔非0：
+──对于阻塞套接字，阻塞到所有数据发送完或超时间隔到时；
+──对于非阻塞套接字，立即返回并且指示错误WSAEWOULDBLOCK。
+ 
+参见：accept(), socket(), ioctisocket(), setsockopt(),WSAAsyncSelect(),WSADuplicateSocket()。
+6.2.4  connect()
+语法：   int WSAAPI 
+             connect ( 
+                     IN   SOCKET                                   s, 
+                     IN   const struct sockaddr FAR*      name,
+                    IN   int                                     namelen
+             );
+       此函数用来与对等方建立一个连接。如果套接字s没有绑扎，则系统赋予本地相关一个唯一值，并且套接字被表示为已绑扎的。
+ 
+参  数
+描      述
+s
+用来表示发出连接请求的套接字的描述符。
+name
+指向一个socket address结构的指针，该结构含有对等方的套接字的地址。
+namelen
+name指向的socket address结构的字节数。
+ 
+返回值：      如果没有错误发生，connect()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+       对于阻塞套接字来说，返回值表示连接试图是否成功。
+      对于非阻塞套接字来说，连接试图不一定马上完成。当connect()返回SOCKET_ERROR，并且WSAGetLastError()返回WSAEWOULDBLOCK时，应用程序可以：
+1.         利用select()函数，通过检查套接字是否可写来判断连接请求是否完成。
+2.         如果应用程序已使用WSAAsyncSelect()函数注册了对连接事件的兴趣，则当连接操作完成时应用程序将收到FD _CONNECT通知（无论成功与否）。
+3.         如果应用程序已使用WSAEventSelect()函数注册了对连接事件的兴趣，则当连接操作完成时相应的事件对象将设置信号（无论成功与否）。
+      对于一个非阻塞套接字来说，在连接试图完成之前，任何对该套接字的connect()调用都将以错误码WSAEALREADY失败，在连接成功之后则返回错误码WSAEISCONN。由于Windows Sockets 1.1规范在定义当连接请求正在处理时调用connect()函数返回的错误值有二义性，其返回值对于不同的Windows Sockets实现其值不同，因此不推荐应用程序采用多次调用connect()函数的方式来检测连接是否完成。如果应用程序员一定要这么做，为了确保程序的可靠运行，他们在处理错误码WSAEALREADY的同时，还必须准备处理WSAEINVAL和WSAEWOULDBLOCK错误码。
+      如果返回值指出连接试图失败（例如WSAECONNREFUSED，WSAENETUNREACH，WSAETIMEDOUT等），则应用程序可对该套接字再次调用connect()函数。
+ 
+错误码：
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEADDRINUSE
+套接字的本地地址已被使用，并且该套接字没有使用SO_REUSEADDR来设置允许地址重用。此错误经常发生在函数bind()调用时，但当bind()函数使用通配地址（包括ADDR_ANY）并且在connect()函数调用时需要“提交”一个指定地址时，此错误能够延迟到 connect()函数。
+WSAEINTR
+阻塞的WinSock 1.1调用为WSACancelBlockingCall()函数撤消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+WSAEALREADY
+一个非阻塞的connect()调用已经在指定的套接字上进行（WinSock 2）。
+WSAEADDRNOTAVAIL
+远程地址非法（如ADDR_ANY）。
+WSAEAFNOSUPPORT
+此套接字不能使用指定地址族中的地址。
+WSAECONNREFUSED
+连接请求被目的主机拒绝。
+WSAEDESTADDRREQ
+要求目标地址（WinSock 1.1）。
+WSAEFAULT
+参数name或namelen不是用户地址空间的合法部分；参数namelen太小（小于结构sockaddr的长度）；参数name包含了相关的地址族来说是不正确的地址格式。
+WSAEINVAL
+此套接字没有捆扎到一个地址，或套接字为监听套接字，或者指定的目的地址与套接字从属的强制组不一致。。
+WSAEISCONN
+此套接字已经建立了连接（只对面向连接的套接字有效）。
+WSAEMFILE
+无文件描述符可用（WinSock 1.1）。
+WSAENETUNREACH
+此主机现在不能到达网络。
+WSAENOBUFS
+无缓冲区空间可用，此套接字不能被连接。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAETIMEDOUT
+连接请求超时，未能建立连接。
+WSAEWOULDBLOCK  
+套接字处于非阻塞模式，并且连接不能立即完成，它并不表明一个错误情况 。
+WSAEACCES
+由于setsockopt()时未允许SO_BROADCAST，无法将一个数据报套接字与一个广播地址连接。
+ 
+ 
+注释：   客户程序在流套接字上调用connect()函数来建立与服务器的连接，服务器必须有一个空闲的被动接口。否则，connect()函数将以错误码WSAECONNREFUSED失败。
+       对于流套接字（类型SOCK_STREAM），connect()函数用来初始化与参数name（套接字名字空间中的地址）指示的外部主机的活动连接。当connect()调用成功完成后，套接字就可以收发数据了。如果结构name的地址域全为0，则返回错误WSAEADDRNOTAVAIL。
+       流套接字只能调用connect()函数一次，多次调用将以错误码WSAEISCONN失败。数据报套接字（类型SOCK_DGRAM)可以重复调用connect()函数来变换连接，它设置与数据报套接字数据传送的默认目标，供以后的send()/WSASend()和recv()/WSARecv()函数使用。数据报套接字可以通过连接一个无效地址，例如空地址（即全部字段清零）来结束连接。
+       对于无连接的套接字来说，name可以是任何合法的地址，包括广播地址。然而，要连接到一个广播地址，套接字必须使用setsockopt()函数的SO_BROADCAST选项来允许广播，否则connect()函数将以错误码WSAEACCES失败。
+       对于处于阻塞模式的套接字s，connect()函数阻塞调用者，直到建立起连接或有错误被接收到。对于非阻塞套接字s，如果返回值是SOCKET_ERROR,并且错误码为WSAEWOULDBLOCK，那么应用程序可以使用select()函数来检查套接字s是否可写来判定连接请求是否完成；如果应用程序使用了基于消息的WSAAsyncSelect()/WSAEventSelect()函数来指示感兴趣的连接事件，那么当连接操作完成后，应用程序将收到FD_CONNECT消息。
+ 
+参见：accept(), bind(), getsockname(), socket(), select(), WSAAsyncSelect(), WSAConnect()。
+6.2.5  getpeername()
+语法：   int WSAAPI 
+             getpeername ( 
+                     IN          SOCKET                            s, 
+                     OUT              struct sockaddr FAR*        name, 
+                     IN OUT  int FAR*                           namelen
+             );
+       此函数用来获取与套接字连接的对等方的地址，它检索与套接字s连接的对等方的名字，并把它存在sockaddr结构的name域中。此函数只能用于已连接的数据报或流套接字。对于数据报套接字，只有在先前的connect()调用中指定的对等方的名字被返回，而不会返回先前的sendto()调用指定的名字。
+ 
+参  数
+描      述
+s
+标识已连接的套接字的描述符。
+name
+指向连接的套接字网际地址的指针，该结构由getpeername()在返回之前填写，name的确切格式由通信发生的区域决定。
+namelen
+指向name所指结构大小的指针。它在返回时含有返回名字的实际字节数。
+ 
+返回值：      如果没有错误发生，getpeername()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+参数name或namelen不是用户地址空间的合法部分，或参数namelen不够大。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTCONN
+套接字没有连接。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+ 
+参见：bind(), socket(), getsockname()。
+6.2.6  getsockname()
+语法：   int WSAAPI 
+             getsockname ( 
+                     IN          SOCKET                            s, 
+                     OUT              struct sockaddr FAR*        name, 
+                     IN OUT  int FAR*                            namelen
+             );
+       此函数用来获取套接字的本地名。它检索指定套接字描述符的当前名字，并放入name，它用于参数s指定的一个已绑扎并且／或者已连接的套接字，返回与该套接字相连的本地地址。当调用connect()函数之前没有先调用bind()函数时，该调用特别有用；它提供了唯一一种用来确定系统设置的本地连接的方法。
+ 
+参  数
+描      述
+s
+一个已绑扎（bind()）套接字的描述符。
+name
+接收套接字的地址（名字）的缓冲区指针。
+namelen
+指向name 缓冲区大小的指针，返回时，它含有返回名字的实际字节数。
+ 
+返回值：      如果没有错误发生，getsockname()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+参数name或namelen不是用户地址空间的合法部分，参数namelen不够大。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEINVAL
+套接字没有使用bind()绑扎到一个地址，或套接字在bind()调用时地址指定为ADDR_ANY，并且连接仍没有建立。
+ 
+注释：   流套接字只有在成功调用了bind()，connect()或accept()之后才真正与一名字联系。如果该套接字没有与一地址连接，调用返回其地址族，其它字段置为零。例如，一个网际地址域中的未连接套接字将会导致name所指的sockaddr_in结构中的sin_family字段被置为AF_INET，其它字段全置为零。如果套接字被绑扎为INADDR_ANY，这指示任何主机IP地址都可用于套接字，则getsockname()不一定返回主机IP地址的信息，除非该套接字已经用connect()或accept()建立了连接。Windows Sockets应用程序一定不要假定IP地址可从INADDR_ANY改变，这是因为对于一多宿主机来说，用于套接字的 IP 地址是不可知的，除非该套接字是已连接的。如果此套接字使用的是无连接协议，除非I/O正在该套接字上发生，否则得不到地址。
+ 
+参见：bind(), socket(), getpeername()。
+6.2.7  getsockopt()
+语法：   int WSAAPI 
+             getsockopt ( 
+                     IN          SOCKET              s, 
+                     IN          int                level, 
+                     IN          int                optname, 
+                     OUT              char FAR*    optval, 
+                     IN OUT  int FAR*             optlen
+             );
+       此函数用来获取套接字选项。它检索与任何类型、任何状态的套接字相连的套接字选项的当前值，并把结果存入optval。选项可能在多个协议层存在，但它们总是表现在最高的“socket”层。 选项影响套接字操作，例如一个操作是否阻塞、包的路由选择、带外数据传输等。
+ 
+参  数
+描      述
+s
+套接字描述符。
+level
+设置选项的层，只支持SOL_SOCKET 和IPPROTO_TCP。
+optname
+指定要检索的套接字选项的名字。
+optval
+指向查询选项返回值的缓冲区。
+optlen
+指向optval缓冲区大小的指针。
+ 
+返回值：      如果没有错误发生，getsockname()返回0。否则返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+参数optval或optlen不是用户地址空间的合法部分，或参数optlen不够大。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEINVAL
+level未知或非法。
+WSAENOTPROTOOPT
+未知或不支持的选项。特别地，SOCK_STREAM类型的套接字不支持SO_BROADCAST，而SOCK_DGRAM类型的套接字不支持SO_ACCEPTCONN, SO_DONTLINGER, SO_KEEPALIVE, SO_LINGER和SO_OOBINLINE。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+ 
+注释：   与选择的选项相关联的返回值放在缓冲区optval中，由optlen指向的整数指针开始应含有该缓冲区的大小，返回时，它被赋予返回值的长度大小。对于SO_LINGER，这将是结构linger的大小；对于其他选项，它将是一整形值的长度。如果选项从未由setsockopt()设置，则getsockopt()返回该选项的默认值。
+       getsockopt()支持下表所列选项，TYPE 标志optval指向的数据类型。TCP_NODELAY选项使用IPPROTO_TCP层，其它选项使用SOL_SOCKET层。
+ 
+值
+类  型
+含      义
+默认值
+SO_ACCEPTCONN
+BOOL
+套接字正在监听（listen()ing）
+FALSE，除非WSPListen()已经被执行
+SO_BROADCAST
+BOOL
+套接字被设置用来发传广播消息
+FALSE
+SO_DEBUG
+BOOL
+允许Debugging
+FALSE
+SO_DONTLINGER
+BOOL
+如为真，SO_LINGER选项被关闭
+TRUE
+SO_DONTROUTE
+BOOL
+路由选择关闭
+FALSE
+SO_ERROR
+int
+获取错误状态，并清除错误。
+0
+SO_GROUP_ID
+GROUP
+保留为将来的套接字组使用：套接字从属的组ID
+NULL
+SO_GROUP_PRIORITY
+int
+保留为将来的套接字组使用：套接字组中套接字的相对优先级
+0
+SO_KEEPALIVE
+BOOL
+正发送“keep a live（保持活动）”信息
+FALSE
+SO_LINGER
+struct linger FAR *
+返回当前linger选项
+l_onoff为0
+SO_MAX_MSG_SIZE
+unsigned int
+基于消息的套接字类型的最大外出（发送）消息长度。对基于流的套接字无意义
+依赖于实现
+SO_OOBINLINE
+BOOL
+在正常的数据流中接收带外数据
+FALSE
+SO_PROTOCOL_INFO
+WSAPROTOCOL_INFO
+此套接字绑扎的协议的协议信息
+依赖于协议
+SO_RCVBUF
+int
+接收缓冲区的大小
+依赖于实现
+SO_REUSEADDR
+BOOL
+套接字可绑扎到一已在使用的地址上
+FALSE
+SO_SNDBUF
+int
+发送缓冲区的大小
+依赖于实现
+SO_TYPE
+int
+套接字类型（例如，SOCK_STREAM）
+由socket()创建
+PVD_CONFIG
+依赖于服务提供者
+服务提供者给套接字s相关的一个不透明数据结构。此对象存储了服务提供者当前的配置信息。结构的确切格式由服务提供者指定
+依赖于实现
+TCP_NODELAY
+BOOL
+在发送聚结（coalescing）时关闭Nagle算法
+依赖于实现
+ 
+       getsockopt()不支持的BSD选项有：
+ 
+值
+类   型
+含      义
+SO_RCVLOWAT
+int
+接收低潮标志 （Low water）
+SO_RCVTIMEO
+int
+接收超时
+SO_SNDLOWAT
+int
+发送低潮标志
+SO_SNDTIMEO
+int
+发送超时
+IP_OPTIONS
+ 
+取得IP头中的选项
+TCP_MAXSEG
+int
+取得TCP最大段尺寸
+ 
+       使用不支持的选项调用getsockopt()函数将返回错误码WSAENOPROTOOPT，它由WSAGetLastError()函数返回。  
+ 
+参见：setsockopt(), socket(), WSAAsyncSelect(), WSAConnect(), WSAGetLastError(), WSASetLastError()。
+6.2.8  htonl()
+语法：   u_long WSAAPI 
+             htonl ( 
+                     IN   u_long   hostlong
+             );
+       此函数将一个u_long类型数（32位无符号整数）从主机字节顺序转换成TCP/IP网络字节顺序。
+ 
+参  数
+描      述
+hostlong
+主机字节顺序表示的32位无符号整数。
+ 
+返回值： htonl()返回一个TCP/IP网络字节顺序表示的32位值。
+ 
+参见：htons(), ntohl(), ntohs(), WSAHtons(), WSAHtonl(), WSANtohl(), WSANtohs()。
+6.2.9  htons()
+语法：   u_short WSAAPI 
+             htons (
+                     IN   u_short       hostshort
+             );
+       此函数将一个u_short类型数（16位无符号整数）从主机字节顺序转换成TCP/IP网络字节顺序。
+ 
+参  数
+描      述
+hostshort
+主机字节顺序表示的16位无符号整数。
+ 
+返回值：      htons()返回一个TCP/IP网络字节顺序表示的16位值。
+ 
+参见：htonl(), ntohl(), ntohs(), WSAHtons(), WSAHtonl(), WSANtohl(), WSANtohs()。
+6.2.10  inet_addr()
+语法：   unsigned long WSAAPI 
+             inet_addr (
+                     IN   const char FAR *        cp 
+             );
+       此函数将一个用点分表示法表示的字符串地址转换成网际地址in_addr形式。它解释由参数cp指示的字符串，该字符串代表用网际标准的点分表示法表示的网际地址。返回值是一个适用于网际地址的长整数。所有网际地址都以网络字节顺序（字节顺序从左到右）返回。
+ 
+参  数
+描      述
+cp
+含有用网际标准的点分表示法表示的地址的字符串。
+ 
+返回值：      如果没有错误发生，inet_addr()返回一个无符号长整数，它用适合网际地址的二进制表示。如果传入的字符串不含有合理的网际地址，例如“a.b.c.d”地址的任何一部分超过255，则inet_addr()返回值INADDR_NONE。
+ 
+注释：   使用点分表示法表示的网际地址取下列形式的一种：
+        a.b.c.d          a.b.c              a.b          a
+        如果四部分都指定了，每部分解释为一个字节数据，并从左到右赋给网际地址的四个字节。注意，当网际地址被看作Intel体系结构中的32位整数时，上述地址表示为“d.c.b.a”，这就是说，Intel处理器中的字节顺序是从右到左的。
+        注意：下述标记只用于Berkeley，不能用于网际的其它部分。为了与它们的软件兼容，这些都需要特殊支持。
+        当指定了一个三部分的地址时，最后一部分解释为16位整数，并放入网络地址最右端的两字节中。这使得三部分地址适宜于将B类网络地址指定为“128.net.host”。
+        当指定了一个两部分的地址时，最后一部分解释为24位整数，并放入网络地址最右端的三字节中。这使得两部分地址适宜于将A类网络地址指定为“net.host”。
+        当只指定了一部分时，该值直接存入网络地址，毋需进行字节的重新安排。
+       点分表示法中作为地址的数字可以是十进制、十六进制或八进制，这些数字按C语言语法进行解释。以0x打头表示十六进制，以0打头表示八进制，以非零打头表示十进制，最常用的是点分十进制表示法。
+ 
+参见：inet_ntoa()。
+6.2.11  inet_ntoa()
+语法：   char FAR * WSAAPI 
+             inet_ntoa ( 
+                     IN   struct in_addr             in
+             );
+       此函数将一个网际地址转换成点分十进制表示法表示的字符串。它接受由参数in指定的网际地址结构，返回以点分表示法如“a.b.c.d”表示的地址的ASCII字符串。
+ 
+参  数
+描      述
+in
+表示主机网际地址的结构。
+ 
+返回值：      如果没有错误发生，inet_ntoa()返回一个字符指针，该指针指向含有以点分十进制表示法表示的正文地址的静态缓冲区。否则返回NULL。
+ 
+注释：   值得注意的是，inet_addr()返回的字符串保存在Windows Sockets实现分配的内存中，应用程序不应对内存是如何分配的做任何假定。该数据一直保持有效直到同一线程的下一个Windows Sockets API调用。这样，在下一个Windows Sockets API调用前，数据应当备份出来。
+ 
+参见：inet_addr()。
+6.2.12  ioctlsocket()
+语法：   int WSAAPI 
+             ioctlsocket ( 
+                     IN          SOCKET              s, 
+                     IN          long                     cmd,
+                     IN OUT  u_long FAR*        argp
+             );
+       此函数控制套接字模式，它用于处在任何状态的任何套接字，用来获取或检索与套接字相关的，独立于协议和通讯子系统的操作参数。
+ 
+参  数
+描      述
+s
+套接字描述符。
+cmd
+在套接字s上执行的命令。
+argp
+指向cmd命令的参数的指针。
+ 
+返回值：      成功结束则ioctlsocket()返回0。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEINVAL
+cmd是非法命令，或者argp是cmd不可接受的参数，或者此命令不能应用于套接字支持的类型。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEFAULT
+参数argp不是用户地址空间的合法部分。
+ 
+注释：   此函数是Berkeley Sockets中ioctl()的子集。特别地，没有与FIOASYNC相当的命令，而SIOCATMARK是唯一支持的套接字层命令。它支持的命令描述如下：
+命   令
+语      义
+FIONBIO
+设置或禁止套接字s上的非阻塞模式。argp指向一个无符号长整数，如设置套接字为非阻塞模式则为非零值，禁止非阻塞时为零值。当套接字建立时，它工作于阻塞模式（即非阻塞模式禁止），这与BSD套接字一致。函数WSAAsyncSelect()或 WSAEventSelect()自动地设置套接字为非阻塞模式。如果WSAAsyncSelect()或 WSAEventSelect()已经在一个套接字执行过，那么使用ioctlsocket()将套接字设置为阻塞模式的任何企图都将以错误码WSAEINVAL失败。为了将套接字设置为阻塞模式，应用程序必须先用WSAAsyncSelect()带参数lEvent值为0的调用来禁止WSAAsyncSelect()的作用，或用 WSAEventSelect()带参数lNetworkEvents值为0的调用来禁止 WSAEventSelect()的作用
+FIONREAD
+检测可从套接字s中立即读出的数据量。argp指向ioctlsocket()存放结果的无符号整数。如果s是SOCK_STREAM类型，FIONREAD返回可由一次recv()读出的总数据量；这通常与套接字上排队的总数据量一致。如果s是SOCK_DGRAM类型，FIONREAD返回在套接字上排队的第一个数据报的大小。
+SIOCATMARK
+检测是否所有的带外数据都已读出。这只适用于SOCK_STREAM类型的套接字，并且它们被设置为在正常数据流中接收任何带外数据（SO_OOBINLINE）时有作用。如果没有带外数据等待读，该操作返回TRUE；否则返回FALSE，并且在套接字上执行的下一个recv()或recvfrom()将接收“mark（标记）”之前的部分或全部数据。应用程序可用SIOCATMARK操作查看是否还有剩余数据。如果在“紧急”（带外）数据之前存在任何正常数据，它们都将按顺序接收，recv()或recvfrom()不会在同一个调用中混合带外数据和正常数据。argp指向一个布尔型变量， ioctlsocket()在其中存入返回值。
+ 
+参见：socket(), setsockopt(), getsockopt(), WSAAsyncSelect(), WSAEventSelect(), WSAIoctl()。
+6.2.13  listen()
+语法：   int WSAAPI 
+             listen ( 
+                     IN   SOCKET       s, 
+                     IN   int         backlog
+             );
+       此函数只用于流套接字，它执行两个操作：
+l            若没有为s调用过bind()，则listen()完成套接字s所必须的连接。
+l            建立长度为backlog的连接请求队列来存放即将到来的连接请求。
+ 
+参  数
+描      述
+s
+标识一个已绑扎、没有连接的套接字的描述符。
+backlog
+未处理连接队列的最大长度。
+ 
+返回值：      如果没有错误发生，listen()返回0。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEADDRINUSE
+套接字的本地地址已被使用，并且该套接字没有使用SO_REUSEADDR来设置允许地址重用。此错误经常发生在函数bind()调用时，但当bind()函数使用通配地址（包括ADDR_ANY）并且在listen()函数调用时需要“提交”一个指定地址时，此错误能够延迟到 listen()函数。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEINVAL
+套接字没有使用bind()绑扎或已经连接。
+WSAEISCONN
+套接字已经连接。
+WSAEMFILE
+无描述符可用。
+WSAENOBUFS
+无缓冲区空间可用。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEOPNOTSUPP
+套接字不是listen()操作支持的类型。
+ 
+注释：   listen()调用表明套接字准备好接收客户连接请求。它将主动套接字变为被动套接字，一旦变换后，s将再不能作为主动套接字来初始化连接请求。调用listen()是服务器接收一个连接请求的四个步骤中的第三步。它在调用socket()函数分配一个流套接字，且调用bind()函数给s连接一个名字之后调用，而且一定要在函数accept()之前调用。
+       此函数用于同一时刻有多个连接请求的服务器：如果一个连接在请求到达时队列已满，此连接请求被忽略，并且客户将收到WSAECONNREFUSED指示的错误。
+        当没有可用描述符时，listen()试图继续执行下去，它接收连接直到队列变空为止。如果又有可用描述符（系统释放了一些描述符），稍后调用的listen()或accept()将队列重新填到当前的或最近的“backlog（后备日志）”，如果可能的话，恢复对外来连接的监听。
+        应用程序可以对同一个套接字调用多次listen()函数，其结果是更新了监听套接字的当前“后备日志”。如果未处理的连接比新的backlog值还多，则超出部分被重置或丢弃。
+       在WinSock 1.1中，backlog的最大值是5。如果backlog小于1，则backlog被置为1；若backlog大于SOMAXCONN（定义在winsock.h中，值为5），则backlog被置为SOMAXCONN。在WinSock 2中，没有指定具体值，它由服务提供者决定。
+ 
+参见：accept(), connect(), socket()。
+6.2.14  ntohl()
+语法：   u_long WSAAPI 
+             ntohl ( 
+                     IN   u_long          netlong
+             );
+       此函数将一个u_long类型的数（32位无符号整数）从TCP/IP网络字节顺序转换成主机字节顺序。
+ 
+参  数
+描      述
+netlong
+TCP/IP 网络字节顺序表示的32位无符号整数。
+ 
+返回值：      ntohl()返回主机字节顺序表示的32位值。
+ 
+参见：htonl(), htons(), ntohs(), WSAHtons(), WSAHtonl(), WSANtohl(), WSANtohs()。
+6.2.15  ntohs()
+语法：   u_short WSAAPI 
+                    ntohs ( 
+                            IN   u_short         netshort
+                    );
+       此函数将一个u_short类型的数（16位无符号整数）从TCP/IP 网络字节顺序转换成主机字节顺序。
+ 
+参  数
+描      述
+netshort
+TCP/IP 网络字节顺序表示的16位无符号整数。
+ 
+返回值：      ntohs()返回主机字节顺序表示的16位值。
+ 
+参见：htonl(), htons(), ntohl(), WSAHtons(), WSAHtonl(), WSANtohl(), WSANtohs()。
+6.2.16  recv()
+语法：   int WSAAPI 
+                    recv ( 
+                            IN          SOCKET              s, 
+                            OUT              char FAR*    buf, 
+                            IN          int                len, 
+                            IN          int                flags
+                    );
+        此函数用于在参数s指定的已连接的数据报或流套接字上读取输入数据。
+ 
+参  数
+描      述
+s
+已连接的套接字描述符。
+buf
+指向接收输入数据缓冲区的指针。
+len
+buf参数所指缓冲区的长度。
+flags
+指定调用的方式，它可用来与套接字相关的选项一起影响函数的功能。就是说，recv()函数的意义由套接字选项和flags参数共同决定。flags可取下列值：
+MSG_OOB     读取套接字上的带外数据。
+MSG_PEEK    查看输入数据，数据被拷入缓冲区中, 但不从输入队列中清除。
+ 
+返回值：      如果没有错误发生，recv()返回收到的字节数。如果连接被关闭，返回0。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+参数buf不是用户地址空间的合法部分。
+WSAENOTCONN
+套接字未建立连接。
+WSAEINTR
+（阻塞）调用被WSACancelBlockingCall()函数取消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENETRESET
+在操作进行时“keep-alive”活动检测到一个失败，连接被中断。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEOPNOTSUPP
+MSG_OOB被指定，但是套接字不是流风格的（如SOCK_STREAM类型），此套接字相关的通讯域不支持带外数据；或套接字是单向的，只支持发送操作。
+WSAESHUTDOWN
+套接字已经shutdown，recv()不可能在套接字上执行了how参数为SD_RECEIVE或SD_BOTH的shutdown()调用后执行。
+WSAEWOULDBLOCK
+套接字被标识为非阻塞，但接收操作将被阻塞。
+WSAEMSGSIZE
+数据报太大，以致不能装入指定的缓冲区，数据报被截断。
+WSAEINVAL
+套接字没有使用bind()绑扎；或指定了未知标志；或套接字的SO_OOBINLINE属性允许却指定了MSG_OOB标志；或参数len为0或负数。
+WSAECONNABORTED
+虚电路因超时或其它失败而中断。
+WSAETIMEOUT
+连接因网络失败或对等方系统不能响应而丢弃。
+WSAECONNRESET
+虚电路被远程方复位。
+ 
+注释：   此函数用在参数s指定的连接套接字或已绑扎的无连接套接字上，用来读取进来的数据。套接字的本地地址必须已知。对于服务器方应用程序来说，这常常通过显式地调用bind()函数完成，或调用accept()/WSAAccept()函数附带完成。客户方应用程序不鼓励对套接字使用显式的绑扎，它可以通过函数connect()、WSAConnect()、sendto()、WSASendTo()或WSAJoinLeaf()来将套接字附带变为绑扎的。
+       无论是连接还是无连接套接字，此函数都严格限制可接受的接收消息来源地址。此函数只返回从连接中指定的远程地址到来的消息，从其它地址到来的消息被丢弃。
+      对于流风格套接字（如SOCK_STREAM类型），最多可返回最大缓冲区长度的信息。如果套接字被设置用于在正常数据流中接收带外数据（套接字选项SO_OOBINLINE), 并且带外数据未读取, 那么只返回带外数据。应用程序可使用ioctlsocket()或WSAIoctl()函数的SIOCATMARK命令来查看是否还有带外数据未读出。
+       对于基于消息的套接字（如SOCK_DGRAM类型），数据从函数connect()指定的目的地址的第一个排队数据报中抽取出来，最多可有最大缓冲区长度的信息。如果数据报比提供的缓冲区大，则缓冲区填以数据报的第一部分，recv()返回错误码WSAEMSGSIZE。对于不可靠协议（如UDP），多余的数据就丢失了；对于可靠协议，数据被服务提供者保留，直到它们被使用了足够大的缓冲区的recv()调用读取。
+       如果套接字上没有输入数据，那么除非是非阻塞模式，否则recv()函数将一直等待数据的到来，此时将返回SOCKET_ERROR错误，错误码设为WSAEWOULDBLOCK。应用程序可通过调用select()、WSAAsyncSelect()或WSAEventSelect()函数来查看何时有数据到来。
+       如果套接字是面向连接的, 并且远程方已“雅致”地关闭了连接，所有数据也已经被接收，则recv()立即返回，接收0字节数据。如果连接被复位，recv()将失败，错误码为WSAECONNRESET。
+ 
+参见：recvfrom(), read(), send(), select(), WSAAsyncSelect(), socket()。
+6.2.17  recvfrom()
+语法：   int WSAAPI 
+             recvfrom ( 
+                     IN          SOCKET                            s, 
+                     OUT              char FAR*                  buf, 
+                     IN          int                              len, 
+                     IN          int                              flags, 
+                     OUT              struct sockaddr FAR*        from,
+                     IN OUT  int FAR*                            fromlen
+             );
+       此函数用于在参数s指定的套接字（可能已连接）上读取输入数据，并捕获发送数据的地址，存入源地址缓冲区。
+ 
+参  数
+描      述
+s
+套接字描述符。
+buf
+指向接收输入数据缓冲区的指针。
+len
+buf 参数指向的缓冲区的长度。
+flags
+指定调用的方式，它可用来与套接字相关的选项一起影响函数的功能。就是说，recvfrom()函数的意义由套接字选项和flags参数共同决定。flags可取下列值：
+MSG_OOB     读取套接字上的带外数据。
+MSG_PEEK    查看输入数据，数据被拷入缓冲区中, 但不从输入队列中清除。
+from
+任选指针，它指示源地址缓冲区。
+fromlen
+任选指针，它指示from长度。
+ 
+返回值：      如果没有错误发生，recvfrom()返回收到的字节数。如果连接被关闭，返回0。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+参数buf或from不是用户地址空间的合法部分；或参数fromlen太小，不能容下对等方地址。
+WSAEINTR
+（阻塞）调用被WSACancelBlockingCall()函数取消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEINVAL
+套接字没有使用bind()绑扎；或指定了未知标志；或套接字的SO_OOBINLINE属性允许却指定了MSG_OOB标志；或参数len为0或负数。
+WSAEISCONN
+套接字已连接。此函数不允许在已连接套接字上使用，不管套接字是面向连接的还是无连接的
+WSAENETRESET
+在操作进行时“keep-alive”活动检测到一个失败，连接被中断。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEOPNOTSUPP
+MSG_OOB被指定，但是套接字不是流风格的（如SOCK_STREAM类型），此套接字相关的通讯域不支持带外数据；或套接字是单向的，只支持发送操作。
+WSAESHUTDOWN
+套接字已经shutdown，recv()不可能在套接字上执行了how参数为SD_RECEIVE或SD_BOTH的shutdown()调用后执行。
+WSAEWOULDBLOCK
+套接字被标识为非阻塞，但接收操作将被阻塞
+WSAEMSGSIZE
+数据报太大，以致不能装入指定的缓冲区，数据报被截断
+WSAECONNABORTED
+虚电路因超时或其它失败而中断
+WSAETIMEOUT
+连接因网络失败或对等方系统不能响应而丢弃。
+WSAECONNREST
+虚电路被远程方复位。
+ 
+注释：   此函数用在参数s指定的连接套接字或已绑扎的无连接套接字上，用来读取进来的数据。套接字的本地地址必须已知。对于服务器方应用程序来说，这常常通过显式地调用bind()函数完成，或调用accept()/WSAAccept()函数附带完成。客户方应用程序不鼓励对套接字使用显式的绑扎，它可以通过函数connect()、WSAConnect()、sendto()、WSASendTo()或WSAJoinLeaf()来将套接字附带变为绑扎的。
+       无论是连接还是无连接套接字，此函数都严格限制可接受的接收消息来源地址。此函数只返回从连接中指定的远程地址到来的消息，从其它地址到来的消息被丢弃。
+      流风格套接字（如SOCK_STREAM类型），最多可返回最大缓冲区长度的信息。如果套接字被设置用于在正常数据流中接收带外数据（套接字选项SO_OOBINLINE), 并且带外数据未读取, 那么只返回带外数据。应用程序可使用ioctlsocket()或WSAIoctl()函数的SIOCATMARK命令来查看是否还有带外数据未读出。对于SOCK_STREAM套接字，from和fromlen参数被忽略。
+       对于基于消息的套接字，数据从第一个排队的数据报中抽取出来，最多可有最大缓冲区长度的信息。如果数据报比提供的缓冲区大，则缓冲区填以数据报的第一部分，recvfrom()返回错误码WSAEMSGSIZE。对于不可靠协议（如UDP），多余的数据被丢失。
+       如果from非零，且套接字是SOCK_DGRAM类型，发送数据的对等方的网络地址被拷入对应的结构sockaddr中。fromlen指向的值被初始化为该结构的大小，返回时被改变为存入此处的地址的实际大小。
+       如果套接字上没有输入数据，那么除非是非阻塞模式，否则recvfrom()函数将一直等待数据的到来，此时将返回SOCKET_ERROR错误，错误码设为WSAEWOULDBLOCK。应用程序可通过调用select()、WSAAsyncSelect()或WSAEventSelect()函数来查看何时有数据到来。
+       如果套接字是面向连接的, 并且远程方已“雅致”地关闭了连接，recvfrom()将立即返回，接收0字节数据。如果连接被复位，recv()将失败，错误码为WSAECONNRESET。
+ 
+参见：recv(), send(), select(), WSAAsyncSelect()。
+6.2.18  select()
+语法： int WSAAPI 
+             select ( 
+                     IN          int                              nfds, 
+                     IN OUT  fd_set FAR *                      readfds, 
+                     IN OUT  fd_set FAR *                      writefds, 
+                     IN OUT  fd_set FAR *                      exceptfds, 
+                     IN          const struct timeval FAR *timeout
+             );
+       此函数用来检测一个或多个套接字的状态。对每一个套接字来说，这个调用可以请求读、写或错误状态方面的信息。请求给定状态的套接字集合由一个fd_set结构指示。在返回时，此结构被更新，以反映那些满足特定条件的套接字的子集，同时， select()函数返回满足条件的套接字的数目。
+ 
+参  数
+描      述
+nfds
+此变量被忽略，包括它只是为了兼容性。
+readfds
+指向要检测是否可读的套接字集合的可选指针。
+writefds
+指向要检测是否可写的套接字集合的可选指针。
+exceptfds
+指向要检测是否出错的套接字集合的可选指针。
+timeout
+指向select()函数等待的最大时间的结构指针，如果设为NULL则为阻塞操作。
+ 
+返回值：      select()返回包含在fd_set结构中已准备好的套接字描述符的总数目，如果是限制时间到了仍没有准备好的套接字描述符则返回0，或者是发生错误则返回SOCKET_ERROR，并且错误码可通过调用WSAGetLastError()函数得到。      
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEFAULT
+WinSock实现不能为内部操作分配必要的资源，或参数readfds，writefds，exceptfds或timeval不是用户地址空间的合法部分。
+WSAEINVAL
+参数timeout的值不合法，或三个描述符参数都为NULL。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTSOCK
+有一个描述符集合包含了一个不是套接字的入口。
+ 
+注释：   参数readfds标识那些要检测是否可读的套接字。如果一个套接字正在监听（listen()），在它收到一个进来的连接请求时它将被标记为可读的，此时accept()调用可确保无阻塞完成。对于其它套接字，可读意味着排队的数据可用来读，或者对SOCK_STREAM类型的套接字意味着此套接字对应的虚拟套接字已经关闭，因此recv()、recvfrom()、WSARecv()或WSARecvFrom()函数都可确保无阻塞完成。
+      对于面向连接的套接字，可读也可能意味着接收到对等方的关闭请求。如果如果虚电路被“雅致”关闭，并且所有数据被接收，则recv()立即返回，所读取的字节为0。如果虚电路被重置，那么recv()立即返回错误码WSAECONNRESET。如果套接字选项设置了SO_OOBINLINE（参见setsockopt()），则带外数据的到来也将被检测。
+       参数writefds标识那些要检查是否可写的套接字。如果一个套接字正在连接(connect()，非阻塞方式)，可写意味着成功地建立了连接；其它情况，可写意味着一个send()、sendto()、WSASend()或 WSASendto()调用将在无阻塞情况下完成。然而，对于阻塞套接字来说，如果要发送的数据长度len超出了系统的可用的输出缓冲区长度，发送操作也可能阻塞。（没有说明此担保在多长时间内是合法的, 特别是在多线程环境中）。
+       参数exceptfds标识那些待检测是否有带外数据出现或者任何异常的错误条件的套接字。注意带外数据只有在选项SO_OOBINLINE为FALSE时才报告。对一个SOCK_STREAM来说，连接被对等方中断或由于KEEPALIVE失败将由一个异常指示。如果一个套接字正在连接(connect()，非阻塞方式), 连接失败也在exceptfds中指示。
+       如果没有感兴趣的套接字描述符，readfds，writefds或exceptfds可以给定为NULL，但至少有一个非空。
+       下面给出套接字在select()函数返回的集合中存在的条件小结：
+ 
+readfds：
+²        如果在监听（listen()ing），则有为处理连接到来，accept()将成功返回；
+²        有数据可读（如果SO_OOBINLINE允许则包括OOB数据）；
+²        连接被关闭/重置/终止。
+ 
+writefds：
+²        如果正连接（connect()ing），则说明连接已经成功；
+²        数据可以被发送。
+ 
+exceptfds：
+²        如果正连接（connect()ing），连接试图失败；
+²        有OOB数据可读（只在 SO_OOBINLINE禁止时有效）。
+       为了操作套接字描述符集合, 在头文件winsock.h中定义了一组操作fd_set结构的宏，它们是：
+FD_CIR(s, *set)
+从集合中删除描述符s
+FD_ISSET(s, *set)
+如果描述符s是集合中的一个元素, 则返回非0；否则返回0
+FD_SET(s, *set)
+增加描述符到集合中
+FD_ZERO(*set)
+初始化集合为NULL集
+       变量FD_SETSIZE决定集合中最多可容纳的描述符数目（在winsock.h中， FD_SETSIZE的默认值为64, 它可通过在#include winsock.h之前通过定义#define FD_SETSIZE为其他值来修改）。在内部，fd_set表示为一个SOCKET的数组，最后合法的入口后跟一个设置为INVALID_SOCKET的元素。
+       参数timeout控制多长时间select()将完成。如果timeout为一个null指针，select()将无限阻塞，直到至少一个描述符满足特定的条件。否则，timeout指向一个结构timeval，它描述select()在返回前等待的最大时间。如果结构timeval初始化为{0,0}， select()将立即返回；这用来获取选择的套接字的状态。如果是这种情况, 那么select()调用被认为是非阻塞方式，并且适用对非阻塞调用的标准假设。例如，不必调用阻塞处理例程，并且Windows Sockets实现不必放弃控制权。
+ 
+参见：WSAAsyncSelect(), accept(), connect(), recv(), recvfrom(), send(), WSAEventSelect()。
+ 
+6.2.19  send()
+语法：   int WSAAPI 
+             send ( 
+                     IN          SOCKET                     s, 
+                     IN          const char FAR *        buf, 
+                     IN          int                       len, 
+                     IN          int                       flags
+             );
+       此函数用于在参数s指定的已连接的数据报或流套接字上发送输出数据。
+ 
+参  数
+描      述
+s
+已连接的套接字描述符。
+buf
+指向存有发送数据的缓冲区的指针。
+len
+缓冲区buf中数据长度。
+flags
+指定调用的方式，它可用来与套接字相关的选项一起影响函数的功能。就是说，send()函数的意义由套接字选项和flags参数共同决定。flags可取下述值：
+MSG_DONTROUTE            指出数据不提交给路由选择。
+MSG_OOB               发送带外数据。
+ 
+返回值：      如果没有错误发生，send()返回总共发送的字节数（注意，这可能比len指示的长度小）。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEACCES
+请求地址是广播地址，但是相应的flags没设置。
+WSAENOTCONN
+套接字未建立连接。
+WSAEINTR
+（阻塞）调用被WSACancelBlockingCall()函数取消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEFAULT
+参数buf不是用户地址空间的一个合法部分。
+WSAENETRESET
+在操作进行时“keep-alive”活动检测到一个失败，连接被中断。
+WSAENOBUFS
+无缓冲区空间可用。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEOPNOTSUPP
+MSG_OOB被指定，但是套接字不是流风格的（如SOCK_STREAM类型），此套接字相关的通讯域不支持带外数据；或套接字是单向的，只支持发送操作。
+WSAESHUTDOWN
+套接字已经shutdown。send()不可能在套接字上执行了how参数为 SD_SEND或SD_BOTH 的shutdown()调用后执行。
+WSAEWOULDBLOCK
+套接字被标识为非阻塞，但发送操作将被阻塞。
+WSAEMSGSIZE
+套接字为基于消息的，消息太大，大于底层传输支持的最大值。
+WSAEINVAL
+套接字没有使用bind()绑扎；或指定了未知标志；或套接字的SO_OOBINLINE属性允许却指定了MSG_OOB标志。
+WSAECONNABORTED
+虚电路因超时或其它失败而中断。
+WSAECONNRESET
+虚电路被远程方复位。
+WSAETIMEOUT
+连接因网络失败或对等方系统不能响应而丢弃。
+ 
+注释：   对数据报套接字来说，一定要注意一次发送的数据不能超过下层子网的最大IP包大小，该值在WSAStartup()返回的WSAData结构的iMaxUdpDg中给出。如果数据太长，不能通过下面的协议，将返回错误WSAEMSGSIZE，并且没有数据传输。
+       注意，send()函数只是将数据传送到输出缓冲区，它执行成功并不意味着数据成功地发送出去了。如果传输系统中没有可用缓冲区用来保存传输数据，send()将阻塞，除非套接字被设置为非阻塞I/O模式。在非阻塞SOCK_STREAM套接字上，写的字节数可为从1到请求的长度，这由本地和外部主机上可用的缓冲区大小决定。select()、WSAAsyncSelect()或WSAEventSelect()函数可用来查看何时可能发送更多的数据。
+ 
+参见：recvfrom(), recv(), sendto(), WSAStartup(), socket(), WSAAsyncSelect(), WSAEventSelect() 。
+6.2.20  sendto()
+语法：   int WSAAPI 
+             sendto ( 
+                     IN          SOCKET                                   s, 
+                     IN          const char FAR *                      buf, 
+                     IN          int                                     len, 
+                     IN          int                                     flags, 
+                     IN          const struct sockaddr FAR *     to, 
+                     IN          int                                     tolen
+             );
+       此函数用于在参数s指定的数据报或流套接字上向指定目的地发送输出数据。
+ 
+参  数
+描      述
+s
+套接字描述符。
+buf
+指向存有发送数据的缓冲区的指针。
+len
+缓冲区buf中数据长度。
+flags
+指定调用的方式，它可用来与套接字相关的选项一起影响函数的功能。就是说，sendto()函数的意义由套接字选项和flags参数共同决定。flags可取下述值：
+MSG_DONTROUTE 指出数据不提交给路由选择。
+MSG_OOB         发送带外数据。
+to
+指向目的套接字地址的任选指针。
+tolen
+to参数所指地址的长度。
+ 
+返回值：      如果没有错误发生，sendto()返回总共发送的字节数（注意，这可能比len指示的长度小）。否则它返回SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEACCES
+请求地址是广播地址，但是相应的flags没设置。
+WSAENOTCONN
+套接字未建立连接。
+WSAEINTR
+（阻塞）调用被WSACancelBlockingCall()函数取消。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEFAULT
+参数buf或to不是用户地址空间的一个合法部分，或者参数to太小（小于结构sockaddr的长度）
+WSAENETRESET
+在操作进行时“keep-alive”活动检测到一个失败，连接被中断。
+WSAENOBUFS
+无缓冲区空间可用。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAEOPNOTSUPP
+MSG_OOB被指定，但是套接字不是流风格的（如SOCK_STREAM类型），此套接字相关的通讯域不支持带外数据；或套接字是单向的，只支持发送操作。
+WSAESHUTDOWN
+套接字已经shutdown。send()不可能在套接字上执行了how参数为 SD_SEND或SD_BOTH 的shutdown()调用后执行。
+WSAEWOULDBLOCK
+套接字被标识为非阻塞，但发送操作将被阻塞。
+WSAEMSGSIZE
+套接字为基于消息的，消息太大，大于底层传输支持的最大值。
+WSAEHOSTUNREACH
+主机此时不能到达远程主机。
+WSAEINVAL
+套接字指定了未知标志；或套接字的SO_OOBINLINE属性允许却指定了MSG_OOB标志。
+WSAECONNABORTED
+虚电路因超时或其它失败而中断。
+WSAECONNRESET
+虚电路被远程方复位。
+WSAETIMEOUT
+连接因网络失败或对等方系统不能响应而丢弃。
+WSAEADDRNOTAVAIL
+指定的地址在本地机器不可用。
+WSAEAFNOSUPPORT
+此套接字不能使用指定地址族的地址。
+WSAEDESTADDRREQ
+要求目标地址。
+WSAENETUNREACH
+主机此时不能到达网络。
+ 
+注释：   对数据报套接字来说，一定要注意一次发送的数据不能超过下层子网的最大IP包大小，该值在WSAStartup()返回的WSAData结构的iMaxUdpDg中给出。如果数据太长，不能通过下面的协议，将返回错误WSAEMSGSIZE，并且没有数据传输。
+       注意，sendto()函数只是将数据传送到输出缓冲区，它执行成功并不意味着数据成功地发送出去了。如果传输系统中没有可用缓冲区用来保存传输数据，sendto()将阻塞，除非套接字被设置为非阻塞I/O模式。在非阻塞SOCK_STREAM套接字上，写的字节数可为从1到请求的长度，这由本地和外部主机上可用的缓冲区大小决定。select()，WSAAsyncSelect()或WSAEventSelect()函数可用来查看何时可能发送更多的数据。
+       sendto()函数通常用在SOCK_DGRAM套接字上，用于向参数to指定的对等方套接字发送数据报。对于SOCK_STREAM套接字，to和tolen参数被忽略，在这种情况下，sendto()等同于send()。
+        为了发送广播消息（仅用于SOCK_DGRAM套接字），参数to中的地址需要用特殊的IP地址INADDR_BROADCAST（在winsock.h中定义）和一定的端口号构成。通常广播数据报不应超长，否则就会出现碎片，这意味着数据报的数据部分（不包括头）不应超过512字节。
+ 
+参见：recvfrom(), recv(), send(), WSAStartup(), socket(), WSAAsyncSelect(), WSAEventSelect() 。
+ 
+6.2.21  setsockopt()
+语法：   int WSAAPI 
+             setsockopt ( 
+                     IN          SOCKET                     s, 
+                     IN          int                       level, 
+                     IN          int                       optname, 
+                     IN          const char FAR *        optval, 
+                     IN          int                       optlen
+             );
+       此函数为套接字相关的选项设置当前值，套接字可以是任何类型，可以处于任何状态。尽管选项可存在于多个协议层次，但是它们总是表现在最高的“socket”层。 选项影响套接字操作，例如加急数据是否在正常数据流中接收、广播消息是否可以在套接字上发送等。
+ 
+参  数
+描      述
+s
+套接字描述符。
+level
+选项定义的层次，只支持SOL_SOCKET和IPPROTO_TCP。
+optname
+指定套接字选项的名字。
+optval
+指向请求选项数据缓冲区的指针。
+optlen
+选项数据optval缓冲区的长度。
+ 
+返回值：      如果没有错误发生，setsockopt()返回0。否则它返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTCONN
+在设置了SO_KEEPALIVE时连接已被复位。
+WSAEFAULT
+参数optval不是进程地址空间的合法部分，或参数optlen太小。
+WSAENETRESET
+在操作进行时“keep-alive”活动检测到一个失败，连接被中断。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+WSAENOPROTOOPT
+未知或不支持的选项。特别地，SOCK_STREAM类型的套接字不支持SO_BROADCAST，而SOCK_DRAGM类型的套接字不支持SO_DONTLINGER, SO_KEEPALIVE, SO_LINGER和SO_OOBINLINE。
+WSAEINVAL
+参数level不合法，或参数optval中的信息不合法。
+ 
+注释：   套接字选项有两种类型：设置或禁止特征／行为的布尔（Boolean）选项，以及要求整数值或结构的选项。为了设置一个布尔选项，optval应指向一个非零整数；如果禁止此选项，optval应指向一个等于零的整数。对布尔选项来说，optlen应该等于整型数的长度。对于其它选项，optval指向一个包含了选项要求值的整数或结构，并且optlen为此整数或结构的长度。
+       当套接字上有未发送数据并执行了closesocket()调用时，其动作由SO_LINGER选项控制。关于SO_LINGER设置影响closesocket()语义的描述请参见closesocket()函数的说明。应用程序通过使用下面列出的结构linger（由参数optval指定）来设置要求的行为：
+       struct linger {
+              int   l_onoff;
+              int   l_linger;
+       }
+       为了设置SO_LINGER选项，应用程序应该设置l_onoff为非零值，设置l_linger为0或要求的超时（单位：秒），并调用setsockopt()函数。要设置SO_DONTLINGER（禁止SO_LINGER），l_onoff应该设置为0，并调用setsockopt()函数。
+       一般来说，系统默认采用SO_DONTLINGER方式，即当套接字在关闭时，closesocket()不等待立即返回，但套接字资源也可能不立即释放。如果此时重新启动应用程序，则在调用bind()函数将以错误码WSAEADDRINUSE失败返回，应用程序无法继续执行。为了解决这一问题，使套接字在关闭后系统能够立即释放套接字资源，我们可以使用SO_LINGER选项，并且使l_onoff为1且l_linger为0，即“hard（强制）”关闭。相关程序片段为：
+      struct linger ling1;
+ 
+      newsock = accept(mainsock, &addr, &len);
+      ling1.l_onoff = 1;
+      ling1.l_linger = 0;
+      setsockopt(newsock, SOL_SOCKET, SO_LINGER, &ling1, sizeof(ling1));
+ 
+       套接字一般默认为不能绑扎（bind()）到一个已经使用的本地地址。然而，它偶尔会要求用这种方式“重用”一个地址。既然每一个连接是通过本地地址和远程地址来唯一地识别的，那么在远程地址不同时，两个套接字绑扎到同一个本地地址就不存在问题。为了通知Windows Sockets实现不必因为套接字上的bind()调用所要求的地址被其它套接字使用而禁止，应用程序应该在调用bind()之前为此套接字设置SO_REUSEADDR套接字选项。注意此选项只在bind()调用时解释：因此在不绑扎到地址的套接字上设置此选项是不必要的（也无害的），并且在bind()函数之后设置或取消此选项对此套接字或其它套接字都没影响。
+       应用程序可能通过打开SO_KEEPALIVE套接字选项开关来请求Windows Sockets实现允许在TCP连接上使用“保持运行（keepalive）”包。TCP使用一个叫做“保持运行计时器”（keepalive timer）的计时器，该计时器监视那些可能由于匹配系统崩溃或超时而被断开的空闲连接。若此选项有效，将定时向匹配者发送一个保持运行包。这主要用于允许服务器关闭那些已经消失的连接，这是用户未关闭连接就离开所造成的后果。此选项仅对流套接字有意义。如果连接因为“保持运行”的原故而被丢弃，那么在此套接字上进行的任何调用都将返回错误码WSAENETRESET，并且后续的调用将以WSAENOTCONN失败。
+       选项TCP_NODELAY取消Nagle算法（RFC896）。Nagle算法用来减少主机的小包发送数量，它通过缓冲未确认的发送数据直到能够发送一个全长度的包来做到这一点。然而，对某些应用程序来说，此算法可能妨碍性能，可以用TCP_NODELAY选项来关闭它。既然设置TCP_NODELAY选项可能对网络性能有很大的消极影响，应用程序一般不要设置它，除非这样做的影响是很好理解的，并且是必要的。TCP_NODELAY是IPPROTO_TCP层唯一支持的选项；所有其他选项都使用SOL_SOCKET层。
+       setsockopt()支持下列选项。“类型”标识optval寻址的数据类型。
+ 
+值
+类  型
+含      义
+SO_BROADCAST
+BOOL
+允许在套接字上传输广播消息。
+SO_DEBUG
+BOOL
+记录调试信息。
+SO_DONTLINGER
+BOOL
+在有数据等待发送时不阻塞关闭。设置此选项等价于用l_onoff值为0来设置SO_LINGER选项。
+SO_DONTROUTE
+BOOL
+绕开路由选择：直接发送到接口。
+SO_GROUP_PRIORITY
+int
+保留为将来的套接字组使用：套接字组中套接字的相对优先级。
+SO_LINGER
+struct linger FAR *
+若有未发送的数据则延迟关闭。
+SO_OOBINLINE
+BOOL
+在正常数据流中接收带外数据。
+SO_RCVBUF
+int
+指定接收缓冲区长度。
+SO_REUSEADDR
+BOOL
+允许套接字绑扎到一个已在使用的地址上（参见bind()）。
+SO_SNDBUF
+int
+指定发送缓冲区长度。
+PVD_CONFIG
+依赖于服务提供者
+服务提供者给套接字s相关的一个不透明数据结构。此对象存储了服务提供者当前的配置信息。结构的确切格式由服务提供者指定
+ 
+       setsockopt()不支持的Berkeley Sockets选项：
+ 
+值
+类  型
+含      义
+SO_ACCEPTCONN
+BOOL
+套接字正在监听。
+SO_ERROR
+int
+取错误状态并清除。
+SO_RCVLOWAT
+int
+设置接收低潮标志。
+SO_RCVTIMEO
+int
+接收超时。
+SO_SNDLOWAT
+int
+设置发送低潮标志。
+SO_SNDTIMEO
+int
+发送超时。
+SO_TYPE
+int
+套接字类型。
+IP_OPTIONS
+ 
+设置IP头中可选域。
+ 
+参见：WSAAsyncSelect(), bind(), getsockopt(), ioctlsocket(), socket(), WSAEventSelect()。
+6.2.22  shutdown()
+语法：   int WSAAPI 
+             shutdown ( 
+                     IN          SOCKET       s, 
+                     IN          int         how
+             );
+       此函数用来切断一个双向连接的接收、发送部分或全部连接。
+ 
+参  数
+描      述
+s
+套接字描述符。
+how
+断路情况，有0，1，2三种不同情况：如果how为0（SD_RECEIVE），套接字上后续的接收将被禁止，这对低层的协议没有影响。对TCP套接字来说，由于数据不能递交到用户，如果有数据在套接字上排队等待接收，或有后续数据到达，则连接被重置。对UDP来说，进来的数据报被接收并排队。这些情况都没有ICMP错误包产生。如果how为1（SD_SEND），后续的发送被禁止。对TCP套接字来说，将发送一个FIN。设置how为2（SD_BOTH）将同时禁止发送和接收。
+ 
+返回值：如果没有错误发生，shutdown()返回0。否则它返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEINVAL
+参数how 不合法，或与套接字类型不一致（如SD_SEND在UNI_RECV套接字类型上使用）。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAENOTCONN
+套接字未连接（只对面向连接的套接字）。
+WSAENOTSOCK
+此描述符不是套接字描述符。
+ 
+注释：   不管套接字上SO_LINGER是否设置，shutdown()函数都不会阻塞。应用程序不应该在shutdown()一个套接字之后再去使用它。注意shutdown()并不关闭套接字，与套接字相关的资源并没有释放，除非执行一个closesocket()调用。
+       为了确保在一个连接的套接字上的所有数据在它关闭前能够被发送／接收，应用程序应该采用“雅致”的断连，如使用下面的步骤：
+·         调用WSAAsyncSelect()函数注册FD_CLOSE事件通知；
+·         使用用参数how=SD_SEND调用shutdown()函数；
+·         当接收到FD_CLOSE事件时，调用recv()函数直到接收到0字节，或返回错误码SOCKET_ERROR；
+·         调用closesocket()函数。
+ 
+参见：connect(), socket()。
+ 
+6.2.23  socket()
+语法：   SOCKET WSAAPI 
+             socket ( 
+                     IN          int         af, 
+                     IN          int         type, 
+                     IN          int         protocol
+             );
+       此函数建立一个套接字，它给指定的地址族、数据类型和协议分配一个套接字描述符以及相关的资源。
+ 
+参  数
+描      述
+af
+一种地址格式描述。现在支持的格式只有PF_INET，它是ARPA网际地址格式。
+type
+要建立的套接字的类型描述。
+protocol
+套接字使用的特定协议，如果调用者不希望指定协议，则置为0，使用默认的连接模式。
+ 
+返回值：      如果没有错误发生，socket()返回一个与建立的套接字相关的描述符。否则它返回值INVALID_SOCKET，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEAFNOSUPPORT
+不支持指定的地址族。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 操作正在进行。
+WSAEMFILE
+无多余的描述符可用。
+WSAENOBUFS
+无缓冲区空间可用，套接字不能建立。
+WSAEPROTONOSUPPORT
+不支持指定协议。
+WSAEPROTOTYPE
+对此套接字来说，指定协议是错误的类型。
+WSAESOCKTNOSUPPORT
+在此地址族中不支持指定套接字类型。
+ 
+注释：   socket()函数创建一个套接字描述符并分配任何相关资源，同时将套接字描述符与一个传输服务提供者建立联系。WinSock使用能够支持地址族、套接字类型和协议参数组合请求的第一个服务提供者。默认情况下，创建的套接字具有重叠属性。
+      WinSock 1.1只支持一种地址族PF_INET，但是，地址族可以给定为AF_UNSPEC（不指定），在这种情况下，参数protocol必须指定。使用的协议号是针对发生通讯的“通讯区域”来说的，大多数情况下，一种协议只支持特定地址族中特定类型的套接字。
+       WinSock 1.1支持的两种类型套接字描述如下：
+ 
+类   型
+说      明
+SOCK_STREAM
+提供顺序的、可靠的、双向的、基于连接的字节流，并有带外数据传送机制。使用TCP作为网际地址族。
+SOCK_DGRAM
+支持无连接的、不可靠的数据报，包的最大长度是固定的。使用UDP作为网际地址族。
+      在WinSock 2中，引入了一些新的套接字类型。然而，由于应用程序可以使用WSAEnumProtocols()函数动态地发现每一个可用的传输协议的属性，因此在API规范中没有必要将这些可变的套接字类型一一列出。套接字类型的定义在Winsock2.h中能够找到，不过由于有新的套接字类型、地址族和协议出现，该文件会定期更新。
+       象SOCK_STREAM类型的面向连接的套接字建立全双工的字节流。在两个对等的应用程序间提供可靠的、流式控制的连接。流套接字既是主动的，又是被动的。主动的套接字被客户用来使用connect()函数初始化连接请求，默认情况下，socket()建立主动套接字。服务器使用被动套接字来接收connect()调用的连接请求。要将主动套接字变为被动套接字可以先用bind()调用将套接字与一名字相连接，再用listen()调用表明希望接收连接。一旦套接字变为被动，它将不能用于初始化连接请求。在连接建立成功后，就可以使用send()和recv()调用进行数据传输。当会话结束，必须执行closesocket()函数关闭套接字。带外数据也可以使用send()进行发送，使用recv()进行接收。实现了SOCK_STREAM的通讯协议可以确保数据不会丢失和重复。如果对等方协议有缓冲区空间，而数据不能在一个合理的时间内发送，则连接被认为是中断了，后续的调用将以错误码WSAETIMEDOUT失败返回。
+       SOCK_DGRAM类型的套接字无主动和被动之分，它允许使用sendto()和recvfrom()函数与任意的对等方发送或接收数据。如果这样的套接字已经连接（connect()）到一个特定的对等方，则数据报也可以通过send()发送数据到对等方，或通过recv()从对等方接收数据。数据报套接字可以向多个接收者广播消息。将目的地址置为广播地址与网络接口有关（取决于地址的类别和是否有子网）。如果基本网被设置为支持广播，可以使用INADDR_BROADCAST来向基本网进行广播。
+       WinSock规范不要求服务提供者支持RAW类型套接字，但鼓励他们支持RAW套接字。
+ 
+参见：accept(), bind(), connect(), getsockname(), getsockopt(), setsockopt(), listen(), recv(), recvfrom(), select(), send(), sendto(), shutdown(), ioctlsocket(), WSASocket()。
+
+6.3  数据库函数
+6.3.1  gethostbyaddr()
+语法：   struct hostent FAR * WSAAPI 
+             gethostbyaddr ( 
+                     IN   const char FAR *        addr, 
+                     IN   int                       len,  
+                     IN   int                       type
+             );
+        此函数用来通过地址获取主机信息，它返回下面所示结构的指针，此结构包含与给定的地址相对应的名字和地址。
+struct hosten
+t {
+        char FAR *         h_name;
+        char FAR * FAR *       h_al
+iases;
+        short h_addrtype;
+        short h_length;
+        char FAR * FAR *       h_addr_list;
+};
+ 
+此结构的元素意义如下：
+ 
+元   素
+ 
+含      义
+h_name
+主机（PC）的正式名字。
+h_aliases
+主机别名，是一个
+以NULL结束的别名数组。
+h_addrtype
+返回的地址类型，对Windows Sockets 1.1来说总是PF_INET。
+h_lengt
+h
+每一个地址的字节数，对PF_INET来说总是4。
+h_addr_list
+一个以NULL结束的主机的地址表，地址用网络字节顺序表示。
+为了和过去的软件兼容，预定义指针
+h_addr为h_addr_list[0]。
+h_name是主机的正式名字，如果使用的是DNS或类似的解析系统，服务器应答的是全域名（Fully Qualified Domain Name，FQDN）；如果使用的是本地“hosts”文件，则返回的是IP地址后的第一个入口。
+ 
+参  数
+描      述
+addr
+指向一个网络字节顺序表示的32位网际地址的指针。
+len
+addr的字节数，对PF_INET地址来说必须为4。
+type
+地址类型，必须为PF_INET。
+ 
+返回值：      如果没有错误发生，gethostbyaddr()返回一个如上所描述的hostent结构指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答主机未找到。
+WSATRY_AGAIN
+非授权应答主机未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如FORMERR，REFUSED，NOTIMP。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+WSAEAFNOSUPPORT
+Windows Sockets实现不支持type指示的类型。
+WSAEFAULT
+参数addr不是用户地址空间的合法部分，或参数len太小。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+注释：   对数据库函数中得getXbyY()类函数来说，它们返回的指针指向的结构是由
+Windows Sockets 实现分配的。应用程序决不能试图修改此结构或释放它的任一部件。进一步说，每个线程只分配了此结构的一个备份，因此应用程序应该在发布其它Windows Sockets API调用之前将它所需要的信息拷贝出来。
+       值得注意的是，这些函数主要用于Windows Sockets 1.1，WinSock 2只是为了兼容的缘故才保留了它们。这些函数是基于IPv4版本TCP/IP网络的，为了和以后的IPv6版本TCP/IP兼容，协议独立的应用程序不鼓励使用这些函数，WinSock 2提供了WSALookupServiceBegin/Next/End()函数序列来实现这些函数的功能。
+ 
+参见：WSAAsyncGetHostByAddr(), gethostbyname(), WSALookupServiceBegin()。
+6.3.2  gethostbyname()
+语法：   struct hostent FAR * WSAAPI
+             gethostbyname ( 
+                     IN   const char FAR *        name
+             );
+       此函数用来通过主机名获取主机信息，它返回hostent结构的指针，此结构包含与给定的主机名相对应的名字和地址。
+ 
+参  数
+描      述
+name
+所查询主机的名字。
+ 
+返回值：      如果没有错误发生，gethostbyname()返回一个hostent结构指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答主机未找到。
+WSATRY_AGAIN
+非授权应答主机未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如FORMERR，REFUSED，NOTIMP。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+WSAEFAULT
+参数name不是用户地址空间的合法部分。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+注释：   g
+et
+hostbyname()函数不能理解传递给它的IP地址字符串，这样的请求只能当做传送了一个未知的主机名处理。一个应用程序如果要分析IP地址字符串，它应该使用inet_addr()来将字符串转换成IP
+地址，然后调用
+gethostbyaddr()来获得hostent结构。
+ 
+参见：WSAAsyncGetHostByName(), gethostbyaddr()。
+6.3.3  gethostname()
+语法：   int WSAAPI 
+             gethostname (
+                     OUT      char FAR *   name, 
+                     IN          int                 namelen
+             );
+       此函数在参数指定的缓冲区中返回本地主机的名字，它是一个以null结束的字符串。
+ 
+参  数
+描      述
+name
+指向接受主机名的缓冲区的指针。
+namelen
+缓冲区长度。
+ 
+返回值：      如果没有错误发生，gethostname()返回0。否则它返回值SOCKET_ERROR，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAEFAULT
+参数name不是用户地址空间的合法部分，或参数namelen太小。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+ 
+注释：   主机名的形式依赖于Windows Sockets实现，它可能是一个简单的主机名，或者是一个完全合格的域名。不管那种形式，返回的名字都保证能够由函数
+gethostbyname()和WSAAsyncGetHostByName()使用。
+ 
+参见：WSAAsyncGetHostByName(), gethostbyname()。
+6.3.4  getprotobyname()
+语法：   struct protoent FAR * WSAAPI 
+             getprotobyname ( 
+                     IN   const char FAR *        name
+             );
+       此函数用来获取协议信息，它返回下面所示结构的指针，此结构的内容通过给定协议名name获得，它包含名字和地址。
+struct protoent {
+      char FAR *     p_name;
+      char FAR * FAR * 
+p_aliases;
+      sho
+rt     p_proto;
+};
+ 
+此结构的元素含义如下：
+ 
+元   素
+ 
+含      义
+p_name
+协议的正式名字。
+p_aliases
+协议
+别名，是一个以NULL结束的别名数组。
+p_proto
+以主机字节顺序表示的协议号。
+ 
+参  数
+描      述
+name
+指向协议名的指针。
+ 
+返回值：      如果没有错误发生，getprotobyname()返回一个protoent结构指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答协议未找到。
+WSATRY_AGAIN
+非授权应答协议未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如协议数据库不可访问。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行，或服务提供者正在处理回调函数。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+参见：WSAAsyncGetProtoByName(), getprotobynumber()，gethostbyaddr()。
+6.3.5  getprotobynumber()
+语法：   struct protoent FAR * WSAAPI 
+                    getprotobynumber (
+                     IN   int         number
+              );
+       此函数用来通过协议号获取协议信息，它返回protoent结构的指针，此结构包含与给定的协议号相对应的名字和协议号。
+ 
+参  数
+描      述
+number
+用主机字节顺序表示的协议号。
+ 
+返回值：      如果没有错误发生，getprotobynumber()返回一个protoent结构指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答协议未找到。
+WSATRY_AGAIN
+非授权应答协议未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如协议数据库不可访问。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行，或服务提供者正在处理回调函数。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+参见：WSAAsyncGetProtoByNumber(), getprotobyname()，gethostbyaddr()。
+6.3.6  getservbyname()
+语法：   struct servent FAR * WSAAPI 
+             getservbyname ( 
+                     IN   const char FAR* name, 
+                     IN   const char FAR *        proto
+             );
+       此函数用来获取服务信息，它返回下面所示servent结构的指针，此结构的内容通过给定服务名name和协议名proto获得，它包含服务名和服务端口号。
+struct servent {
+        char FAR *  s_name;
+        char FAR * FAR *  s_aliases;
+        short  s_por
+t;
+        char FAR *  s_proto;
+};
+ 
+ 
+此结构的元素如下：
+ 
+元  素
+ 
+含      义
+s_name
+服务的正式名字。
+s_aliases
+服务
+别名，是一个以NULL结束的别名数组。
+s_port
+服务的端口号，用网络字节顺序表示。
+s_proto
+与该服务连接时使用的协议名。
+ 
+参  数
+描      述
+name
+指向服务名的指针。
+proto
+指向协议名的可选指针。
+ 
+返回值：      如果没有错误发生，getservbyname()返回一个如上所描述的servent结构指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答服务未找到。
+WSATRY_AGAIN
+非授权应答服务未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如服务数据库不可访问。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+注释：   参数proto是可选项，如果它为NULL，getservbyname()返回服务名s_name或服务别名s_aliases之一与name 匹配的第一个服务入口。否则，getservbyname()同时匹配服务名name和协议名proto。
+ 
+参见：WSAAsyncGetServByName(), getservbyport()，gethostbyaddr()。
+6.3.7  getservbyport()
+语法：   struct servent FAR * WSAAPI 
+             getservbyport (
+                    IN   int                       port, 
+                     IN   const char FAR* proto
+             );
+       此函数用来获取服务信息，它返回servent结构的指针，此结构的内容通过给定端口号port和协议名proto获得，它包含服务名和服务端口号。
+ 
+参  数
+描      述
+port
+服务使用的端口号，用网络字节顺序表示。
+proto
+指向协议名的可选指针。
+ 
+返回值：      如果没有错误发生，getservbyport()返回一个servent结构的指针。否则它返回一个NULL指针，错误码可通过调用WSAGetLastError()函数得到。
+ 
+错误码：     
+WSANOTINITIALISED
+未初始化Windows Sockets DLL，在使用此函数之前必须有一次成功的WSAStartup()函数调用。
+WSAENETDOWN
+Windows Sockets 实现检测到网络系统已经失败。
+WSAHOST_NOT_FOUND
+授权应答服务未找到。
+WSATRY_AGAIN
+非授权应答服务未找到，或是服务器故障（SERVERFAIL）。
+WSANO_RECOVERY
+不可恢复错误，如服务数据库不可访问。
+WSANO_DATA
+合法的名字，但没有请求类型的数据记录。
+WSAEINPROGRESS
+一个阻塞的Windows Sockets 1.1操作正在进行。
+WSAEFAULT
+参数proto不是用户地址空间的合法部分。
+WSAEINTR
+此阻塞调用被WSACancelBlockingCall()函数取消。
+ 
+注释：   参数proto是可选项，如果它为NULL，getservbyport()返回服务端口号s_port与port 匹配的第一个服务入口。否则，getservbyport()同时匹配服务端口号port和协议名proto。
+ 
+参见：WSAAsyncGetServByPort(), getservbyname()，gethostbyaddr()。
+ 

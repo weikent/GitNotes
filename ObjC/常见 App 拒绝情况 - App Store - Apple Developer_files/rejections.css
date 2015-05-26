@@ -1,0 +1,12 @@
+.color-list, .stats {padding-top: 20px; font-size: 12px; line-height:1.75em; clear:both;}
+.color-list li {padding-bottom:5px;}
+.color-list li span {display:inline-block; width: 20px; padding-right:12px; vertical-align:top;}
+.color-list li p {display:inline-block; margin-bottom:0;}
+.font-blue {color:#0078ff;}
+.font-green {color:#50C64E;}
+.font-yellow {color:#FECB00;}
+.font-orange {color:#ff9500;}
+.font-red {color:#ff3e23;}
+.font-purple {color:#4c0089;}
+
+.stats li {width:50%; float:left; line-height:1.25em;}

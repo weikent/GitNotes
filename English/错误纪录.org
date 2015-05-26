@@ -1,0 +1,10 @@
+#+TITLE: 英语错误纪录
+
+
+* 1
+Bob said: "Don't disturb me, please".
+转换
+Bob asked me not to disturb me
+
+
+When we need to transform a request into reported speech we use an introductory verb + the to-infinitive:  asked not + to disturb

@@ -17,18 +17,18 @@ let explicitDouble : Double = 70
 * 追加字符串
 
 - 使用 加号 【+】
-#+BEGIN_SRC C
+#+BEGIN_SRC objc
 let label = "The width is "
 let width = 94
 let widthLabel = label + String(width)
 #+END_SRC
 - 使用 斜线 括号 【\()】
-#+BEGIN_SRC C
+#+BEGIN_SRC objc
 “ backslash (\) before the parentheses. For example:”
 let apples = 3
 let oranges = 5
 let appleSummary = "I have \(apples) apples."
-let fruitSummary = "I have \(apples + oranges) pieces of fruit.
+let fruitSummary = "I have \(apples + oranges) pieces of fruit."
 #+END_SRC
 
 * 数组与字典

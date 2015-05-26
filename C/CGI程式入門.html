@@ -1,0 +1,328 @@
+
+<!-- saved from url=(0044)http://ind.ntou.edu.tw/~dada/cgi/CGIprog.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Big5">
+<meta charset="big5">
+<title>CGI程式入門</title>
+<style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style></head>
+
+<body bgcolor="WHITE">
+<center><table border="5"><tbody><tr><td><font size="+3">CGI程式入門</font></td></tr></tbody></table></center>
+<p><font size="+2">
+看</font>過上一篇「CGI簡介」，大家想必對CGI這玩意已經有些概念了，簡單來說，CGI只是一個介面，提供一些讓瀏覽器和server程式溝通的方法。
+但CGI選是附屬壁HTTP通訊協定下，也就是瀏覽器要送資料給你的CGI程式或是CGI程式要將執行結果送到瀏覽器show出來，這都必須經過HTTPd這道關卡，因此CGI程式的I/O就必須要遵守HTTP通訊協定了。
+其實CGI程式和一般程式也沒什麼不同，唯一的不同只有它的I/O部分，只要了解CGI程式I/O的原理，那CGI程式也就不足為懼了，接下來就看你programming的功力了。
+
+</p><p><font size="+2">
+在</font>這份文件中有幾點要注意的：當我只寫『CGI』這三個字母，只代表著一個interface、一個gateway；
+我若寫『CGI程式』，才是代表程式本身，請大家不要弄混了。
+還有就是在文件中我所用的範例程式全部都是Perl程式，使用其他程式語言的人只好說聲抱歉了。但是在CGI程式的觀念部分是沒有語言之別的，
+所以慣用其他程式語言的人也請你耐心看完本文件，說不定你也能從中獲得不少好處。
+說起我為何只用Perl，一來想起C語言對字串處理的肉腳我就頭大，偏偏CGI程式最重要的工作就是處理字串；
+二來，說實在話，雖然我對C還不算太肉腳，但叫我用C來寫CGI程式，我還真的不知從何下手哩。
+因此對程式語言的初學者而言，我強烈推薦使用Perl語言，它絕對比任何一程程式語言都容易入門；
+至於已經習慣用某一種程式語言的人我也勸你不妨試試Perl，至少在CGI程式方面它是一方霸主，鮮有其他語言能相提並論，對你CGI程式的發展絕對是有益無害的；
+若你對C的基本語法有所認識的話，那我更要勸你趕緊試試Perl，它們之間的相似性，保證讓你一學便會、一看便知，不費什麼力氣就能學會如何使用Perl。
+
+</p><p><font size="+2">
+好</font>了，閒話不多說，且讓我們先來看看CGI程式到底是如何input，而瀏覽器是如何傳送資料給CGI程式的。
+還記得HTML語法中有個&lt;FORM&gt;標籤嗎? 這就是CGI程式主要應用的地方。
+當你按下submit按鈕後，瀏覽器會將你填好的資料傳送到WWW server上去，若HTTPd發現這是一個CGI request，
+就會藉由CGI去呼叫指定的程式，並建立起互相溝通的管道。
+第一種可互相溝通的管道就是<b>環境變數</b>：由於CGI程式是由HTTPd所呼叫而產生的一個子行程(child process)，
+所以CGI程式繼承了HTTPd所有的環境變數，因此也得到由client端的瀏覽器傳過來的一些資訊。
+HTTPd的標準環境變數與其所代表的意義十分重要，我把一些重要的環境變數列表於後，希望大家仔細看看：
+</p><p>
+
+</p><center><table border="1">
+<tbody><tr><td width="150">環境變數</td><td>內容
+</td></tr>
+<tr><td width="150">AUTH_TYPE</td><td>存取認證型態。
+</td></tr>
+<tr><td width="150">CONTENT_LENGTH</td>
+<td>經由標準輸入傳遞給CGI程式的資料長度，以bytes或字元數來計算。
+</td></tr>
+<tr><td width="150">CONTENT_TYPE</td>
+<td>query資料的MIME型態。
+</td></tr>
+<tr><td width="150">GATEWAY_INTERFACE
+</td><td>伺服器的CGI版本編號。
+</td></tr>
+<tr><td width="150">HTTP_(string)</td>
+<td>client端的檔頭資料，由各瀏覽器自訂。
+</td></tr>
+<tr><td width="150">PATH_INFO</td><td>傳遞給cgi程式的額外路徑資訊。
+</td></tr>
+<tr><td width="150">QUERY_STRING</td>
+<td>傳遞給CGI程式的query資訊，也就是用"?"隔開，添加在URL後面的字串。
+</td></tr>
+<tr><td width="150">REMOTE_ADDR</td>
+<td>client端(發出request那一端)的host名稱。
+</td></tr>
+<tr><td width="150">REMOTE_HOST</td>
+<td>client端的IP位址。
+</td></tr>
+<tr><td width="150">REMOTE_USER</td>
+<td>client端送出來的使用者名稱。
+</td></tr>
+<tr><td width="150">REMOTE_METHOD</td>
+<td>client端發出request的方法。
+</td></tr>
+<tr><td width="150">SCRIPT_NAME</td>
+<td>CGI程式所在的虛擬路徑，如/cgi-bin/program.pl。
+</td></tr>
+<tr><td width="150">SERVER_NAME</td>
+<td>server的host名稱或IP位址。
+</td></tr>
+<tr><td width="150">SERVER_PORT</td>
+<td>收到request的server埠。
+</td></tr>
+<tr><td width="150">SERVER_PROTOCOL</td>
+<td>所使用的通訊協定和版本編號。
+</td></tr>
+<tr><td width="150">SERVER_SOFTWARE</td>
+<td>server程式的名稱和版本。
+</td></tr>
+</tbody></table></center>
+
+<p><font size="+2">
+H</font>TTPd不但將自己的環境變數傳給CGI程式，它還將CGI程式的標準輸入、輸出(STDIN、STDOUT)重新導向，
+使得HTTPd能將&lt;FORM&gt;裡面的資料藉由STDIN傳遞給CGI程式，而CGI程式也能藉由STDOUT將程式執行結果傳遞給HTTPd show在瀏覽器上。
+這就是CGI所提供的第二個溝通管道。
+
+</p><p><font size="+2">
+還</font>記得&lt;FORM&gt;標籤有個method屬性，它有二種值：get和post，就分別代表著上述二種溝通管道：
+method=get是藉由環境變數來傳遞資料，一旦指定了這種方法，瀏覽器會將你填入&lt;FORM&gt;裡的資料附加在action屬性所指定的CGI程式名稱後面，
+並以"?"隔開，當HTTPd收到這個request後會將"?"後面的字串存放在QUERY_STRING這個環境變數中，
+於是CGI程式就可以透過這個環境變數取得&lt;FORM&gt;裡面的資料了。
+
+</p><p><font size="+2">
+但</font>是，環境變數的大小是有一定的限制的，當需要傳送的資料量大時，儲存環境變數的空間可能會不足，造成資料接收不完全，甚至無法執行CGI程式。
+因此後來又發展出另外一種方法：method=post，也就是利用I/O重新導向的技巧，讓CGI程式可以藉由STDIN和STDOUT直接跟瀏覽器溝通。
+當我們指定用這種方法傳遞&lt;FORM&gt;裡面的資料時，HTTPd收到資料後會先放在一塊輸入緩衝區中，並且將資料的大小記錄在CONTENT_LENGTH這個環境變數，
+然後呼叫CGI程式並將CGI程式的STDIN指向這塊緩衝區，於是我們就可以很順利的透過STDIN和環境變數CONTENT_LENGTH得到所有的資料，再沒有資料大小的限制了。
+
+</p><p><font size="+2">
+光</font>說不練恐怕大家還是不易了解，我們還是趕緊來看看下面這二個例子，看看CGI程式內部到是底如何運作的：
+
+</p><p>
+&lt;例一&gt;method=get：使用環境變數QUERY_STRING來傳遞資料
+</p><p>
+</p><center><table border="1">
+<tbody><tr><td><center>
+<form method="GET" action="http://ind.ntou.edu.tw/cgi-bin/cgiwrap/~dada/exp1.pl">
+ 姓名：<input size="10" name="name"><br>
+ 性別：<input type="radio" name="sex" value="boy" checked="">男
+ <input type="radio" name="sex" value="girl">女<br>
+ <input type="submit" value="送出資料">
+ <input type="reset" value="清除資料">
+</form></center>
+</td></tr>
+<tr><td><font color="green" size="+1"><code>&lt;FORM METHOD="GET" ACTION="http://ind.ntou.edu.tw/cgi-bin/cgiwrap/~dada/exp1.pl"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>姓名：&lt;INPUT SIZE=10 NAME="name"&gt;&lt;BR&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>性別：&lt;INPUT TYPE="radio" NAME="sex" VALUE="boy" CHECKED&gt;男</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="radio" NAME="sex" VALUE="girl"&gt;女&lt;BR&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="submit" VALUE="送出資料"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="reset" VALUE="清除資料"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;/FORM&gt;</code></font>
+</td></tr>
+</tbody></table></center>
+
+<p><br>
+&lt;例二&gt;method=post：使用STDIN來取得資料
+</p><p>
+</p><center><table border="1">
+<tbody><tr><td><center>
+<form method="POST" action="http://ind.ntou.edu.tw/cgi-bin/cgiwrap/~dada/exp1.pl">
+ 姓名：<input size="10" name="name"><br>
+ 性別：<input type="radio" name="sex" value="boy" checked="">男
+ <input type="radio" name="sex" value="girl">女<br>
+ <input type="submit" value="送出資料">
+ <input type="reset" value="清除資料">
+</form></center>
+</td></tr>
+<tr><td><font color="green" size="+1"><code>&lt;FORM METHOD="POST" ACTION="http://ind.ntou.edu.tw/cgi-bin/cgiwrap/~dada/exp1.pl"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>姓名：&lt;INPUT SIZE=10 NAME="name"&gt;&lt;BR&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>性別：&lt;INPUT TYPE="radio" NAME="sex" VALUE="boy" CHECKED&gt;男</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="radio" NAME="sex" VALUE="girl"&gt;女&lt;BR&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="submit" VALUE="送出資料"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;INPUT TYPE="reset" VALUE="清除資料"&gt;</code></font>
+<br>
+<font color="green" size="+1"><code>&lt;/FORM&gt;</code></font>
+</td></tr>
+</tbody></table></center>
+
+<p><br>
+&lt;程式說明&gt;<br>
+<br>
+上面二個例子目的都是列出所輸入的資料和所有的環境變數，所以這二個例子都是使用同一個CGI程式，而程式會自行判斷到底要用何種方法得到資料。<br>
+<br>
+<font color="green" size="+1"><code>#!/usr/local/bin/perl</code></font><code><br></code>
+這是UNIX shell script的慣例，在程式開頭的第一行註明程式所要使用的解譯器和它的絕對路徑，
+注意，一定要在第一行，而且以<font color="green" size="+1"><code>#!</code></font>開頭後面接著解譯器的絕對路徑，不能再有其他不相干的字。<br>
+<br>
+<font color="green" size="+1"><code>my ($data, $i, @data, $key, $val, %FORM); </code></font><br>
+雖然Perl可以不用事先宣告變數，但是養成這個好習慣對以後程式的維護是很有好處的。<br>
+<br>
+<font color="green" size="+1"><code>
+if ($ENV{'REQUEST_METHOD'} eq "GET") {<br>
+$data = $ENV{'QUERY_STRING'};<br>
+} elsif ($ENV{'REQUEST_METHOD'} eq "POST") {<br>
+read(STDIN,$data,$ENV{'CONTENT_LENGTH'});<br>
+}<br>
+</code></font>
+FORM所指定的方法會記錄在REQUEST_METHOD環境變數中，所以我們只要看看這個環境變數的值就可以知道要從何處讀取資料。
+而Perl讀取環境變數的方法十分簡單，直接使用 %ENV 這個特殊相關變數就可以了。
+從STDIN讀取一定長度的資料的方法就是使用read函數，詳細用法請用man perlfunc指令查看Perl的man pages，
+以下程式所用到的Perl內建函數也請自行查閱相關資料，畢竟本文不是在教程式語言。取出的資料存放在變數$data中。<br>
+<br>
+<font color="green" size="+1"><code>@data = split(/&amp;/,$data);</code></font><code><br></code>
+還記得你的&lt;FORM&gt; 裡面的項目都有個name和value屬性嗎?
+這就相當於變數名稱與變數值的配對，而瀏覽器會以『mane1=value1&amp;name2=value2&amp;...』的形式將資料傳送給server，
+因此我們取得資料串後的第一步就是依"&amp;"這個分隔符號把每個變數分開，並將它存放在@data陣列中。
+值得一提的是Perl的split函數簡直就是為它量身定做的一樣，就這樣短短的一行完成了C語言要寫半天的事，叫我如何能不為它驚喜。<br>
+<br>
+<font color="green" size="+1"><code>
+foreach $i (0 ..$#data) {<br>
+# Convert plus's to spaces<br>
+$data[$i] =~ s/\+/ /g;<br> 
+</code></font>
+因為有些字元用做特殊用途，所以資料在傳送前會先經過標準的URL格式來編碼，以" +"來替換空白鍵，
+以"%XX"這種十六進位編碼方式來將不可列印出的字元編碼，
+其中"X"代表一個十六進位的數字(0-F)，"%XX"即代表這個字元的ASCII碼。
+上面這行就是把"+"再替代回來。<br>
+<br>
+<font color="green" size="+1"><code>
+# Split into key and value. <br>
+# splits on the first =<br>
+($key, $val) = split(/=/,$data[$i],2);<br>
+</code></font>
+把變數名稱和變數值割開，分別放在$key和$val中。<br>
+<br>
+<font color="green" size="+1"><code>
+# Convert %XX from hex numbers to alphanumeric<br>
+$key =~ s/%(..)/pack("c",hex($1))/ge;<br>
+$val =~ s/%(..)/pack("c",hex($1))/ge;<br>
+</code></font>
+把十六進位碼轉換回它原來所代表的字元，也就是對資料進行解碼的動作。<br>
+<br>
+<font color="green" size="+1"><code>
+# Kill SSI command<br>
+$val =~ s/&lt;!--(.|\n)*--&gt;//g;<br>
+</code></font>
+在一般用途中常常會把使用者輸入的資料再show出來，所以如果資料中包含SSI指令，為了安全起見，我們必須把它去掉。<br>
+<br>
+<font color="green" size="+1"><code>
+# Associate key and value<br>
+# \0 is the multiple separator<br>
+$FORM{$key} .= "\0" if (defined($FORM{$key}));<br>
+$FORM{$key} .= $val;<br>
+</code></font>
+最後我們以$key為索引，將$val存到%FORM中。看，Perl的相關變數多好用!若用C語言的話，少不得還要自訂一個資料結構哩。
+要注意的是，如果有key相同的情況發生(例如FORM標籤的checkbox或select項目)，我們就用"\0"為分隔符號把新資料添加在最後面。<br>
+<br>
+<font color="green" size="+1"><code>}<br>
+<br>
+print "Content-type: text/html\n\n";<br>
+</code></font>
+OK!! 資料都處理好了，接下來就是CGI程式的輸出部分了。由於CGI會將CGI程式的STDOUT重新導向給HTTPd，再傳送給瀏覽器，
+所以我們在程式中直接使用print指令就好了，不必透過什麼特殊的指令或函數。
+總而言之，print出去的字串是要送給瀏覽器解讀的，所以我們送出去的字串必須符合HTTP通訊協定，也就是必須包含HTTP表頭 (header) 和一連串符合HTML語法的字串。
+上面print出去的那個字串就是一個必須的HTTP表頭--MIME content type，它指定下面所輸出的字串內容都是符合HTML語法的字串。
+HTTP表頭有很多，不過我們只需要指定這個表頭，其它的HTTPd會自動幫你加上去的。
+注意：HTTP表頭和內容字串中間是用空白行隔開的，所以上面那個HTTP表頭後面有二個換行符號，千萬不能漏掉。
+有人就是漏掉了一個小小的換行符號，結果弄得滿頭大汗，瀏覽器上面還是一片空白。<br>
+<br>
+在HTTP表頭之後，接著輸出的就是你的HTML文件內容。這就相當於用程式產生HTML文件，只要符合HTML語法就好了，不同的是程式可以利用各種資料動態的產生網頁。<br>
+<br>
+<font color="green" size="+1"><code>
+print "&lt;html&gt;\n";<br>
+print "&lt;head&gt;\n";<br>
+print "&lt;title&gt;CGI程式入門'範例1&lt;/title&gt;\n";<br>
+print "&lt;/head&gt;\n";<br>
+print "&lt;body bgcolor=white&gt;\n";<br>
+<br>
+print "CGI程式所收到的資料串是長的這個樣子的：&lt;p&gt;\N";<br>
+print "$data&lt;p&gt;\n";<br>
+print "&lt;hr&gt;\n";<br>
+<br>
+### Print variables<br>
+print "FORM裡面的資料經過程式處理之後就變成這樣了：&lt;p&gt;\n";<br>
+foreach $key (keys %FORM) {<br>
+print "$key = $FORM{$key}&lt;br&gt;\n";<br>
+}<br>
+<br>
+print "&lt;hr&gt;\n";<br>
+<br>
+### print %ENV<br>
+print "環境變數列表：&lt;br&gt;\n";<br>
+foreach $key (sort keys %ENV) {<br>
+print "$key = $ENV{$key}&lt;br&gt;\n";<br>
+}<br>
+<br>
+print "&lt;/body&gt;\n";<br>
+print "&lt;/html&gt;\n";<br>
+</code></font>
+<br>
+<br>
+<a href="http://ind.ntou.edu.tw/~dada/cgi/exp1.txt">&lt;完整程式列表&gt;</a><br>
+<br>
+<br>
+嗯，就是這麼簡單!!其實CGI程式和一般程式也沒什麼兩樣，只要輸入和輸出稍微注意一下，對有寫程式經驗的人來說根本是『一塊蛋糕』 (a piece of cake) 。
+而且輸入和輸出部分都有固定的模式可尋，於是網路上就有人把它寫成函式庫，方便大家寫程式，著名的有cgi-lib.pl和CGI.pm模組等。
+有一天吃飽飯後沒事幹，突發奇想，何不針對自己的需要把常用的功能寫一個函式庫呢?這樣以後寫CGI程式不就方便多了嗎?
+於是我以cgi-lib.pl為藍本，按照自己的構想完成了一個函式庫。尤其對初學者來說，只要你會用這些基本的函式，寫個簡單的留言板真的是易如反掌。<br>
+<br>
+下面就是我寫的函式庫，只要把它copy到你的cgi-bin目錄下就可以直接使用了。希望對你會有幫助：<br>
+<br>
+<a href="http://ind.ntou.edu.tw/~dada/cgi/cgilib.txt">cgilib.pl</a>
+<br>
+<br>
+範例一那個簡單的CGI程式，如果應用這個函式庫，幾十行程式立刻變成只有二十幾行，你說簡不簡單。不信我show給你看：<br>
+<br>
+<font color="green" size="+1"><code>
+#!/usr/local/bin/perl<br>
+require "cgilib.pl";<br>
+<br>
+$data=&amp;ReadForm(*FORM);<br>
+<br>
+&amp;PrintHeader;<br>
+print "&lt;html&gt;\n";<br>
+print "&lt;head&gt;\n";<br>
+print "&lt;title&gt;CGI程式入門-範例1&lt;/title&gt;\n";<br>
+print "&lt;/head&gt;\n";<br>
+print "&lt;body bgcolor=white&gt;\n";<br>
+<br>
+print "CGI程式所收到的資料串是長的這個樣子的：&lt;p&gt;\n";<br>
+print "$data&lt;p&gt;\n";<br>
+print "&lt;hr&gt;\n";<br>
+<br>
+### Print variables<br>
+print "FORM裡面的資料經過程式處理之後就變成這樣了：&lt;p&gt;\n";<br>
+&amp;PrintVar(%FORM);<br>
+print "&lt;hr&gt;\n";<br>
+<br>
+### print %ENV<br>
+print "環境變數列表： &lt;p&gt;\n";<br>
+&amp;PrintENV;<br>
+<br>
+print "&lt;/body&gt;\n";<br>
+print "&lt;/html&gt;\n";<br>
+</code></font>
+<br>
+<br>
+CGI程式入門就說到這裡，其他還有一些技巧或注意事項，我會再寫個FAQ讓大家參考。<br>
+<br>
+
+
+</p><div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="&#21457;音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入&#21333;&#35789;表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出&#21333;&#35789;表"></a><a href="http://ind.ntou.edu.tw/~dada/cgi/CGIprog.htm#" id="haloword-open" class="haloword-button" title="查看&#21333;&#35789;&#35814;&#32454;&#37322;&#20041;" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="&#20851;&#38381;查&#35810;窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>

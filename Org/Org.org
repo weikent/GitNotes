@@ -209,3 +209,32 @@ a_{b}
 
 * org 支持的语言
 [[./org_language.png]]
+
+* ditaa
+
+参数说明
+| param | long param     | desc                                 |
+| -e    | –encoding      | 指定编码                             |
+| -E    | –no-separation | 嵌套矩形是否分隔,缺省有分隔,设置后无 |
+| -r    | –round-corners | 圆角矩形                             |
+| -s    | –scale         | 矩形大小 ,比如 0.8                   |
+| -o    | –overwrite     | 如果有同名文件覆盖                   |
+| -S    | –no-shadows    |                                      |
+| -A    | –no-antialias  |                                      |
+| -v    | –verbose       |                                      |
+| -h    | –help          |                                      |
+| -t    | –tabs          |                                      |
+| -h    | –html          |                                      |
+图形规则
+
+圆角矩形: 用/ \ 作为图形的四个顶角
+color
+cxxx xxx别表示RGB
+也可以采用预设的值: cRED cGRE cBLK cBLU cPNK cYEL
+tags 在矩形内部标记:
+{d} document
+{s} storage
+{io} input/output
+dashed lines 虚线 竖虚线 :: : 横虚线 :: =
+*
+矩形内的文本: o :: · 号

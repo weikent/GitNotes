@@ -6,7 +6,7 @@
 
 可以在工程－》build settings --> Swift complier - code generation --> Objective-C Bridging Header中设置
 
-[[../images/SwiftFrameWork/1-1.jpeg]]
+[[1-1.jpeg]]
 
 
 * 在一个FrameWork / Libary 工程中，如果想让某个头文件是 public的。可以如下

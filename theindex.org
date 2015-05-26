@@ -1,0 +1,7 @@
+#+TITLE: Index
+
+#+INCLUDE: "theindex.inc"
+
+[[/English/English.html][English]]
+
+[[./English/English.html][English2]]

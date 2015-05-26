@@ -1,0 +1,354 @@
+
+<!-- saved from url=(0114)http://cn.cocos2d-x.org/comment/get_comments?url=http%3A%2F%2Fwww.cocoachina.com%2Fios%2F20140915%2F9620.html&uid= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link type="text/css" rel="stylesheet" href="style.css">
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.simplemodal.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript">
+$(function()
+{
+	//初始化session验证码隐藏域
+	//change_code('top');
+
+});
+//获取评论列表
+function get_comments( c_url )
+{	
+	var post_url = $('#post_url').val()+'get_comments';	
+	$.ajax({
+	  type: 'POST',
+	  url: post_url,
+	  data: {
+			c_url : encodeURIComponent(c_url),
+		  },
+		success:function(data) 
+		{    
+			//$("#comments").empty();
+			$('#comments').append(data);	 
+		},    
+	});
+		
+}
+
+
+//验证文本框内容是否为空
+function check(obj,id)
+{
+	var reg=/^\s+/;
+	$("#"+id).hide().html("");
+	if(obj.val().replace(reg,'').length==0)
+	{
+		$("#"+id).show().html("评论内容不能为空。");
+		return false;
+	}
+	else 
+	{
+		$("#"+id).hide().html("");
+		return true;
+	}
+}
+
+function setContent(str) {
+str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+str.value = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+//str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+return str;
+}
+
+//保存评论
+
+function save_comment( form_id )
+{
+	var c_url = $('#url').val();
+	var top_id = $('#top_id').val();
+	var user_id = $('#session_user_id').val();
+	var regTag=/^<+$/g;
+	//顶级评论
+	if( form_id == 'reply' )
+	{
+		var content = $('#content').val();		
+		var code = $('#topic_vcode').val();
+		var session_code = $('#hidden_code').val();
+		if(!check($('#content'),"toptip") )
+		{
+			return false;
+		}
+		/*var flag = false;
+		if( code.toUpperCase() != session_code )
+		{
+			$('#top_code_error').text('验证输入错误，请重新输入');
+			flag = true;
+		}
+		else
+			$('#top_code_error').text();
+		if( content == '' )
+		{
+			$('#top_content_error').text('评论内容不能为空');
+			flag = true;			
+		}
+		else
+			$('#top_content_error').text();
+		
+		if( flag )
+			return false;
+		*/
+
+	}
+	else if( form_id == 'subreply' )	//子评论
+	{		
+		var content = $('#sub_content').val();		
+		var code = $('#sub_vcode').val();
+		var session_code = $('#hidden_sub_code').val();
+		var top_id = $('#sub_top_id').val();
+
+		if(!check($('#sub_content'),"subtip") )
+		{
+			return false;
+		}
+		/*var flag = false;
+		if( code.toUpperCase() != session_code )
+		{
+			$('#sub_code_error').text('验证输入错误，请重新输入');
+			flag = true;
+		}
+		else
+			$('#sub_code_error').text();		
+		if( content == '' )
+		{
+			$('#sub_content_error').text('评论内容不能为空');
+			flag = true;			
+		}
+		else
+			$('#sub_content_error').text();			
+
+		if( flag )
+			return false;
+		*/		
+	}	
+
+	if( form_id == 'reply' && user_id!='' )	
+	{				
+		var _html = '<li>'
+		+'<a class="fl" href="http://www.cocoachina.com/bbs/u.php?uid=" target="_blank"><img src="http://cn.cocos2d-x.org/image/none.gif" width="48" height="48" alt="" /></a>'
+		+'<div class="item">'
+		+'<div class="author"><a href="http://www.cocoachina.com/bbs/u.php?uid=" target="_blank"> </a><span>1分钟前</span></div>'
+		+'<div class="con">'+setContent($("#content").val()) +'</div>'
+		+'</div>'
+		+'</li>';				
+		$(".comlists").prepend(_html);
+		$("#now_all_num").html(parseInt($("#now_all_num").html())+1);
+		$('html, body').animate({scrollTop:$(".comments .cbttl").offset().top+'px'}, 200);
+		$("#reply")[0].reset();
+	}
+	else if( form_id == 'subreply' && user_id!='' )
+	{	
+		var _sub_html = '<div class="comsub"><a class="fl" href="http://www.cocoachina.com/bbs/u.php?uid=" target="_blank"><img src="http://cn.cocos2d-x.org/image/none.gif" width="48" height="48" alt="" /></a>'
+		+'<div class="item">'
+		+'<div class="author"><a href="http://www.cocoachina.com/bbs/u.php?uid=" target="_blank"></a><span>1分钟前</span></div>'
+		+'<div class="con">'+ setContent($("#sub_content").val()) +'</div>'
+		+'</div>';
+		
+		$("#subreplybox").parent().append(_sub_html);
+		
+		$("#subreplybox").hide();
+		$("#subreply")[0].reset();
+		
+		$("#subreplybox").parent().find(".reply span").html($("#subreplybox").parent().find(".comsub").length - 1);			
+		$("#subreply")[0].reset();		
+	
+	}
+
+
+	var post_url = $('#post_url').val()+'save_comment';	
+	
+	$.ajax({
+	  type: 'POST',
+	  url: post_url,
+	  data: {
+			c_url : encodeURIComponent(c_url),
+			top_id : top_id,
+			user_id : user_id,
+			content : content,
+			code : code,
+		  },
+		success:function(result) 
+		{    
+
+			var data=eval("("+result+")");
+			
+			if(data.status == 1) 
+			{
+				if( form_id == 'reply' )
+					$(".topreply")[0].reset();
+				else if( form_id == 'subreply' )
+					$("#subreply")[0].reset();
+					
+			} else if(data.status == 2) {
+				_orCom = true;
+				return simModal(0);
+			}
+			else {
+				$("#toptip").html(data.content).fadeIn(200);
+				$(".topreply").find("textarea").on("focus", function() {
+					$("#toptip").fadeOut(200);
+				})
+				$(".topreply").find("input").on("focus", function() {
+					$("#toptip").fadeOut(200);
+				})
+			}
+
+			if(data.vcode == 1) {
+				//window.location.reload(true);
+			}
+			_orCom = true;
+		},    
+		
+	});			
+
+}
+//显示回复评论区域--回复框
+$(document).on('click', '.reply', function() {
+	if($(this).parent().parent().parent().hasClass("comsub")) {
+		$("#subreplybox").css("padding-left", "85px").show().insertAfter($(this).parent().parent().parent());
+	} else {
+		$("#subreplybox").css("padding-left", "0").show().insertAfter($(this).parent().parent());
+	}
+	$("#sub_top_id").val($(this).attr("data-id"));
+	$("#subtip").hide();
+	//初始化session 子级验证码
+	//change_code('sub');
+	return false;
+});
+
+
+// 评论的支持和赞
+var _orOther = true;
+$(document).on('click', '.report_cc, .praise_cc', function() {
+	if(_orOther) {
+		_orOther = false;
+		var _this = $(this);
+		var _class = _this.attr("class");
+		var _id = _this.attr("data-id");
+		//举报
+		if(_class == "report_cc") 
+		{
+			var post_url = $('#post_url').val()+'ajax_comment_report';			
+			$.ajax({
+			  type: 'POST',
+			  url: post_url,
+			  data: "id="+_id,
+				success:function(result) 
+				{
+					var data=eval("("+result+")");
+			
+					if(data.status == 1) {
+						_this.html("已举报");
+					} else if(data.status == 2) {
+						alert(data.content);
+						//return simModal(0);
+					} else {
+						if(!_this.parent().find(".red").length) {
+							_this.parent().prepend($("<span></span>").addClass("red").html(""+data.content));
+							setTimeout(function() {
+								_this.parent().find(".red").remove();
+							}, 1000);
+						}
+					}
+					_orOther = true;
+					return false;				
+				}
+			});		
+		}
+		else if(_class == "praise_cc") 	//支持
+		{
+			var post_url = $('#post_url').val()+'ajax_comment_support';			
+			$.ajax({
+			  type: 'POST',
+			  url: post_url,
+			  data: "id="+_id,
+				success:function(result) 
+				{
+					var data=eval("("+result+")");
+			
+					if(data.status == 1) {
+						_this.html('<i class="grayicon graypraise"></i>支持(' + data.num +')');
+						_this.addClass("praised");
+					} else if(data.status == 2) {
+						alert(data.content);
+						//return simModal(0);
+					} else {
+						if(!_this.parent().find(".red").length) {
+							_this.parent().prepend($("<span></span>").addClass("red").html(""+data.content));
+							setTimeout(function() {
+								_this.parent().find(".red").remove();
+							}, 1000);
+						}
+					}
+					_orOther = true;
+					return false;			
+				}
+			});			
+		} else {
+			_orOther = true;
+			return false;
+		}
+	}
+});
+
+//更新验证码
+/*function change_code( code_type )
+{
+	$.ajax({
+		type: 'POST',
+		url:"/comment/ajax_update_code",
+		data:"code_type="+code_type,
+		success: function(msg){
+
+			if( code_type == 'top' )
+			{			
+				$('#hidden_code').val(msg);
+			}
+			else
+			{
+				$('#hidden_sub_code').val(msg);
+			}		
+		}
+	})
+}*/
+</script>
+
+<style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style></head><body><div class="comments" id="comments">
+	<h4 class="cbttl" style="border-bottom:none">文章评论 (<span id="now_all_num">0</span>)</h4>
+	<ul class="comlists">                    
+		
+		<div id="subreplybox" class="comsub subreply" style="display:none">
+			<form id="subreply">
+				<p id="subtip">回复内容不能为空。</p>
+				<input type="hidden" name="user_id" id="sub_user_id" value="">
+				<input type="hidden" name="top_id" id="sub_top_id" value="">
+				<p><span id="sub_content_error" style="color:red; margin-left:10px; font-size: 14px;"></span></p>
+				<textarea class="textarea" name="content" id="sub_content" placeholder="你想说什么……" style="height:80px"></textarea>
+									
+				<input type="hidden" id="hidden_sub_code" value="">
+				<p class="subpos"><a href="javascript:void(0)" id="send_reply" class="subbtn smallbtn" onclick="save_comment(&#39;subreply&#39;)">回 复</a></p>
+			</form>
+		</div> <!--sub comment-->
+	</ul>
+	<form class="topreply" id="reply" action="">
+		<p id="toptip">评论内容不能为空。</p>
+		<input type="hidden" name="url" id="url" value="http://www.cocoachina.com/ios/20140915/9620.html">
+		<input type="hidden" name="user_id" value="">		
+		<p><span id="top_content_error" style="color:red; margin-left:10px; font-size: 14px;"></span></p>
+        <textarea class="textarea require" name="content" id="content" placeholder="对这篇文章有什么感想，写一下吧……"></textarea>
+		
+								
+		
+		<p class="subpos"><a href="javascript:void(0)" class="subbtn" onclick="save_comment(&#39;reply&#39;)">发表评论</a></p>
+        <input type="hidden" id="hidden_code" value="">
+	</form>
+	<input type="hidden" id="post_url" value="http://cn.cocos2d-x.org/comment/">
+	<input type="hidden" id="session_user_id" value="">
+   	<input type="hidden" id="loginurl" value="http://www.cocoachina.com/bbs/login.php?forward=http://www.cocoachina.com/ios/20140915/9620.html">
+   	<input type="hidden" id="sso_signup_url" value="http://www.cocoachina.com/bbs/register.php?forward=&#39;http://www.cocoachina.com/ios/20140915/9620.html&#39;">
+</div><div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入单词表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出单词表"></a><a href="http://cn.cocos2d-x.org/comment/get_comments?url=http%3A%2F%2Fwww.cocoachina.com%2Fios%2F20140915%2F9620.html&uid=#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>

@@ -1,0 +1,2213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0048)http://bbs.chinaunix.net/thread-1592888-1-1.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" class=" widthauto"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<title>怎么用C实现Http POST功能向Http服务器上传文件？？-C/C++-ChinaUnix.net</title>
+<meta name="google-site-verification" content="OJoEeACa37Td5C_TevGy7D9GrG9Pe407duCwm81ra6g">
+<link href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html" rel="canonical"><meta name="description" content=" 怎么用C实现Http POST功能向Http服务器上传文件？？ ">
+<meta name="author" content="Discuz! Team and Comsenz UI Team">
+<meta name="copyright" content="2001-2011 Comsenz Inc.">
+<meta name="MSSmartTagsPreventParsing" content="True">
+<meta http-equiv="MSThemeCompatible" content="Yes">
+<!--<base href="http://bbs.chinaunix.net/">--><base href="."><link rel="stylesheet" type="text/css" href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/style_3_common.css"><link rel="stylesheet" type="text/css" href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/style_3_forum_viewthread.css"><script type="text/javascript" async="" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/ga.js"></script><script type="text/javascript" charset="utf-8" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/ODM5OTE0Ng==.js"></script><script type="text/javascript">var STYLEID = '3', STATICURL = 'static/', IMGDIR = 'http://cu.img168.net/static/image/common/', VERHASH = '10q', charset = 'gbk', discuz_uid = '0', cookiepre = 'ndfU_81a3_', cookiedomain = '.chinaunix.net', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = 'login|newthread|reply|tradeorder|activity|debate|nav|usergroups|task', creditnotice = '', defaultstyle = '', REPORTURL = 'aHR0cDovL2Jicy5jaGluYXVuaXgubmV0L3RocmVhZC0xNTkyODg4LTEtMS5odG1s', SITEURL = 'http://bbs.chinaunix.net/', JSPATH = 'static/js/';</script>
+
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/common.js" type="text/javascript"></script>
+<!-- 2014 -->
+<script type="text/javascript" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/h599.js"></script><script type="text/javascript" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/h599(1).js"></script>
+<script type="text/javascript"> 
+var jq = jQuery.noConflict();
+</script>
+
+<meta name="application-name" content="ChinaUnix.net">
+<meta name="msapplication-tooltip" content="ChinaUnix.net">
+<meta name="msapplication-task" content="name=论坛;action-uri=http://bbs.chinaunix.net/forum.php;icon-uri=http://bbs.chinaunix.net/http://cu.img168.net/static/image/common//bbs.ico">
+<link rel="archives" title="ChinaUnix.net" href="http://bbs.chinaunix.net/archiver/">
+<link rel="stylesheet" id="css_widthauto" type="text/css" href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/style_3_widthauto.css">
+<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forum.js" type="text/javascript" charset="gbk"></script>
+<link href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/bdsstyle.css" rel="stylesheet" type="text/css"><script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/logger.js"></script><style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style></head>
+<body id="nv_forum" class="pg_viewthread"><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div><iframe frameborder="0" style="display: none;"></iframe><div id="bdshare_s" style="display: block;"><iframe id="bdsIfr" style="position:absolute;display:none;z-index:9999;" frameborder="0"></iframe><div id="bdshare_l" style="display: none;"><div id="bdshare_l_c"><h6>分享到</h6><ul><li><a href="http://bbs.chinaunix.net/#" class="bds_mshare mshare">一键分享</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_qzone qqkj">QQ空间</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_tsina xlwb">新浪微博</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_bdysc bdysc">百度云收藏</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_renren rrw">人人网</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_tqq txwb">腾讯微博</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_bdxc bdxc">百度相册</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_kaixin001 kxw">开心网</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_tqf txpy">腾讯朋友</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_tieba bdtb">百度贴吧</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_douban db">豆瓣网</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_tsohu shwb">搜狐微博</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_bdhome bdhome">百度新首页</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_sqq sqq">QQ好友</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_thx thx">和讯微博</a></li><li><a href="http://bbs.chinaunix.net/#" class="bds_more">更多...</a></li></ul><p><a href="http://bbs.chinaunix.net/#" class="goWebsite">百度分享</a></p></div></div></div>
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<!-- 自定义 -->		
+<!--头-->
+<!--广告位置名称：首页通栏 -->
+<div id="ADV_13039"><script>LG('ADV_13039')</script></div>
+<!--2011.12.1修改 大版宽屏显示 但是莫名其妙设置中的用户组也宽屏了，打印了下gid为28.暂时不清楚为什么 -->
+<div class="wp head_top">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+<tbody><tr>
+<td>
+<a href="http://bbs.chinaunix.net/member.php?mod=logging&action=login&logsubmit=yes"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/login.gif"></a>
+&nbsp;&nbsp;<a href="http://u.it168.com/findPassword?returnUrl=http://bbs.chinaunix.net/home.php?mod=spacecp">忘记密码</a>
+&nbsp;&nbsp;<a href="http://bbs.chinaunix.net/member.php?mod=register.php">免费注册</a>
+</td>
+<td align="right">
+<a href="http://bbs.chinaunix.net/listthread.php">查看新帖</a> |
+<a href="http://www.chinaunix.net/jh/"><font color="red">论坛精华区</font></a>
+</td>
+</tr>
+<tr><td height="1" colspan="3" style="background-color:#000"></td></tr>
+</tbody></table>
+</div>
+<div id="hd">
+<div class="wp">
+<!--LOGO和banner  -->
+<table width="100%" style="clear: both;height:90px">
+<tbody><tr>
+<td style="padding:0">
+<h1>
+<!--2011.12.27修改只有首页去www其他去bbs-->
+<a href="http://bbs.chinaunix.net/" title="ChinaUnix.net"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/logo.gif" alt="ChinaUnix.net" border="0"></a>
+</h1>
+</td>
+<td style="padding:0" align="center">
+<!--不同页面广告位 -->
+<div id="ADV_18508"><a href="http://bbs.chinaunix.net/thread-4164336-1-1.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/20141229104453374.jpg" border="0" width="960" height="80"></a></div>
+	
+</td>
+<!--2014.07.30添加广告位ADV_20649-->
+<td style="padding:0" align="center">
+<div id="ADV_20649"><a href="http://edu.chinaunix.net/" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/20150109110110471.jpg" border="0" width="220" height="90"></a></div>
+</td>
+</tr>
+</tbody></table>
+<!--<div id="nv">
+<a href="javascript:;" id="qmenu" onmouseover="showMenu({'ctrlid':'qmenu','pos':'34!','ctrlclass':'a','duration':2});">快捷导航</a>
+<ul> --><!-- <li id="mn_Ne30e" ><a href="plugin.php?id=auction" hidefocus="true" title="Auction"  >竞拍<span>Auction</span></a></li> --><!-- <li id="mn_N2ddf" ><a href="plugin.php?id=itpub_medal:medal_shop" hidefocus="true"  >商店</a></li> --><!-- <li id="mn_forum" ><a href="forum.php" hidefocus="true" title="BBS"  >论坛<span>BBS</span></a></li> --><!-- <li id="mn_userapp" ><a href="userapp.php" hidefocus="true" title="Manyou"  >应用<span>Manyou</span></a></li> --><!-- <li id="mn_N12a7" ><a href="misc.php?mod=ranklist" hidefocus="true" title="Ranklist"  >排行榜<span>Ranklist</span></a></li> --><!--</ul>
+</div> -->
+<div id="mu" class="cl">
+</div><!--搜索框去掉20111024 -->
+</div>
+</div>
+<!--2011.11.30如果是大版则宽屏显示 -->
+<div id="wp" class="wp">
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="background:url(static/image/common/bg_menu_top.gif)"> 
+<tbody>
+<tr><td height="2" colspan="2"></td></tr>
+<tr>
+<td width="*" valign="center" align="left">&nbsp;
+<font color="#666666"><strong>平台</strong></font>： 
+<a target="_blank" class="title2" href="http://bbs.chinaunix.net/"><font color="#5B7DB3">论坛</font></a>   
+<a target="_blank" class="title2" href="http://blog.chinaunix.net/"><font color="#5B7DB3">博客</font></a>
+<a target="_blank" class="title2" href="http://u.it168.com/vip/"><font color="#FF0000">认证专区</font></a>
+<a target="_blank" class="title2" href="http://www.chinaunix.net/talk"><font color="#FF0000">大话IT</font></a>
+<a target="_blank" class="title2" href="http://edu.chinaunix.net/"><font color="#FF0000">视频</font></a>
+<a target="_blank" class="title2" href="http://wenku.it168.com/"><font color="#5B7DB3">文库</font></a>
+<a target="_blank" class="title2" href="http://www.it168.com/itclub/"><font color="#5B7DB3">沙龙</font></a>   		
+<a target="_blank" class="title2" href="http://selftest.chinaunix.net/"><font color="#5B7DB3">自测</font></a>
+<a target="_blank" class="title2" href="http://download.chinaunix.net/"><font color="#5B7DB3">下载</font></a>
+<font color="#666666"><strong>频道</strong></font>：
+<a target="_blank" class="title2" href="http://www.chinaunix.net/ops/"><font color="#5B7DB3">自动化运维</font></a>   
+<a target="_blank" class="title2" href="http://www.chinaunix.net/virtual/"><font color="#5B7DB3">虚拟化</font></a>   
+<a target="_blank" class="title2" href="http://www.chinaunix.net/server/"><font color="#5B7DB3">服务器</font></a>    
+<a target="_blank" class="title2" href="http://www.chinaunix.net/stor/"><font color="#5B7DB3">储存备份</font></a>  
+<a target="_blank" class="title2" href="http://www.chinaunix.net/cpp/"><font color="#5B7DB3">C/C++</font></a>  
+<a target="_blank" class="title2" href="http://www.chinaunix.net/php/"><font color="#5B7DB3">PHP</font></a>   
+<a target="_blank" class="title2" href="http://www.chinaunix.net/mysql/"><font color="#5B7DB3">MySQL</font></a>   
+<a target="_blank" class="title2" href="http://www.chinaunix.net/embedded/"><font color="#5B7DB3">嵌入式</font></a> 
+<a target="_blank" class="title2" href="http://www.chinaunix.net/linux/"><font color="#5B7DB3">Linux系统</font></a>  
+</td>
+<td>
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($(&#39;scbar_txt&#39;))" action="http://bbs.chinaunix.net/search.php?searchsubmit=yes" target="_blank">
+<!--<form target="_blank" method="get" action="http://search.chinaunix.net/bbs.php"> 
+<input type="text" name=q  size="15" maxlength="20" style="width:60px">
+<input type="hidden" name="title" value="fulltext">
+<input type="hidden" name="st" value="title">
+<input type="hidden" name="bbs" value="1">
+<input type="hidden" name="forums" value="all">-->
+<input type="text" name="srchtxt" id="scbar_txt" autocomplete="off" style="width:80px">
+<input type="hidden" name="mod" id="scbar_mod" value="forum">
+<input type="hidden" name="formhash" value="d57ee6f1">
+<input type="hidden" name="srchtype" value="title">
+<input type="hidden" name="srhfid" value="23" id="dzsearchforumid">
+<input type="hidden" name="srhlocality" value="forum::viewthread">
+<input type="hidden" name="source" value="discuz">
+<input type="hidden" name="fId" value="" id="cloudsearchforumId">
+<input type="hidden" name="q" id="cloudsearchquery" value="">
+<input type="submit" value="搜索">
+</form>
+</td>
+</tr>
+<tr><td height="2" colspan="2"></td></tr> 
+</tbody>
+</table><!--原广告位置 -->
+<!--<div style="margin-top:10px"></div> -->
+<!--广告位置移动这,去掉自带的 换为广告系统标签 -->
+<table width="960px" height="20" cellspacing="0" cellpadding="0" border="0"> 
+<tbody>
+<tr>
+<td align="center"><div id="ADV_17278"><div style="margin-right: 10px;">·<a href="http://www.now.cn/?now_qing_it168wenzi" target="_blank"><font color="red">.cn域名15元，全网最低价！</font></a></div></div></td>
+<td align="center"><div id="ADV_18502"><div style="margin-right: 10px;">·<a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank"><font color="blue">IT安全，你准备好了吗？</font></a></div></div></td>
+<td align="center"><div id="ADV_18503"><div style="margin-right: 10px;">·<a href="http://bbs.chinaunix.net/thread-4163146-1-1.html" target="_blank"><font color="red">DTCC2015正式启动！会员报名享折扣！</font></a></div></div></td>
+<td align="center"><div id="ADV_18504"><div style="margin-right: 10px;">·<a href="http://bbs.chinaunix.net/thread-4165614-1-1.html" target="_blank"><font color="blue">作为一名Python爱好者，你懂网络编程吗？</font></a></div></div></td>
+</tr>
+</tbody>
+</table>
+<script type="text/javascript">var fid = parseInt('23'), tid = parseInt('1592888');</script>
+
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forum_viewthread.js" type="text/javascript"></script>
+<script type="text/javascript">zoomstatus = parseInt(1);var imagemaxwidth = '700';var aimgcount = new Array();</script>
+
+<style id="diy_style" type="text/css"></style>
+<!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="http://www.chinaunix.net/" class="nvhm" title="首页"></a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php">论坛</a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php?gid=60">程序设计</a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php?mod=forumdisplay&fid=23&page=1">C/C++</a> <em>&#8250;</em> <a href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html">怎么用C实现Http POST功能向Http服务器上传文件？？</a>
+</div>
+</div>
+
+
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<div id="ct" class="wp cl">
+<div id="pgt" class="pgs mbm cl ">
+<div class="pgt"><div class="pg"><strong>1</strong><a href="http://bbs.chinaunix.net/thread-1592888-2-1.html">2</a><a href="http://bbs.chinaunix.net/thread-1592888-3-1.html">3</a><a href="http://bbs.chinaunix.net/thread-1592888-2-1.html" class="nxt">下一页</a></div></div>
+<span class="y pgb" id="visitedforums" onmouseover="$(&#39;visitedforums&#39;).id = &#39;visitedforumstmp&#39;;this.id = &#39;visitedforums&#39;;showMenu({&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;34&#39;})"><a href="http://bbs.chinaunix.net/forum.php?mod=forumdisplay&fid=23&page=1">最近访问板块</a></span>
+
+<!--增加板块跳转  -->
+<span style="float:right; padding:0px 0 4px 0; margin-top:5px">
+<select style=" padding:5px 0 4px 0" onchange="if(this.options[this.selectedIndex].value != &#39;&#39;) {
+window.location=(&#39;forum-&#39; + this.options[this.selectedIndex].value + &#39;-1.html&#39;) }">
+<option value="">版块跳转</option>
+<optgroup label="--Linux操作系统"><option value="216">新手园地</option><option value="269">&nbsp; &nbsp; &nbsp; 硬件问题</option><option value="217">Linux系统管理</option><option value="218">Linux网络问题</option><option value="223">Linux环境编程</option><option value="271">Linux桌面系统</option><option value="221">国产Linux</option></optgroup><optgroup label="--Unix操作系统"><option value="5">BSD</option><option value="127">&nbsp; &nbsp; &nbsp; BSD文档中心</option><option value="9">AIX</option><option value="193">&nbsp; &nbsp; &nbsp; 新手入门</option><option value="124">&nbsp; &nbsp; &nbsp; AIX文档中心</option><option value="189">&nbsp; &nbsp; &nbsp; 资源下载</option><option value="188">&nbsp; &nbsp; &nbsp; Power高级应用</option><option value="187">&nbsp; &nbsp; &nbsp; IBM存储</option><option value="10">AS400</option><option value="6">Solaris</option><option value="128">&nbsp; &nbsp; &nbsp; Solaris文档中心</option><option value="8">HP-UX</option><option value="129">&nbsp; &nbsp; &nbsp; HP文档中心</option><option value="7">SCO UNIX</option><option value="130">&nbsp; &nbsp; &nbsp; SCO文档中心</option><option value="118">互操作专区</option><option value="12">IRIX</option><option value="11">Tru64 UNIX</option><option value="41">Mac OS X</option></optgroup><optgroup label="--IT运维架构"><option value="141">门户网站运维</option><option value="233">集群和高可用</option><option value="232">服务器应用</option><option value="235">监控和防护</option><option value="283">虚拟化技术</option><option value="185">架构设计</option><option value="285">行业应用和管理</option></optgroup><optgroup label="--IT基础设施"><option value="45">服务器及硬件技术</option><option value="184">&nbsp; &nbsp; &nbsp; 服务器资源下载</option><option value="180">云计算</option><option value="181">&nbsp; &nbsp; &nbsp; 云计算文档中心</option><option value="182">&nbsp; &nbsp; &nbsp; 云计算业界</option><option value="183">&nbsp; &nbsp; &nbsp; 云计算资源下载</option><option value="34">存储备份</option><option value="125">&nbsp; &nbsp; &nbsp; 存储文档中心</option><option value="126">&nbsp; &nbsp; &nbsp; 存储业界</option><option value="145">&nbsp; &nbsp; &nbsp; 存储资源下载</option><option value="194">&nbsp; &nbsp; &nbsp; Symantec技术交流区</option><option value="29">安全技术</option><option value="30">网络技术</option><option value="131">&nbsp; &nbsp; &nbsp; 网络技术文档中心</option></optgroup><optgroup label="--程序设计"><option value="23">C/C++</option><option value="84">&nbsp; &nbsp; &nbsp; GUI编程</option><option value="142">&nbsp; &nbsp; &nbsp; Functional编程</option><option value="224">内核源码</option><option value="220">&nbsp; &nbsp; &nbsp; 内核问题</option><option value="222">移动开发</option><option value="265">&nbsp; &nbsp; &nbsp; 移动开发技术资料</option><option value="24">Shell</option><option value="25">Perl</option><option value="26">Java</option><option value="133">&nbsp; &nbsp; &nbsp; Java文档中心</option><option value="27">PHP</option><option value="135">&nbsp; &nbsp; &nbsp; php文档中心</option><option value="55">Python</option><option value="132">&nbsp; &nbsp; &nbsp; Python文档中心</option><option value="116">Ruby</option><option value="226">CPU与编译器</option><option value="225">嵌入式开发</option><option value="227">驱动开发</option><option value="80">Web开发</option><option value="100">VoIP开发技术</option></optgroup><optgroup label="--数据库技术"><option value="17">MySQL</option><option value="136">&nbsp; &nbsp; &nbsp; MySQL文档中心</option><option value="21">Sybase</option><option value="19">Oracle</option><option value="18">PostgreSQL</option><option value="22">DB2</option><option value="20">Informix</option><option value="140">数据仓库与数据挖掘</option><option value="292">NoSQL技术</option></optgroup><optgroup label="--综合交流区"><option value="46">IT业界新闻与评论</option><option value="32">IT职业生涯</option><option value="293">&nbsp; &nbsp; &nbsp; 猎头招聘</option><option value="82">IT图书与评论</option><option value="156">&nbsp; &nbsp; &nbsp; CU技术图书大系</option><option value="247">&nbsp; &nbsp; &nbsp; Linux书友会</option><option value="54">二手交易</option><option value="249">下载共享</option><option value="250">Linux文档专区</option><option value="53">IT培训与认证</option><option value="295">&nbsp; &nbsp; &nbsp; 培训交流</option><option value="191">&nbsp; &nbsp; &nbsp; 认证培训</option></optgroup><optgroup label="--休闲生活"><option value="31">清茶斋</option><option value="115">投资理财</option><option value="39">运动地带</option><option value="40">快乐数码摄影</option><option value="168">&nbsp; &nbsp; &nbsp; 摄影器材</option><option value="134">&nbsp; &nbsp; &nbsp; 摄影比赛专区</option><option value="121">IT爱车族</option><option value="96">旅游天下</option></optgroup><optgroup label="--站务及频道"><option value="2">站务交流</option><option value="3">版主会议室</option><option value="51">博客SNS站务交流区</option><option value="123">CU活动专区</option><option value="207">&nbsp; &nbsp; &nbsp; Power活动专区</option><option value="169">&nbsp; &nbsp; &nbsp; 拍卖交流区</option><option value="97">频道交流区</option></optgroup></select>
+</span>
+
+<a id="newspecial" style="margin-top:8px" onmouseover="$(&#39;newspecial&#39;).id = &#39;newspecialtmp&#39;;this.id = &#39;newspecial&#39;;showMenu({&#39;ctrlid&#39;:this.id})" onclick="showWindow(&#39;newthread&#39;, &#39;forum.php?mod=post&amp;action=newthread&amp;fid=23&#39;)" href="javascript:;" title="发新帖"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/pn_post.png" alt="发新帖"></a>
+</div>
+
+
+
+<div id="postlist" class="pl bm">
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls ptm pbm" style="background:#9898BA;border-bottom:1px solid #000">
+<div class="hm">
+<span style="color:#fff">查看:</span> 
+<span style="color:#000">26005</span>
+<span class="pipe">|</span>
+
+<span style="color:#fff">回复:</span> 
+<span style="color:#000">22</span>
+</div>
+</td>
+<td class="plc ptm pbn" style="background-color:#9898BA;border-bottom:1px solid #000">
+<div class="y">
+<a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&action=printable&tid=1592888" title="打印" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/print.png" alt="打印" class="vm"></a>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=nextoldset&tid=1592888" title="上一主题"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/thread-prev.png" alt="上一主题" class="vm"></a>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=nextnewset&tid=1592888" title="下一主题"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/thread-next.png" alt="下一主题" class="vm"></a>
+</div>
+
+
+<h1 class="ts">
+<a href="http://bbs.chinaunix.net/forum.php?mod=forumdisplay&fid=23&filter=typeid&typeid=23">[C]</a>
+<a href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html" id="thread_subject">怎么用C实现Http POST功能向Http服务器上传文件？？</a>
+<!--2011.12.01更改class-->
+<span class="xw0 xs1">
+<!--<span class="xw0 xs1 xg1">-->
+<a href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html" onclick="return copyThreadUrl(this)" title="您的朋友访问此链接后，您将获得相应的积分奖励">[复制链接]</a>
+</span>					
+                    <!-- Baidu Button BEGIN -->
+                    <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float:right;">
+                        <a class="bds_qzone" title="分享到QQ空间" href="http://bbs.chinaunix.net/#"></a><a class="bds_tsina" title="分享到新浪微博" href="http://bbs.chinaunix.net/#"></a><a class="bds_tqq" title="分享到腾讯微博" href="http://bbs.chinaunix.net/#"></a><a class="bds_renren" title="分享到人人网" href="http://bbs.chinaunix.net/#"></a>
+<a class="bds_douban" title="分享到豆瓣网" href="http://bbs.chinaunix.net/#"></a><a class="bds_taobao" title="分享到我的淘宝" href="http://bbs.chinaunix.net/#"></a><a class="bds_fbook" title="分享到Facebook" href="http://bbs.chinaunix.net/#"></a><a class="shareCount" href="http://bbs.chinaunix.net/#" title="累计分享2次">2</a>
+<span class="bds_more"></span><a class="shareCount" href="http://bbs.chinaunix.net/#" title="累计分享2次">2</a>
+                    </div>
+                	<!-- Baidu Button END -->					
+</h1>
+</td>
+</tr>
+</tbody></table>
+
+
+<!--1楼标题下面的两条线-->	
+<!-- 
+<table cellspacing="0" cellpadding="0" class="ad">
+<tr>
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+</tr>
+</table>
+ --><div id="post_11323299" style="background-color:#E5EDF2"><table id="pid11323299" summary="pid11323299" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#F0F3FA">
+<a name="newpost"></a> <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xw1">Kallawa</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11323299" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11323299_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xi2">Kallawa</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>432 </dd><dt>UID</dt><dd>20457792</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>392</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl>
+<div class="imicn">
+<a href="http://ste.xidian.edu.cn/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11323299&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar.php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11323299" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11323299_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 392, 距离下一级还需 108 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">85</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20457792.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20457792&amp;handlekey=addfriendhk_20457792" id="a_friend_li_11323299" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20457792" id="a_poke_li_11323299" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20457792&amp;touid=20457792&amp;pmid=0&amp;daterange=2&amp;pid=11323299&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20457792&handlekey=addfriendhk_20457792" id="a_friend_li_11323299" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20457792" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20457792" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20457792&touid=20457792&pmid=0&daterange=2&pid=11323299&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#F0F3FA">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<div id="fj" class="y">
+<label class="z">电梯直达</label>
+<input type="text" class="px p_fre z" size="2" onkeyup="$(&#39;fj_btn&#39;).href=&#39;forum.php?mod=redirect&amp;ptid=1592888&amp;authorid=0&amp;postno=&#39;+this.value" onkeydown="if(event.keyCode==13) {window.location=$(&#39;fj_btn&#39;).href;return false;}" title="跳转到指定楼层">
+<a href="javascript:;" id="fj_btn" class="z" title="跳转到指定楼层"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/fj_btn.png" alt="跳转到指定楼层" class="vm"></a>
+</div>
+<strong>
+<a href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11323299" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>1</em>楼</a>
+<!--以下新加开始 -->
+
+<!--收藏2011.12.01修改-->
+<a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=favorite&type=thread&id=1592888" id="k_favorite" onclick="showWindow(this.id, this.href, &#39;get&#39;, 0);" onmouseover="this.title = $(&#39;favoritenumber&#39;).innerHTML + &#39; 人收藏&#39;">[收藏(<span id="favoritenumber">0</span>)]</a>
+<!--评分-->
+<!--邀请-->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11323299&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11323299&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11323299" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11323299">发表于 2009-10-10 10:35:33</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20457792" rel="nofollow">只看该作者</a>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&extra=page%3D1&ordertype=1">倒序浏览</a>
+</div>
+</div>
+</div><div class="pct"><style type="text/css">.pcb{margin-right:0}</style><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11323299">
+想写个客户端向http服务器(如lighttpd)上传文件数据(不小，大于1G的情况)，不知如何下手？ 网上搜到的多是基于web的，要么是java的要么c#的～～&nbsp;&nbsp;现在就想用linux C来实现http post～～<br>
+<br>
+简单post一个表单抓到的数据<br>
+<div class="quote"><blockquote>POST /upload.php HTTP/1.0<br>
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-excel, application/msword, application/vnd.ms-powerpoint, */*<br>
+Accept-Language: en-us<br>
+Accept-Encoding: gzip, deflate<br>
+User-Agent: Mozilla/4.0<br>
+Content-Length: 196<br>
+Host: 192.168.1.180<br>
+Content-Type: application/x-www-form-urlencoded<br>
+<br>
+-----------------------------7d92af16201c2<br>
+Content-Disposition: form-data; name="upload_file"; filename="/test/tmp.dat"<br>
+Content-Type: application/octet-stream</blockquote></div><br>
+
+<br>
+注：dd if=/dev/zero of=/test/tmp.dat bs=1M count=1<br>
+<br>
+现在的问题是不知道怎么把文件内容跟post请求消息结合起来？ 如果要上传的文件很大的话，应该怎么考虑？ （仅考虑使用http协议）<br>
+<br>
+望路过的各位大侠多多指教～～ 谢过～～<br>
+<br>
+[<i> 本帖最后由 Kallawa 于 2009-10-10 10:40 编辑 </i>]</td></tr></tbody></table>
+</div>
+<div id="comment_11323299" class="cm">
+</div>
+<script type="text/javascript">var auc_list_tmp = $('auc_list_tmp');if(auc_list_tmp !== null){document.write(auc_list_tmp.innerHTML);auc_list_tmp.innerHTML='';}
+function lalala(){
+	ajaxget('plugin.php?id=auction:involve&operation=view&tid=1592888&page=1', 'list_ajax');
+	$('list_ajax').style.display = 'block';
+}
+if($('list_ajax')){setTimeout('lalala()', 1000);}
+</script><!--//chinaunix JOB 自定义钩子-->
+            <div id="post_rate_div_11323299"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#F0F3FA">
+
+<!--这原先是一楼的评分分享收藏的 现在删掉移到上面去 -->
+
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                <div class="mtw mbw w90">
+            <div class="tab011">
+                <ul id="tab011">
+                	                                                            <li><a class="here">本版精华</a></li>
+                                        
+                                                            
+                    <li><a>文库|博客</a></li>
+          
+                </ul>
+             </div>
+                                                                                         <div id="tab011_Content0" class="tab011Cont" style="display: block;">
+                    <div class="tab011_l1">
+                        <ul>     
+                                                                                	<li><a href="http://bbs.chinaunix.net/thread-855126-1-1.html" target="_blank">华为面试题(8分钟写出代码)</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-727270-1-1.html" target="_blank">学习使用autotools</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-408225-1-1.html" target="_blank">跟我一起写 Makefile</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-682969-1-1.html" target="_blank">makefile权威文档</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-1447168-1-1.html" target="_blank">sun公司出品《多线程编程指南》</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-924784-1-1.html" target="_blank">进程间能否传递socket</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-1170202-1-1.html" target="_blank">[原创]贡献一个unix的贪吃蛇小游戏</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-1242914-1-1.html" target="_blank">C++ Primer 4 中英文对照版</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-1613306-1-1.html" target="_blank">单进程多线程服务器存在这样的弊端</a></li>
+                                                                                                            	<li><a href="http://bbs.chinaunix.net/thread-311067-1-1.html" target="_blank">fork的一个例子，好像人家是讲得很详细了，我还是不明白</a></li>
+                                                                            </ul>
+                        <div class="clear"></div>
+                    </div> 
+                 </div>
+                                                                            
+            <div id="tab011_Content1" class="tab011Cont">
+               <div class="tab011_l1">
+                   <ul>     
+                   
+                  <li><a href="http://wenku.it168.com/d_001252063.shtml" target="_blank">REF C Reference Card (ANSI).pdf</a></li><li><a href="http://wenku.it168.com/d_001231753.shtml" target="_blank">一种实时输入数学表达式的C语言算法.pdf</a></li><li><a href="http://wenku.it168.com/d_001217047.shtml" target="_blank">计算机图形学原理及算法教程（Visual C++版）.doc</a></li><li><a href="http://wenku.it168.com/d_001218050.shtml" target="_blank">C和C++在非面向对象编程中的区别.pdf</a></li><li><a href="http://wenku.it168.com/d_001261944.shtml" target="_blank">使用C++和DirectX开发Windows Store应用.pptx</a></li> 
+        
+      
+                  <li><a href="http://blog.chinaunix.net/uid-301743-id-4781653.html" target="_blank">MyEclipse 2015优化技巧</a></li><li><a href="http://blog.chinaunix.net/uid-21564437-id-4781496.html" target="_blank">VIM 的配置和神一般的插件。</a></li><li><a href="http://blog.chinaunix.net/uid-45057-id-4777001.html" target="_blank">python的变量域referenced before assignment</a></li><li><a href="http://blog.chinaunix.net/uid-301743-id-4776852.html" target="_blank">Apache Commons DbUtils使用手册</a></li><li><a href="http://blog.chinaunix.net/uid-26772321-id-4775857.html" target="_blank">关于for,while,dowhile效率测试</a></li> 
+          
+                   </ul>
+                   <div class="clear"></div>
+               </div> 
+            </div>
+            
+   	    </div>
+   	    <script type="text/javascript">
+function iniMenu(tabObj,selNum,tabTagName,t){
+var collection = document.getElementById(tabObj).getElementsByTagName(tabTagName);
+var selObj = collection[selNum];
+selObj.className = 'here';
+document.getElementById(tabObj+"_Content"+selNum).style.display = "block";
+for(var i = 0; i < collection.length; i++){
+collection[i].num= i;
+collection[i].onmouseover = function(){
+//onclick
+temp = this;
+timer = setTimeout( function(){
+if(temp != selObj){
+selObj.className = '';
+temp.className = 'here';
+document.getElementById( tabObj+"_Content" + temp.num).style.display="block";
+document.getElementById( tabObj+"_Content" + selObj.num).style.display="none";
+selObj = temp;
+}
+},t);
+}
+collection[i].onmouseout = function(){
+clearTimeout(timer);
+}
+}
+}
+iniMenu('tab011',0,'a',200);
+</script> 
+                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">K.I.S.S. --- Keep It Simple,Stupid！<br>
+<strong>吼吼：求转让《erlang程序设计》</strong></div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://ask.chinaunix.net/question/785702" target="_blank" title="谁能够帮我解决LINUX  2.6  10版本驱动"><b>谁能够帮我解决LINUX  2.6  10版本驱动</b></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://ask.chinaunix.net/question/785701" target="_blank" title="现在的博客积分不会更新了吗？"><b>现在的博客积分不会更新了吗？</b></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://ask.chinaunix.net/question/785686" target="_blank" title="shell怎么读取网页内容"><b>shell怎么读取网页内容</b></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://ask.chinaunix.net/question/785684" target="_blank" title="ssh等待连接的超时问题"><b>ssh等待连接的超时问题</b></a>&nbsp;&nbsp;|&nbsp;&nbsp;</div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style=""></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11323329" style=""><table id="pid11323329" summary="pid11323329" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#fff">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-22284632.html" target="_blank" class="xw1">qwert3399</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11323329" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11323329_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-22284632.html" target="_blank" class="xi2">qwert3399</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>100 </dd><dt>UID</dt><dd>22284632</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>225</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">125</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>225 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>238 小时</dd><dt>注册时间</dt><dd>2009-08-06</dd><dt>最后登录</dt><dd>2010-09-09</dd></dl>
+<div class="imicn">
+<a href="http://wpa.qq.com/msgrd?V=1&Uin=86699487&Site=ChinaUnix.net&Menu=yes" target="_blank" title="QQ"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/qq.gif" alt="QQ"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11323329&#39;)"><a href="http://bbs.chinaunix.net/space-uid-22284632.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar(1).php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11323329" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11323329_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 225, 距离下一级还需 275 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">125</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">24</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=22284632&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>225 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>238 小时</dd><dt>注册时间</dt><dd>2009-08-06</dd><dt>最后登录</dt><dd>2010-09-09</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-22284632.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=22284632&amp;handlekey=addfriendhk_22284632" id="a_friend_li_11323329" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=22284632" id="a_poke_li_11323329" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_22284632&amp;touid=22284632&amp;pmid=0&amp;daterange=2&amp;pid=11323329&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=22284632&handlekey=addfriendhk_22284632" id="a_friend_li_11323329" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=22284632" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=22284632" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_22284632&touid=22284632&pmid=0&daterange=2&pid=11323329&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#fff">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11323329" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11323329" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>2</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11323329&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11323329&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11323329" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11323329">发表于 2009-10-10 10:38:21</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=22284632" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11323329">
+不懂，观望中。。。。</td></tr></tbody></table>
+</div>
+<div id="comment_11323329" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11323329"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#fff">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style="background-color:#fff"></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11323978" style="background-color:#E5EDF2"><table id="pid11323978" summary="pid11323978" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#F0F3FA">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank" class="xw1">teng0210</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11323978" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11323978_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank" class="xi2">teng0210</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>31 </dd><dt>UID</dt><dd>20799406</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>434</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">355</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>434 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>1220 小时</dd><dt>注册时间</dt><dd>2008-12-30</dd><dt>最后登录</dt><dd>2014-12-30</dd></dl>
+<div class="imicn">
+<a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11323978&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar(2).php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11323978" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11323978_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 434, 距离下一级还需 66 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">355</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">24</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>434 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>1220 小时</dd><dt>注册时间</dt><dd>2008-12-30</dd><dt>最后登录</dt><dd>2014-12-30</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20799406.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20799406&amp;handlekey=addfriendhk_20799406" id="a_friend_li_11323978" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20799406" id="a_poke_li_11323978" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20799406&amp;touid=20799406&amp;pmid=0&amp;daterange=2&amp;pid=11323978&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20799406&handlekey=addfriendhk_20799406" id="a_friend_li_11323978" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20799406" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20799406" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20799406&touid=20799406&pmid=0&daterange=2&pid=11323978&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#F0F3FA">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11323978" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11323978" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>3</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11323978&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11323978&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11323978" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11323978">发表于 2009-10-10 11:33:31</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20799406" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11323978">
+用socket就行了<br>
+和服务器建立请求<br>
+然后发送请求报文"\r\n\r\n"结束之后是数据<br>
+post分为,application/x-www-form-urlencoded和multipart/form-data boundary=<br>
+要是上传文件,就得使用multipart/form-data boundary=...<br>
+服务器那边根据boundary来解析出数据<br>
+至于大文件,要看服务器,主要是服务器的超时设置,这边传着呢,服务器那边计算到超时时间了,就咔咔,断掉了,所以服务器需要设置的.</td></tr></tbody></table>
+</div>
+<div id="comment_11323978" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11323978"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#F0F3FA">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style=""></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11324348" style=""><table id="pid11324348" summary="pid11324348" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#fff">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20350143.html" target="_blank" class="xw1">ideawu</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11324348" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11324348_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20350143.html" target="_blank" class="xi2">ideawu</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>446 </dd><dt>UID</dt><dd>20350143</dd><dt>阅读权限</dt><dd>50</dd><dt>积分</dt><dd>2163</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">2488</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>2163 </dd><dt>专家积分</dt><dd>55 </dd><dt>在线时间</dt><dd>1423 小时</dd><dt>注册时间</dt><dd>2005-12-15</dd><dt>最后登录</dt><dd>2014-06-19</dd></dl>
+<div class="imicn">
+<a href="http://www.ideawu.net/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11324348&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20350143.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar(3).php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=13" target="_blank">小富即安</a></em></p>
+
+</div>
+<p id="g_up11324348" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level2.gif" alt="Rank: 3"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 3"></p>
+<div id="g_up11324348_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">小富即安, 积分 2163, 距离下一级还需 2837 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">2488</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">154</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20350143&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>2163 </dd><dt>专家积分</dt><dd>55 </dd><dt>在线时间</dt><dd>1423 小时</dd><dt>注册时间</dt><dd>2005-12-15</dd><dt>最后登录</dt><dd>2014-06-19</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20350143.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20350143&amp;handlekey=addfriendhk_20350143" id="a_friend_li_11324348" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20350143" id="a_poke_li_11324348" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20350143&amp;touid=20350143&amp;pmid=0&amp;daterange=2&amp;pid=11324348&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20350143&handlekey=addfriendhk_20350143" id="a_friend_li_11324348" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20350143" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20350143" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20350143&touid=20350143&pmid=0&daterange=2&pid=11324348&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#fff">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11324348" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11324348" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>4</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11324348&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11324348&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11324348" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11324348">发表于 2009-10-10 12:42:28</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20350143" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11324348">
+用libcurl吧.</td></tr></tbody></table>
+</div>
+<div id="comment_11324348" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11324348"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#fff">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style="background-color:#fff"></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11325891" style="background-color:#E5EDF2"><table id="pid11325891" summary="pid11325891" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#F0F3FA">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xw1">Kallawa</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11325891" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11325891_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xi2">Kallawa</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>432 </dd><dt>UID</dt><dd>20457792</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>392</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl>
+<div class="imicn">
+<a href="http://ste.xidian.edu.cn/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11325891&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar.php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11325891" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11325891_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 392, 距离下一级还需 108 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">85</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20457792.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20457792&amp;handlekey=addfriendhk_20457792" id="a_friend_li_11325891" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20457792" id="a_poke_li_11325891" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20457792&amp;touid=20457792&amp;pmid=0&amp;daterange=2&amp;pid=11325891&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20457792&handlekey=addfriendhk_20457792" id="a_friend_li_11325891" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20457792" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20457792" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20457792&touid=20457792&pmid=0&daterange=2&pid=11325891&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#F0F3FA">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11325891" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11325891" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>5</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11325891&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11325891&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11325891" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11325891">发表于 2009-10-10 16:33:02</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20457792" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11325891">
+<div class="quote"><blockquote>原帖由 <i>teng0210</i> 于 2009-10-10 11:33 发表 <a href="http://bbs2.chinaunix.net/redirect.php?goto=findpost&pid=11323978&ptid=1592888" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/back.gif" onload="thumbImg(this)" alt="" width="13" height="13"></a><br>
+用socket就行了<br>
+和服务器建立请求<br>
+然后发送请求报文"\r\n\r\n"结束之后是数据<br>
+post分为,application/x-www-form-urlencoded和multipart/form-data boundary=<br>
+要是上传文件,就得使用multipart/form-data bou ... </blockquote></div><br>
+
+<br>
+思路也是这样的，现在问题在细节实现上～～<br>
+<br>
+sniffer抓包数据：<br>
+<div class="quote"><blockquote>&nbsp; &nbsp; &nbsp; &nbsp; POST /myup/upload.php HTTP/1.1<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Host: 192.168.1.180<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Connection: keep-alive<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/3.0.195.25 Safari/532.0<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Referer: <a href="http://192.168.1.180/myup/up.html" target="_blank">http://192.168.1.180/myup/up.html</a><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Content-Length: 1055012<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Cache-Control: max-age=0<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Origin: <a href="http://192.168.1.180/" target="_blank">http://192.168.1.180</a><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryy+u09GS0qCiv2NKf<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Accept: application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Accept-Encoding: gzip,deflate,sdch<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Accept-Language: zh-CN,zh;q=0.8<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Accept-Charset: GBK,utf-8;q=0.7,*;q=0.3</blockquote></div><br>
+
+<br>
+上传的文件：tmp.gz<br>
+<br>
+<div class="quote"><blockquote>(TCP)192.168.1.220:4942-&gt;192.168.1.180:80 ,1500 Bytes<br>
+<br>
+<br>
+<br>
+45 00 05 DC AB D0 40 00 80 06 C4 6A C0 A8 01 DC&nbsp;&nbsp;; <a href="mailto:">E.....@....j</a>....<br>
+<br>
+C0 A8 01 B4 13 4E 00 50 8E D4 01 AE FC FF B4 A1&nbsp;&nbsp;; .....N.P........<br>
+<br>
+50 10 80 00 E1 2A 00 00 2D 2D 2D 2D 2D 2D 57 65&nbsp;&nbsp;; P....*..------We<br>
+<br>
+62 4B 69 74 46 6F 72 6D 42 6F 75 6E 64 61 72 79&nbsp;&nbsp;; bKitFormBoundary<br>
+<br>
+79 2B 75 30 39 47 53 30 71 43 69 76 32 4E 4B 66&nbsp;&nbsp;; y+u09GS0qCiv2NKf<br>
+<br>
+0D 0A 43 6F 6E 74 65 6E 74 2D 44 69 73 70 6F 73&nbsp;&nbsp;; ..Content-Dispos<br>
+<br>
+69 74 69 6F 6E 3A 20 66 6F 72 6D 2D 64 61 74 61&nbsp;&nbsp;; ition: form-data<br>
+<br>
+3B 20 6E 61 6D 65 3D 22 75 70 6C 6F 61 64 5F 66&nbsp;&nbsp;; ; name="upload_f<br>
+<br>
+69 6C 65 22 3B 20 66 69 6C 65 6E 61 6D 65 3D 22&nbsp;&nbsp;; ile"; filename="<br>
+<br>
+74 6D 70 2E 67 7A 22 0D 0A 43 6F 6E 74 65 6E 74&nbsp;&nbsp;; tmp.gz"..Content<br>
+<br>
+2D 54 79 70 65 3A 20 61 70 70 6C 69 63 61 74 69&nbsp;&nbsp;; -Type: applicati<br>
+<br>
+6F 6E 2F 67 7A 69 70 0D 0A 0D 0A 74 6D 70 2E 64&nbsp;&nbsp;; on/gzip....tmp.d<br>
+<br>
+61 74 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; at..............<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30&nbsp;&nbsp;; ...............0<br>
+<br>
+30 30 30 36 34 34 00 30 30 30 30 30 30 30 00 30&nbsp;&nbsp;; 000644.0000000.0<br>
+<br>
+30 30 30 30 30 30 00 30 30 30 30 34 30 30 30 30&nbsp;&nbsp;; 000000.000040000<br>
+<br>
+30 30 00 31 31 32 36 33 35 32 37 37 30 37 00 30&nbsp;&nbsp;; 00.11263527707.0<br>
+<br>
+31 31 30 35 32 00 20 30 00 00 00 00 00 00 00 00&nbsp;&nbsp;; 11052. 0........<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 75 73 74 61&nbsp;&nbsp;; ............usta<br>
+<br>
+72 20 20 00 72 6F 6F 74 00 00 00 00 00 00 00 00&nbsp;&nbsp;; r&nbsp;&nbsp;.root........<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 72 6F 6F 74 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ....root........<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................<br>
+<br>
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&nbsp;&nbsp;; ................</blockquote></div><br>
+
+<br>
+根据这些数据，大致构造了一下post请求，返回的是400，不知道为什么～～<br>
+第一次弄这东西，晕忽忽的～～</td></tr></tbody></table>
+</div>
+<div id="comment_11325891" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11325891"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#F0F3FA">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">K.I.S.S. --- Keep It Simple,Stupid！<br>
+<strong>吼吼：求转让《erlang程序设计》</strong></div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style=""></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11325900" style=""><table id="pid11325900" summary="pid11325900" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#fff">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xw1">Kallawa</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11325900" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11325900_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xi2">Kallawa</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>432 </dd><dt>UID</dt><dd>20457792</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>392</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl>
+<div class="imicn">
+<a href="http://ste.xidian.edu.cn/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11325900&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar.php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11325900" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11325900_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 392, 距离下一级还需 108 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">85</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20457792.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20457792&amp;handlekey=addfriendhk_20457792" id="a_friend_li_11325900" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20457792" id="a_poke_li_11325900" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20457792&amp;touid=20457792&amp;pmid=0&amp;daterange=2&amp;pid=11325900&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20457792&handlekey=addfriendhk_20457792" id="a_friend_li_11325900" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20457792" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20457792" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20457792&touid=20457792&pmid=0&daterange=2&pid=11325900&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#fff">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11325900" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11325900" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>6</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11325900&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11325900&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11325900" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11325900">发表于 2009-10-10 16:33:37</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20457792" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11325900">
+大致代码如下：<br>
+<table cellspacing="0" class="t_table" style="width:95%"><tbody><tr><td><font face="FixedSys"><font color="#000000"><font color="#0000CC">#</font><font color="#FF0000">include</font><font color="#0000CC">&lt;</font>stdio<font color="#0000CC">.</font>h<font color="#0000CC">&gt;</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">include</font><font color="#0000CC">&lt;</font><font color="#FF0000">string</font><font color="#0000CC">.</font>h<font color="#0000CC">&gt;</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">include</font><font color="#0000CC">&lt;</font>stdlib<font color="#0000CC">.</font>h<font color="#0000CC">&gt;</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">include</font><font color="#0000CC">&lt;</font>sys<font color="#0000CC">/</font><font color="#FF0000">socket</font><font color="#0000CC">.</font>h<font color="#0000CC">&gt;</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">include</font><font color="#0000CC">&lt;</font>netinet<font color="#0000CC">/</font>in<font color="#0000CC">.</font>h<font color="#0000CC">&gt;</font><br>
+<br>
+<font color="#0000FF">char</font> <font color="#0000CC">*</font>post_req<font color="#0000CC">=</font> <font color="#FF00FF">"POST /myup/upload.php HTTP/1.1rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Host: 192.168.1.180rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Connection: keep-alivern"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/3.0.195.25 Safari/532.0rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Referer: <a href="http://192.168.1.180/myup/up.htmlrn" target="_blank">http://192.168.1.180/myup/up.htmlrn</a>"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Content-Length: 1055012rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Cache-Control: max-age=0rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Origin: <a href="http://192.168.1.180rn/" target="_blank">http://192.168.1.180rn</a>"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryy+u09GS0qCiv2NKfrn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Accept: application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Accept-Encoding: gzip,deflate,sdchrn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Accept-Language: zh-CN,zh;q=0.8rn"</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF00FF">"Accept-Charset: GBK,utf-8;q=0.7,*;q=0.3rn"</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+<font color="#0000FF">const</font> <font color="#0000FF">char</font> <font color="#0000CC">*</font>data_boun_start <font color="#0000CC">=</font> <font color="#FF00FF">"----WebKitFormBoundaryy+u09GS0qCiv2NKfrn"</font><font color="#0000CC">;</font> <font color="#FF9900">// <br>
+</font><br>
+<font color="#0000FF">const</font> <font color="#0000FF">char</font> <font color="#0000CC">*</font>data_boun_end <font color="#0000CC">=</font> <font color="#FF00FF">"----WebKitFormBoundaryy+u09GS0qCiv2NKf--"</font><font color="#0000CC">;</font><br>
+<font color="#0000FF">const</font> <font color="#0000FF">char</font> <font color="#0000CC">*</font>data_head <font color="#0000CC">=</font> <font color="#FF00FF">"Content-Disposition:form-data;name="</font>upload_file<font color="#FF00FF">";filename="</font>tmp<font color="#0000CC">.</font>dat<font color="#FF00FF">"rn"</font><font color="#0000CC">;</font> <font color="#FF9900">//&nbsp;&nbsp;+"rn" ??<br>
+</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">define</font> req_len&nbsp;&nbsp;<font color="#FF0000">strlen</font><font color="#0000CC">(</font>post_req<font color="#0000CC">)</font><br>
+<font color="#0000CC">#</font><font color="#FF0000">define</font> dst_ip <font color="#FF00FF">"192.168.1.180"</font><br>
+<br>
+<font color="#0000FF">int</font> main<font color="#0000CC">(</font><font color="#0000CC">)</font><br>
+<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">//packing data<br>
+</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">// read data<br>
+</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">FILE</font> <font color="#0000CC">*</font>fp <font color="#0000CC">=</font> <font color="#FF0000">NULL</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">int</font> file_size <font color="#0000CC">=</font> 0<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">int</font> res<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;fp <font color="#0000CC">=</font> <font color="#FF0000">fopen</font><font color="#0000CC">(</font><font color="#FF00FF">"tmp.dat"</font><font color="#0000CC">,</font> <font color="#FF00FF">"r"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font><font color="#0000CC">(</font>fp <font color="#0000CC">=</font><font color="#0000CC">=</font> <font color="#FF0000">NULL</font><font color="#0000CC">)</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">fprintf</font><font color="#0000CC">(</font><font color="#FF0000">stderr</font><font color="#0000CC">,</font> <font color="#FF00FF">"fopen error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> <font color="#0000CC">-</font>1<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">fseek</font><font color="#0000CC">(</font>fp<font color="#0000CC">,</font> <font color="#FF0000">SEEK_SET</font><font color="#0000CC">,</font> <font color="#FF0000">SEEK_END</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;file_size <font color="#0000CC">=</font> <font color="#FF0000">ftell</font><font color="#0000CC">(</font>fp<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">// printf("req_size: %dnfile_size:%dn", req_len, file_size/1024);<br>
+</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">char</font> data_buf<font color="#0000CC">[</font>file_size<font color="#0000CC">]</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">// res = read(fp, data_buf, file_size);<br>
+</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;res <font color="#0000CC">=</font> <font color="#FF0000">fread</font><font color="#0000CC">(</font>data_buf<font color="#0000CC">,</font> 1<font color="#0000CC">,</font> file_size<font color="#0000CC">,</font> fp<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font><font color="#0000CC">(</font>res <font color="#0000CC">&lt;</font> 0<font color="#0000CC">)</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">fprintf</font><font color="#0000CC">(</font><font color="#FF0000">stderr</font><font color="#0000CC">,</font> <font color="#FF00FF">"read error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> <font color="#0000CC">-</font>1<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">char</font> <font color="#0000CC">*</font>buf <font color="#0000CC">=</font> <font color="#FF0000">NULL</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">int</font> buf_size <font color="#0000CC">=</font> 0<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;buf_size <font color="#0000CC">=</font> req_len <font color="#0000CC">+</font> file_size <font color="#0000CC">+</font> <font color="#FF0000">strlen</font><font color="#0000CC">(</font>data_head<font color="#0000CC">)</font> <font color="#0000CC">+</font> 2<font color="#0000CC">*</font><font color="#FF0000">strlen</font><font color="#0000CC">(</font>data_boun_start<font color="#0000CC">)</font> <font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;buf <font color="#0000CC">=</font> <font color="#0000CC">(</font><font color="#0000FF">char</font> <font color="#0000CC">*</font><font color="#0000CC">)</font><font color="#FF0000">malloc</font><font color="#0000CC">(</font>buf_size<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font><font color="#0000CC">(</font>buf <font color="#0000CC">=</font><font color="#0000CC">=</font> <font color="#FF0000">NULL</font><font color="#0000CC">)</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">fprintf</font><font color="#0000CC">(</font><font color="#FF0000">stderr</font><font color="#0000CC">,</font> <font color="#FF00FF">"malloc error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> <font color="#0000CC">-</font>1<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">strcat</font><font color="#0000CC">(</font>buf<font color="#0000CC">,</font> post_req<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">strcat</font><font color="#0000CC">(</font>buf<font color="#0000CC">,</font> data_boun_start<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">strcat</font><font color="#0000CC">(</font>buf<font color="#0000CC">,</font> data_head<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">strcat</font><font color="#0000CC">(</font>buf<font color="#0000CC">,</font> data_buf<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">strcat</font><font color="#0000CC">(</font>buf<font color="#0000CC">,</font> data_boun_end<font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">int</font> sockfd<font color="#0000CC">,</font> bytes_read<font color="#0000CC">;</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">struct</font> <font color="#FF0000">sockaddr_in</font> dest<font color="#0000CC">;</font><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font> <font color="#0000CC">(</font> <font color="#0000CC">(</font>sockfd <font color="#0000CC">=</font> <font color="#FF0000">socket</font><font color="#0000CC">(</font><font color="#FF0000">AF_INET</font><font color="#0000CC">,</font> <font color="#FF0000">SOCK_STREAM</font><font color="#0000CC">,</font> 0<font color="#0000CC">)</font><font color="#0000CC">)</font> <font color="#0000CC">&lt;</font> 0 <font color="#0000CC">)</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">printf</font><font color="#0000CC">(</font><font color="#FF00FF">"socket error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> <font color="#0000CC">-</font>1<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+<br>
+<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">/*---Initialize server address/port struct---*/</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;bzero<font color="#0000CC">(</font><font color="#0000CC">&amp;</font>dest<font color="#0000CC">,</font> <font color="#0000FF">sizeof</font><font color="#0000CC">(</font>dest<font color="#0000CC">)</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;dest<font color="#0000CC">.</font>sin_family <font color="#0000CC">=</font> <font color="#FF0000">AF_INET</font><font color="#0000CC">;</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;dest<font color="#0000CC">.</font>sin_port <font color="#0000CC">=</font> <font color="#FF0000">htons</font><font color="#0000CC">(</font>80<font color="#0000CC">)</font><font color="#0000CC">;</font> <font color="#FF9900">/*default HTTP Server port */</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">/*<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;if ( inet_addr("192.168.1.180", &amp;dest.sin_addr.s_addr) == 0 )<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;printf("inet_addr error!n");<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;return -1;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;}<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;*/</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;dest<font color="#0000CC">.</font>sin_addr<font color="#0000CC">.</font>s_addr <font color="#0000CC">=</font> inet_addr<font color="#0000CC">(</font>dst_ip<font color="#0000CC">)</font><font color="#0000CC">;</font>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF9900">/*---Connect to server---*/</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font> <font color="#0000CC">(</font> <font color="#FF0000">connect</font><font color="#0000CC">(</font>sockfd<font color="#0000CC">,</font> <font color="#0000CC">(</font><font color="#0000FF">struct</font> <font color="#FF0000">sockaddr</font><font color="#0000CC">*</font><font color="#0000CC">)</font><font color="#0000CC">&amp;</font>dest<font color="#0000CC">,</font> <font color="#0000FF">sizeof</font><font color="#0000CC">(</font>dest<font color="#0000CC">)</font><font color="#0000CC">)</font> <font color="#0000CC">!</font><font color="#0000CC">=</font> 0 <font color="#0000CC">)</font><br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">printf</font><font color="#0000CC">(</font><font color="#FF00FF">"connect error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">if</font><font color="#0000CC">(</font><font color="#FF0000">send</font><font color="#0000CC">(</font>sockfd<font color="#0000CC">,</font> buf<font color="#0000CC">,</font> buf_size<font color="#0000CC">,</font> 0<font color="#0000CC">)</font> <font color="#0000CC">&lt;</font> 0<font color="#0000CC">)</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">{</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">printf</font><font color="#0000CC">(</font><font color="#FF00FF">"send error!n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> <font color="#0000CC">-</font>1<font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000CC">}</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">else</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#FF0000">printf</font><font color="#0000CC">(</font><font color="#FF00FF">"send successfully...n"</font><font color="#0000CC">)</font><font color="#0000CC">;</font><br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<br>
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<font color="#0000FF">return</font> 0<font color="#0000CC">;</font><br>
+<font color="#0000CC">}</font><br>
+</font></font></td></tr></tbody></table><br>
+<br>
+在服务器端用php来处理数据～～ 在html表单中可上传小文件～～<br>
+<br>
+不知道具体问题出在哪了？？？</td></tr></tbody></table>
+</div>
+<div id="comment_11325900" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11325900"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#fff">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">K.I.S.S. --- Keep It Simple,Stupid！<br>
+<strong>吼吼：求转让《erlang程序设计》</strong></div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style="background-color:#fff"></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11325932" style="background-color:#E5EDF2"><table id="pid11325932" summary="pid11325932" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#F0F3FA">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xw1">Kallawa</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11325932" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11325932_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xi2">Kallawa</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>432 </dd><dt>UID</dt><dd>20457792</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>392</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl>
+<div class="imicn">
+<a href="http://ste.xidian.edu.cn/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11325932&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar.php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11325932" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11325932_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 392, 距离下一级还需 108 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">85</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20457792.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20457792&amp;handlekey=addfriendhk_20457792" id="a_friend_li_11325932" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20457792" id="a_poke_li_11325932" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20457792&amp;touid=20457792&amp;pmid=0&amp;daterange=2&amp;pid=11325932&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20457792&handlekey=addfriendhk_20457792" id="a_friend_li_11325932" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20457792" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20457792" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20457792&touid=20457792&pmid=0&daterange=2&pid=11325932&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#F0F3FA">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11325932" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11325932" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>7</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11325932&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11325932&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11325932" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11325932">发表于 2009-10-10 16:36:19</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20457792" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11325932">
+上边代码中rp&nbsp;&nbsp;=&gt;\r\n&nbsp;&nbsp;=&gt; CRLF<br>
+<br>
+不知道在为啥插入代码时屏蔽掉了"\"……<br>
+<br>
+[<i> 本帖最后由 Kallawa 于 2009-10-10 16:37 编辑 </i>]</td></tr></tbody></table>
+</div>
+<div id="comment_11325932" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11325932"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#F0F3FA">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">K.I.S.S. --- Keep It Simple,Stupid！<br>
+<strong>吼吼：求转让《erlang程序设计》</strong></div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style=""></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11325964" style=""><table id="pid11325964" summary="pid11325964" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#fff">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xw1">Kallawa</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11325964" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11325964_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank" class="xi2">Kallawa</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>432 </dd><dt>UID</dt><dd>20457792</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>392</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl>
+<div class="imicn">
+<a href="http://ste.xidian.edu.cn/" target="_blank" title="查看个人网站"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/forumlink.gif" alt="查看个人网站"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11325964&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20457792.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar.php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11325964" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11325964_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 392, 距离下一级还需 108 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">746</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">85</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20457792&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">1</a></dd><dt>可用积分</dt><dd>392 </dd><dt>专家积分</dt><dd>5 </dd><dt>在线时间</dt><dd>698 小时</dd><dt>注册时间</dt><dd>2006-08-24</dd><dt>最后登录</dt><dd>2015-01-24</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20457792.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20457792&amp;handlekey=addfriendhk_20457792" id="a_friend_li_11325964" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20457792" id="a_poke_li_11325964" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20457792&amp;touid=20457792&amp;pmid=0&amp;daterange=2&amp;pid=11325964&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20457792&handlekey=addfriendhk_20457792" id="a_friend_li_11325964" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20457792" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20457792" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20457792&touid=20457792&pmid=0&daterange=2&pid=11325964&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#fff">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11325964" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11325964" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>8</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11325964&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11325964&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11325964" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11325964">发表于 2009-10-10 16:39:30</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20457792" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11325964">
+<div class="quote"><blockquote>原帖由 <i>ideawu</i> 于 2009-10-10 12:42 发表 <a href="http://bbs2.chinaunix.net/redirect.php?goto=findpost&pid=11324348&ptid=1592888" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/back.gif" onload="thumbImg(this)" alt="" width="13" height="13"></a><br>
+用libcurl吧. </blockquote></div><br>
+看纯C的先～</td></tr></tbody></table>
+</div>
+<div id="comment_11325964" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11325964"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#fff">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">K.I.S.S. --- Keep It Simple,Stupid！<br>
+<strong>吼吼：求转让《erlang程序设计》</strong></div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style="background-color:#fff"></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11326349" style="background-color:#E5EDF2"><table id="pid11326349" summary="pid11326349" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#F0F3FA">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20159572.html" target="_blank" class="xw1">net_robber</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div style="margin-left:20px">角斗士 or 奴隶</div><div class="p_pop blk bui" id="userinfo11326349" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11326349_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20159572.html" target="_blank" class="xi2">net_robber</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>240 </dd><dt>UID</dt><dd>20159572</dd><dt>阅读权限</dt><dd>100</dd><dt>积分</dt><dd>24857</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">4990</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">5</a></dd><dt>可用积分</dt><dd>24857 </dd><dt>专家积分</dt><dd>103 </dd><dt>在线时间</dt><dd>1985 小时</dd><dt>注册时间</dt><dd>2004-05-20</dd><dt>最后登录</dt><dd>2014-12-04</dd></dl>
+<div class="imicn">
+<a href="http://wpa.qq.com/msgrd?V=1&Uin=99220799&Site=ChinaUnix.net&Menu=yes" target="_blank" title="QQ"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/qq.gif" alt="QQ"></a><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11326349&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20159572.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar(4).php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=20" target="_blank">广告杀手</a></em></p>
+
+</div>
+<p><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level3.gif" alt="Rank: 8"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level3.gif" alt="Rank: 8"></p>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">4990</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">286</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20159572&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">5</a></dd><dt>可用积分</dt><dd>24857 </dd><dt>专家积分</dt><dd>103 </dd><dt>在线时间</dt><dd>1985 小时</dd><dt>注册时间</dt><dd>2004-05-20</dd><dt>最后登录</dt><dd>2014-12-04</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20159572.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20159572&amp;handlekey=addfriendhk_20159572" id="a_friend_li_11326349" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20159572" id="a_poke_li_11326349" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20159572&amp;touid=20159572&amp;pmid=0&amp;daterange=2&amp;pid=11326349&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20159572&handlekey=addfriendhk_20159572" id="a_friend_li_11326349" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20159572" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20159572" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20159572&touid=20159572&pmid=0&daterange=2&pid=11326349&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#F0F3FA">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11326349" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11326349" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>9</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11326349&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11326349&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11326349" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/teammo.gif">
+<em id="authorposton11326349">发表于 2009-10-10 17:15:31</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20159572" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11326349">
+楼主是不会socket相关的东西呢？还是不知道post的编码方式呢？</td></tr></tbody></table>
+</div>
+<div id="comment_11326349" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11326349"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#F0F3FA">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+<div class="sign" style="max-height:500px;maxHeightIE:500px;">辞职了，接下来干什么呢</div>
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style=""></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_11326366" style=""><table id="pid11326366" summary="pid11326366" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2" style="background-color:#fff">
+ <div class="pi" style=" border-bottom:none">
+<div class="authi"><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank" class="xw1">teng0210</a>
+
+</div>
+
+</div>
+<!--2011.12.01自定义头衔移到用户名下面头像上面  -->
+<div class="p_pop blk bui" id="userinfo11326366" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo11326366_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank" class="xi2">teng0210</a></strong>
+<em>当前离线</em>
+</div>
+<dl class="cl"><dt>空间积分</dt><dd>0 </dd><dt>信誉积分</dt><dd>31 </dd><dt>UID</dt><dd>20799406</dd><dt>阅读权限</dt><dd>20</dd><dt>积分</dt><dd>434</dd><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">355</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>434 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>1220 小时</dd><dt>注册时间</dt><dd>2008-12-30</dd><dt>最后登录</dt><dd>2014-12-30</dd></dl>
+<div class="imicn">
+<a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=profile" target="_blank" title="查看详细资料"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/userinfo.gif" alt="查看详细资料"></a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar" onmouseover="showauthor(this, &#39;userinfo11326366&#39;)"><a href="http://bbs.chinaunix.net/space-uid-20799406.html" target="_blank"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/avatar(2).php"></a></div>
+<p><em><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=usergroup&gid=11" target="_blank">稍有积蓄</a></em></p>
+
+</div>
+<p id="g_up11326366" onmouseover="showMenu({&#39;ctrlid&#39;:this.id, &#39;pos&#39;:&#39;12!&#39;});"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/star_level1.gif" alt="Rank: 1"></p>
+<div id="g_up11326366_menu" class="tip tip_4" style="display: none;">
+<div class="tip_horn"></div>
+<div class="tip_c">稍有积蓄, 积分 434, 距离下一级还需 66 积分</div>
+</div>
+<dl class="pil cl"><dt>帖子</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=reply&view=me&from=space" target="_blank" class="xi2">355</a></dd><dt>主题</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=thread&view=me&from=space" target="_blank" class="xi2">24</a></dd><dt>精华</dt><dd><a href="http://bbs.chinaunix.net/home.php?mod=space&uid=20799406&do=thread&type=digest&view=me&from=space" target="_blank" class="xi2">0</a></dd><dt>可用积分</dt><dd>434 </dd><dt>专家积分</dt><dd>0 </dd><dt>在线时间</dt><dd>1220 小时</dd><dt>注册时间</dt><dd>2008-12-30</dd><dt>最后登录</dt><dd>2014-12-30</dd></dl><ul class="xl xl2 o cl">
+<!--修改文字部分20111026-->
+<!--
+<li class="callon"><a href="space-uid-20799406.html" target="_blank" title="串个门" class="xi2">串个门</a></li>
+<li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid=20799406&amp;handlekey=addfriendhk_20799406" id="a_friend_li_11326366" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加好友" class="xi2">加好友</a></li>
+<li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid=20799406" id="a_poke_li_11326366" onclick="showWindow(this.id, this.href, 'get', 0);" title="打招呼" class="xi2">打招呼</a></li>
+<li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_20799406&amp;touid=20799406&amp;pmid=0&amp;daterange=2&amp;pid=11326366&amp;tid=1592888" onclick="showWindow('sendpm', this.href);" title="发消息" class="xi2">发消息</a></li>
+ -->
+<!--2013.05.15 修改串门链接 -->
+                    <li class="callon"><a href="http://ask.chinaunix.net/account/login/" target="_blank" class="xi2" style=" font-weight:bold; color:#F00">问答</a></li>
+
+<li class="buddy"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=friend&op=add&uid=20799406&handlekey=addfriendhk_20799406" id="a_friend_li_11326366" onclick="showWindow(this.id, this.href, &#39;get&#39;, 1, {&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;00&#39;});" title="加好友" class="xi2">好友</a></li>
+<!--<li class="poke2"><a href="toblog.php?uid=20799406" class="xi2" target="_blank">博客</a></li>-->
+<li class="poke2"><a href="http://blog.chinaunix.net/dir.php?uid=20799406" class="xi2" target="_blank">博客</a></li> 
+<li class="pm2"><a href="http://bbs.chinaunix.net/home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_20799406&touid=20799406&pmid=0&daterange=2&pid=11326366&tid=1592888" onclick="showWindow(&#39;sendpm&#39;, this.href);" title="发消息" class="xi2">消息</a></li>
+</ul>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>0</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"></div><!--2011.12.05新增禁止本版发言2011.12.17修改增加是否是本版版主且对管理员全部开放 -->
+</td>
+<td class="plc" style="background-color:#fff">
+<div class="pi">
+<!--管理操作口移到这-->
+		
+<strong>
+<a href="http://bbs.chinaunix.net/forum.php?mod=redirect&goto=findpost&ptid=1592888&pid=11326366" title="您的朋友访问此链接后，您将获得相应的积分奖励" id="postnum11326366" onclick="setCopy(this.href, &#39;帖子地址复制成功&#39;);return false;"><em>10</em>楼</a>
+<!--以下新加开始 -->
+
+                <!--编辑-->
+
+<!--报告-->
+<a href="javascript:;" onclick="showWindow(&#39;miscreport11326366&#39;, &#39;misc.php?mod=report&amp;rtype=post&amp;rid=11326366&amp;tid=1592888&amp;fid=23&#39;, &#39;get&#39;, -1);return false;">[报告]</a>
+
+
+<!--评分2011.12.29-->
+
+<!--评分2011.12.29-->
+					
+
+				
+
+<!--新加的结束-->	
+
+</strong>
+
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon11326366" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/online_member.gif">
+<em id="authorposton11326366">发表于 2009-10-10 17:17:35</em>
+<span class="pipe">|</span><a href="http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=1592888&page=1&authorid=20799406" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_11326366">
+你构造的报文不正确.所以400了,可以简单的看一下RFC文档<br>
+协议有严格的格式控制</td></tr></tbody></table>
+</div>
+<div id="comment_11326366" class="cm">
+</div>
+<!--//chinaunix JOB 自定义钩子-->
+    <div id="post_rate_div_11326366"></div>
+</div></div>
+
+</td></tr>
+<tr><td class="plc plm" style="background-color:#fff">
+
+        <!--//CHINAUNIX 此处去掉DZ自带相关帖子代码-->
+        
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                                
+        <!--//CHINAUNIX 一楼增加看了又看,相关帖子,本版精华内容 end-->
+
+        
+        <!--//CUASK 增加CU问答文字链 start by caojingfei at 2012.03.21-->
+                <div class="a_pb"><a href="http://bbs.chinaunix.net/thread-4165649-1-1.html" target="_blank" style="color:green"><b>IT安全，你准备好了吗？</b></a>|<a target="_blank" href="http://bbs.chinaunix.net/thread-4165614-1-1.html" style="color:red"><b>
+作为一名Python爱好者，你懂网络编程吗？</b></a> | <a href="http://www.it168.com/remen/aliyun/" target="_blank" style="color:blue"><b>步入云端世界 阿里云计算精粹专区</b></a> | <a href="http://bbs.chinaunix.net/thread-4165568-1-1.html" target="_blank" style="color:#8E236B"><b>从集中式向分布式系统演变过程中面临哪些挑战？</b></a></div>                <!--//ITPUB 增加CU文字链 end by caojingfei at 2012.03.21-->
+</td>
+</tr>
+<tr>
+<td class="pls" style="background-color:#fff"></td>
+<td class="plc">
+<div>
+<!--管理操作口移到上面-->
+
+<!--这块原先是每层楼下的回复编辑现在删掉，移到上面去-->
+</div>
+
+</td>
+</tr>
+
+<!--2011.12.01修改 帖子最后一个回帖出现的粗的黑线，有程序部分取得最大pid做对比，参照forum_vithread.php第596行  -->
+<tr class="ad">
+<td class="pls" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff"></td>
+<td class="plc" style="border-width:1px 0 1px 0; border-style:solid; border-color:#000; background:#fff">
+</td>
+</tr>
+</tbody></table>
+</div>
+<div id="postlistreply" class="pl"><div id="post_new" class="viewthread_table" style="display: none"></div></div>
+</div>
+
+
+
+<style>
+.box0828{ width:960px; margin:0 auto;}
+.box0828_l{ float:left; width:475px;}
+.box0828_r{ float:right; width:475px;}
+</style>
+		<div class="box0828">
+<div class="box0828_l">
+<img border="0" alt="" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/weixint.jpg">
+
+</div>
+<div class="box0828_r">
+<script type="text/javascript">
+
+    var cpro_id = "u1684206";
+</script>
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/c.js" type="text/javascript"></script><div id="BAIDU_DUP_wrapper_u1684206_0"><iframe id="cproIframe_u1684206_1" width="475" height="135" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/acom.html" align="center,center" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" allowtransparency="true"></iframe></div><script charset="utf-8" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/acom"></script>
+
+</div>
+</div><br><form method="post" autocomplete="off" name="modactions" id="modactions">
+<input type="hidden" name="formhash" value="d57ee6f1">
+<input type="hidden" name="optgroup">
+<input type="hidden" name="operation">
+<input type="hidden" name="listextra" value="page%3D1">
+<input type="hidden" name="page" value="1">
+</form>
+
+<!--2011.12.01去掉mbm-->
+<div class="pgs mtm cl">
+<!--<div class="pgs mtm mbm cl">-->
+<div class="pg"><strong>1</strong><a href="http://bbs.chinaunix.net/thread-1592888-2-1.html">2</a><a href="http://bbs.chinaunix.net/thread-1592888-3-1.html">3</a><a href="http://bbs.chinaunix.net/thread-1592888-2-1.html" class="nxt">下一页</a></div><span class="pgb y" id="visitedforumstmp" onmouseover="$(&#39;visitedforums&#39;).id = &#39;visitedforumstmp&#39;;this.id = &#39;visitedforums&#39;;showMenu({&#39;ctrlid&#39;:this.id,&#39;pos&#39;:&#39;21&#39;})"><a href="http://bbs.chinaunix.net/forum.php?mod=forumdisplay&fid=23&page=1">返回列表</a></span>
+<a id="newspecialtmp" onmouseover="$(&#39;newspecial&#39;).id = &#39;newspecialtmp&#39;;this.id = &#39;newspecial&#39;;showMenu({&#39;ctrlid&#39;:this.id})" onclick="showWindow(&#39;newthread&#39;, &#39;forum.php?mod=post&amp;action=newthread&amp;fid=23&#39;)" href="javascript:;" title="发新帖"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/pn_post.png" alt="发新帖"></a>
+</div>
+
+<!--底部的导航-->
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="http://www.chinaunix.net/" class="nvhm" title="首页">ChinaUnix.net</a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php">论坛</a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php?gid=60">程序设计</a> <em>&#8250;</em> <a href="http://bbs.chinaunix.net/forum.php?mod=forumdisplay&fid=23&page=1">C/C++</a> <em>&#8250;</em> <a href="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net.html">怎么用C实现Http POST功能向Http服务器上传文件？？</a>
+</div>
+</div>
+
+
+<!--[diy=diyfastposttop]--><div id="diyfastposttop" class="area"></div><!--[/diy]-->
+<script type="text/javascript">
+var postminchars = parseInt('10');
+var postmaxchars = parseInt('40000');
+var disablepostctrl = parseInt('0');
+</script>
+
+<div id="f_pst" class="pl bm bmw">
+<form method="post" autocomplete="off" id="fastpostform" action="http://bbs.chinaunix.net/forum.php?mod=post&action=reply&fid=23&tid=1592888&extra=page%3D1&replysubmit=yes&infloat=yes&handlekey=fastpost" onsubmit="return fastpostvalidate(this)">
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls">
+
+</td>
+<td class="plc">
+
+<span id="fastpostreturn"></span>
+
+
+<div class="cl">
+<div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><div class="hasfsl" id="fastposteditor">
+<div class="tedt mtn">
+<div class="bar">
+<span class="y">
+<a href="http://bbs.chinaunix.net/forum.php?mod=post&action=reply&fid=23&tid=1592888" onclick="return switchAdvanceMode(this.href)">高级模式</a>
+</span><script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/seditor.js" type="text/javascript"></script>
+<div class="fpd">
+<a href="javascript:;" title="文字加粗" class="fbld">B</a>
+<a href="javascript:;" title="设置文字颜色" class="fclr" id="fastpostforecolor">Color</a>
+<a id="fastpostimg" href="javascript:;" title="图片" class="fmg">Image</a>
+<a id="fastposturl" href="javascript:;" title="添加链接" class="flnk">Link</a>
+<a id="fastpostquote" href="javascript:;" title="引用" class="fqt">Quote</a>
+<a id="fastpostcode" href="javascript:;" title="代码" class="fcd">Code</a>
+<a href="javascript:;" class="fsml" id="fastpostsml">Smilies</a>
+</div></div>
+<div class="area">
+<div class="pt hm">您需要登录后才可以回帖 <a href="http://bbs.chinaunix.net/member.php?mod=logging&action=login&logsubmit=yes" onclick="showWindow(&#39;login&#39;, this.href)" class="xi2">登录</a> | <a href="http://bbs.chinaunix.net/member.php?mod=register.php" class="xi2">注册</a> 
+<a href="http://bbs.chinaunix.net/connect.php?mod=login&op=init&referer=forum.php%3Fmod%3Dviewthread%26tid%3D1592888%26extra%3Dpage%253D1%26page%3D1&statfrom=login" target="_top" rel="nofollow"><img src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/qq_login.gif" class="vm"></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<input type="hidden" name="formhash" value="d57ee6f1">
+<input type="hidden" name="subject" value="">
+<p class="ptm pnpost">
+<button type="button" onclick="showWindow(&#39;login&#39;, &#39;member.php?mod=logging&amp;action=login&amp;guestmessage=yes&#39;)" name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5" style="background:#9898BA; border:0"><strong>发表回复</strong></button>
+<label for="fastpostrefresh"><input id="fastpostrefresh" type="checkbox" class="pc">回帖后跳转到最后一页</label>
+<script type="text/javascript">if(getcookie('fastpostrefresh') == 1) {$('fastpostrefresh').checked=true;}</script>
+</p>
+<!--2011.12.01 -->
+</td>
+</tr>
+</tbody></table>
+</form>
+</div>
+
+<script type="text/javascript">
+var connect_qzone_share_url = 'http://bbs.chinaunix.net/home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=1&thread_id=1592888';
+var connect_weibo_share_url = 'http://bbs.chinaunix.net/home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=2&thread_id=1592888';
+var connect_thread_info = {
+thread_url: 'http://bbs.chinaunix.net/thread-1592888-1-1.html',
+thread_id: '1592888',
+post_id: '11323299',
+forum_id: '23',
+author_id: '20457792',
+author: 'Kallawa'
+};
+
+connect_autoshare = '0';
+connect_isbind = '';
+if(connect_autoshare == 1 && connect_isbind) {
+_attachEvent(window, 'load', function(){
+connect_share(connect_weibo_share_url, connect_openid);
+});
+}
+</script>
+
+
+<div id="visitedforums_menu" class="p_pop blk cl" style="display: none;">
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td id="v_forums">
+<h3 class="mbn pbn bbda xg1">浏览过的版块</h3>
+<ul class="xl xl1">
+<li><a href="http://bbs.chinaunix.net/forum-55-1.html">Python</a></li><li><a href="http://bbs.chinaunix.net/forum-250-1.html">Linux文档专区</a></li></ul>
+</td>
+</tr>
+</tbody></table>
+</div>
+<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, 0, 1, 'forum.php?mod=viewthread&tid=1592888', 1);}</script>
+</div>
+
+<div class="wp mtn">
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/se" type="text/javascript"></script>
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=442796" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/bds_s_v2.js"></script>
+
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?t=" + new Date().getHours();
+</script>
+<!-- Baidu Button END -->
+
+<!--//CHINAUNIX 记录用户看贴日志 start--><script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/viewlog_js.php" type="text/javascript"></script>
+<!--//CHINAUNIX 记录用户看贴日志 END-->	</div>
+<script type="text/javascript">var cookieLogin = Ajax("TEXT");cookieLogin.get("connect.php?mod=check&op=cookie", function() {});</script><div style="width:960px; margin:0 auto; text-align:center; line-height:18px; padding:0 10px 10px 10px">
+<p>北京皓辰网域网络信息技术有限公司. 版权所有 京ICP证:060528号 北京市公安局海淀分局网监中心备案编号：1101082001<br>	
+广播电视节目制作经营许可证(京) 字第1234号  中国互联网协会会员&nbsp;&nbsp;联系我们：<img width="139" height="12" border="0" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/adminmail.gif">
+<br>感谢所有关心和支持过ChinaUnix的朋友们    转载本站内容请注明原作者名及出处</p>
+</div>
+
+<table align="center">
+<tbody><tr>
+<td align="center">
+<a href="http://bbs.chinaunix.net/member.php?mod=clearcookies">清除 Cookies</a> - <a target="_blank" href="http://www.chinaunix.net/">ChinaUnix</a>
+ 	- <a target="_blank" href="http://bbs.chinaunix.net/archiver/">Archiver</a> - <a target="_blank" href="http://bbs.chinaunix.net/">WAP</a> - <a href="http://bbs.chinaunix.net/#top">TOP</a>
+</td>
+</tr>
+</tbody></table>
+
+<!--广告标签 -->
+<!--  <script type='text/javascript' src='http://168.it168.com/js/599.js'></script>-->
+<!-- <script type='text/javascript' src='http://168.it168.com/js/863.js'></script>-->
+<script>if(typeof(BLA)!='undefined'){BLA();}</script><script type="text/javascript" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/f599.js"></script><iframe id="_cnzid" height="0" width="0" style="display:none"></iframe>
+<!--新版测试广告标签 -->
+<script type="text/javascript">
+var SeriesId='';
+var BrandId='';
+</script>
+<!-- <script type='text/javascript' src='http://168.it168.com/ajs/599.js'></script> -->
+<!-- <script type='text/javascript' src='http://168.it168.com/ajs/863.js'></script> -->
+
+    <!--//ITPUB 腾讯分析代码-->
+    &nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/ping.js" charset="utf-8"></script><script type="text/javascript" reload="1">pgvMain({"discuzParams":{"r2":"8399146","ui":0,"rt":"forum","md":"viewthread","fi":"23","ti":"1592888","pn":1},"virtualDomain":"bbs.chinaunix.net","extraParams":""});</script>            
+    
+<div id="g_upmine_menu" class="tip tip_3" style="display:none;">
+<div class="tip_c">
+积分 0, 距离下一级还需  积分
+</div>
+<div class="tip_horn"></div>
+</div>
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/home.php" type="text/javascript"></script>
+<!--回顶部js2011.12.30-->
+<script language="javascript">
+ lastScrollY=0;
+ function heartBeat(){
+ var diffY;
+ if (document.documentElement && document.documentElement.scrollTop)
+     diffY = document.documentElement.scrollTop;
+ else if (document.body)
+     diffY = document.body.scrollTop
+ else
+     {/*Netscape stuff*/}
+ percent=.1*(diffY-lastScrollY);
+ if(percent>0)percent=Math.ceil(percent);
+ else percent=Math.floor(percent);
+ document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+ lastScrollY=lastScrollY+percent;
+ if(lastScrollY<200)
+ {
+ document.getElementById("full").style.display="none";
+ }
+ else
+ {
+ document.getElementById("full").style.display="block";
+ }
+ }
+ var gkuan=document.body.clientWidth;
+ var ks=(gkuan-960)/2-30;
+ suspendcode="<div id=\"full\" style='right:4px;POSITION:absolute;TOP:500px;z-index:100;width:20px; height:50px;cursor:pointer;'><a href=\"javascript:void(0)\" onclick=\"window.scrollTo(0,0);\"></a></div>"
+ document.write(suspendcode);
+ window.setInterval("heartBeat()",1);
+ </script><div id="full" style="right: 4px; position: absolute; top: 3839px; z-index: 100; width: 20px; height: 50px; cursor: pointer; display: block;"><a href="javascript:void(0)" onclick="window.scrollTo(0,0);"></a></div>
+
+
+<!-- 统计 START -->
+<script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/pv.js" type="text/javascript"></script>
+<script type="text/javascript">
+function sendPV(){
+    var pvTrack = new PvTrack();
+    pvTrack.type = 35; // 频道类别ID
+    pvTrack.channel = 22; // 频道ID
+    pvTrack.pageType = 0;
+    pvTrack.track();
+}
+window.setTimeout("sendPV()", 0);
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-20237423-2']);
+  _gaq.push(['_setDomainName', '.chinaunix.net']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<script type="text/javascript"> 
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js?0ee5e8cdc4d43389b3d1bfd76e83216b' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./怎么用C实现Http POST功能向Http服务器上传文件？？-C C++-ChinaUnix.net_files/h.js" type="text/javascript"></script>
+<!-- 统计 END -->
+
+<!-- 临时加的广告统计 al -->
+<!--  临时加的广告统计 阿狸-->
+
+<div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入单词表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出单词表"></a><a href="http://bbs.chinaunix.net/#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>

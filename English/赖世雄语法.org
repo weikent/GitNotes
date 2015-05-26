@@ -1,0 +1,302 @@
+#+TITLE: 赖世雄语法
+
+* 第一章 单句
+
+必须要包含主语和动词。
+
+** 主语
+
+只有名词才能做主语。
+
+*** 用动词做主语      
+work with you is fun.   跟你工作很愉快。   （这是错误的）
+
+动词不能直接做主语。
+需要把动词变成 动名词 或 不定式短语
+
+**** 动名词
+Working with you is fun.
+
+表示以前做过的动作。  表示经验的。
+
+**** 不定式短语
+To work with you is fun.
+
+表示要做的动作。 实际上没有做的。 表示意愿的。
+To buy sth. is my plan.
+To see him is my purpose.
+
+
+*** 用句子做主语
+he loves me very much is true.
+
+#+BEGIN_SRC org
+
+句子不能直接做主语。
+
+需要把句子变成名词从句。   就是句子变成的名词。
+
+只有在句子前面加个  that。
+#+END_SRC
+That he loves me is true.
+
+
+That he study hard is true.
+
+**** 名词从句
+
+***** That
+
+***** Whether
+#+BEGIN_SRC org
+能用 Yes／no来回答的句子做主语的时候。
+#+END_SRC
+
+Whether she is beautiful remains to be see.
+Whether he will come is not know yet.
+***** 疑问词
+#+BEGIN_SRC org
+用疑问词开头的问句，即不能用yes／no来回答的的句子。
+#+END_SRC
+
+
+where will he go。   他要到哪儿去。
+
+Where he will go is still a mistery.
+
+Where he will do is remains to be see.
+
+*** 名词短语
+
+*** 表距离的介词短语
+有名词的意思。
+#+BEGIN_SRC org
+From A to B 可以作为主语。
+#+END_SRC
+其实是省略了The distance
+
+*** 总结
+
+有时会造成主词过大。就要用it来代替。
+
+
+** 动词
+
+先想出一个动词的中文
+#+BEGIN_SRC org
+我 空格   他   。
+他被我  空格   。
+
+#+END_SRC
+如果意思正常的话，就是及物动词。
+
+如果意思不对的话，就是不及物动词。
+
+
+*** 完全及物动词
+加了宾语之后，意思很完全。
+love
+I love him. 加了宾语 him 之后，，意思就完整了。
+
+
+完全及物动词只有这 2 种句型。
+**** 主语 ＋ 完全及物动词 ＋ 宾语（名词，代词，具有名词功能的词）
+i hit him.
+**** 主语 ＋ be动词 ＋ 完全及物动词－ed
+i was hited.
+**** 主语 ＋ be动词 ＋ 完全及物动词－ing
+i was hitting him.
+
+
+
+
+*** 完全不及物动词
+
+**** 主语 ＋ 完全不及物动词-ed
+he danced.
+
+I ran.
+**** 主语 ＋ be ＋ 完全不及物动词－ing
+he was dancing.   他那时正在跳舞。
+
+I was running.   他那时正在跑步。
+
+*** 不完全及物动词
+是及物动词，即使加了宾语之后，意思也不完整。 需要增加宾语补足语。
+make
+- 制造 完全及物动词
+  
+- 使 。。。 成为     不完全及物动词。   需要加宾语补足语。
+
+
+分类
+
+- 叫
+
+  make 和 have 后接 动词原型
+  get 后 接动词不定式
+
+  - make
+
+    make sb do sth.
+    i made him wash the car.
+    i made him sing a song.
+
+  - have
+
+    have sb do sth.
+    i had him wash the car.
+
+  - bid  比较少。
+    bid sb do sth.    或者    bid sb to do sth.
+
+  - get
+    get sb to do sth
+    i got him to sing a song.
+
+- 让
+
+  - let
+
+    let sb do sth.
+    i will let him sing a song.
+
+    - let up 停了。
+
+- 强迫
+
+  force push sb to do sth.
+
+*** 不完全不及物动词
+需要增加 主语补足语。
+- become
+
+he become a doctor.
+he become beautiful.
+
+
+bulky 又笨又大
+
+become 后可接 生气的形容词，也可以接 颜色的形容词。
+
+
+- get
+get 表示获得。是及物动词。
+get 表示变成，是不及物动词。  后面接表示生气的 形容词。
+
+got ＋ v－ed。
+
+- turn
+turn 表示 转动，是及物动词
+turn 表示 变成， 是不及物动词。   接颜色的形容词。
+
+*** 授予动词
+
+- give
+  - give him a car
+    - him 是间接宾语
+    - car 是直接宾语
+    - 现有车，才给him
+
+
+
+- let
+  - let me your car
+
+
+- make
+- buy
+  - 介词用for
+
+
+
+
+- ask
+  - 介词用of
+  - I asked a question of him
+
+- rob
+  - He rob me of my money. 他把我从我的钱 抢夺开来。
+
+- expect
+  - he expects nothing of me.
+
+  - he expects much of me.
+
+- require
+
+  - he requires nothing of me.
+
+- demand
+
+- deprive
+
+  - the court deprived him of his right.
+
+  - the court deprived him of all his right.
+
+- ease  容易  名词    easy  容易的  形容词      uneasy  不安的       not easy 不容易
+
+  - i feel at ease when i see my teacher.   看到老师，我感到心安了。
+
+- ease 减轻   动词
+
+  - he eased me of me burden.  他减轻了我的负担。
+
+
+
+#+BEGIN_SRC org
+to: 间接宾语 得到了这个 直接宾语
+for: 间接宾语 还没有得到 直接宾语
+of: 主语从 间接宾语 哪里 得到了  直接宾语
+#+END_SRC
+
+
+
+
+** 结论
+
+*** 5大类句型
+1. 主词 ＋ 完全不及物动词
+
+   - he slept.
+
+2. 主词 ＋ 不完全不及物动词 ＋ 主词补语
+
+   - he is good.
+
+3. 主词 ＋ 完全及物动词 ＋ 受词
+
+   - he ate it.
+
+   - he knows that he is wrong.
+
+4. 主词 ＋ 不完全及物动词 ＋ 受词 ＋ 受词补语
+
+5. 主词 ＋ 间接宾语 ＋ 直接宾语
+
+   - don't   开头
+
+     - don't ever try it.   ever 强调的意思
+
+   - never  开头    not + ever = never
+
+     - never try it.
+
+6. 感叹句
+
+   1. What  （what是形容词）   多么的
+
+      1. what 后面可接任何名词
+
+   2. How   （how是副词）    多么地
+
+      1. how 只能修饰 /b单数可数名词/b 或 不可数名词
+
+      2. 但 how + many(much) + 复数名词
+
+7. 问句
+
+   1. 一般问句
+
+   2. 疑问句

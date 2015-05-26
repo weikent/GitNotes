@@ -1,0 +1,252 @@
+#+TITLE: emacs 快捷键
+
+
+* M-x ielm 可以打开lisp交互解释器
+
+* 调试Emacs扩展
+
+有时候Emacs的插件会出现各种问题，我们就需要进行调试了。
+
+如果我们希望在出现错误的时候能够自动进入调试模式，那我们可以M-x toggle-debug-on-error。
+
+如果有时候Emacs卡住没有反应，但是按C-g能够恢复的话，那说明可能是进入了死循环。我们可以在之前打开M-x toggle-debug-on-quit，然后在我们按C-g的时候就可以调试当前正在运行的elisp。
+
+那有时候我们需要在某个elisp函数设置断点的话，我们可以通过M-x debug-on-entry [funcname]来为某个函数设置断点。取消断点可以通过M-x cancel-debug-on-entry。
+
+在我们进入调试模式的时候，按d可以单步，q退出，e执行lisp。
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugger-Commands.html][debugger command]]
+
+* 括号高亮
+达到上述逐级高亮的效果，需要借助highlight-parentheses，autopair。然后编写下述代码11。
+
+括号高亮
+
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'highlight-parentheses-mode-hook
+          '(lambda ()
+             (setq autopair-handle-action-fns
+                   (append
+                    (if autopair-handle-action-fns
+                        autopair-handle-action-fns
+                      '(autopair-default-handle-action))
+                    '((lambda (action pair pos-before)
+                        (hl-paren-color-update)))))))
+
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
+#+END_SRC
+
+* 帮助
+
+如果在使用Emacs的过程中遇到什么问题，可以求助于Emacs强大的帮助系统。
+
+C-h t
+
+打开 Emacs 的入门教程，
+
+C-h k
+
+让Emacs告诉你某个快捷键是什么作用。首先按下C-h k，然后按下我们的快捷键。就可以打开帮助了，于此同时，我们还可以看到我们的按键的是如何表示的。
+
+C-h b
+
+查看按键绑定
+
+C-h K
+
+注意这次是大写的 K 。对于 Emacs的一些内部命令，除了Elisp源代码中提供的文档以外，还有一个专门的 Info 文档进行了系统的介绍。C-h K 就是定位到 Info 文档中描述该命令的位置。
+
+C-h f
+
+查看某个函数的文档。建议绑定一个快捷键，这样我们把光标放到某个函数的上面，一按快捷键就可以打开这个函数的文档了。
+
+C-h v
+
+查看某个变量的文档。
+
+C-h m
+
+当开当前mode的帮助。这里挺详细的对于当前可用快捷键的描述。
+
+… C-h
+
+当我们不能完整记得某些快捷键的时候，可以按下前缀后，再按下C-h。就可以看到以这个前缀开始的快捷键有哪些。
+
+C-h a 更模糊的查找
+
+有些时候我们只知道一个关键字，这个时候可以用 C-h a 来通过正则表达式来查找命令名。Emacs 会列出所有匹配的命令以及一个简短的文档，并可以通过点击链接定位到该命令的详细文档。
+
+请个快捷键导师
+
+Emacs中有个快捷键导师，可以在你需要的时候，提示你，可以围观：Emacs中的快捷键导师
+
+0x0E Misc
+
+一些有趣的快捷键
+
+- C-M-h 标记一个函数定义
+- C-h C-a about-emacs
+- C-h C 查看当前文件的编码
+- C-u M-! date 插入当前时间
+- C-u M-= 计算整个缓冲区的行数、字数和单词数
+- C-x <RET> f utf-8 （set-buffer-file-coding-system），设置当前buffer的文件的编码
+- C-x C-+ and C-x C-- to increase or decrease the buffer text font size
+- C-x C-q 开关read-only-mode，在dired-mode中可以进入修改模式，可以批量修改文件名。
+- C-x C-t 交换两行。可以用来调整python中import
+- M-x sort-lines 排序选中行。
+- C-x C-v or M-x find-alternate-file 重新打开当前文件，在高亮后者插件出了bug可以用这个命令重新加载。
+- C-x z 重复上一条命令。可以一直按z不断执行，非常方便！
+- M-& 异步运行一个shell命令
+- M-: 运行一句lisp
+- M-@ mark-word，连续按连续mark单词。
+- M-g M-g linenum 跳到某行，同vim中的[linenum]G
+- M-h 标记一段
+- M-x dig
+- M-x ifconfig
+- M-x ping
+- M-x telnet
+- M-z 删除到某个字符，同Vim的df
+- C-u M-! date 插入当前时间
+- C-q C-i 插入tab
+- M-x list-colors-display 显示Emacs所有的颜色，方便我们来进行配色
+- 当然还有很多很多，就不再列了。
+
+* 中文输入法
+
+在英文版的系统里面，一般情况下Emacs可能打不开中文输入法，此时我们需要修改LC_CTYPE环境变量就好了。
+
+可以在~/.profile最后加上一句
+
+#+BEGIN_SRC shell
+export LC_CTYPE="zh_CN.UTF-8"
+#+END_SRC
+
+* 字节码编译
+
+将我们的el配置编译成字节码，可以加快Emacs的加载速度，特别是在配置文件特别多的时候。
+
+我们去到我们的el配置文件目录，打开dired，然后输入% m来调用dired-mark-files-regexp，然后输入.el来标记所有的配置文件，然后按B调用dired-do-byte-compile，然后就可以把一个目录下面的el一次性编译成elc。或者也可以直接C-u 0 M-x byte-recompile-directory一次性编译一个目录及其子目录。
+
+不过这样就会带来一个问题，就是如果我们修改了配置后，还是需要重新编译的。这里在ErgoEmacs14找到了自动重新编译的配置，就是在保存文件的时候检查当前是否为emacs-lisp-mode，如果是，那么就编译它。这样我们修改配置的时候，就会自动重新编译了。
+
+
+#+BEGIN_SRC emacs-lisp
+
+;; http://ergoemacs.org/emacs/emacs_byte_compile.html
+(defun byte-compile-current-buffer ()
+  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+
+(add-hook 'after-save-hook 'byte-compile-current-buffer)
+#+END_SRC
+
+* dired
+- % m 可以使用正则表达式来标记一批文件
+    问题是如何取消全部标记呢
+    答案是使用 U 
+
+* 字母大小写转换 
+#+begin_src emacs-lisp
+capitalize-word (M-c) ;; 单词首字母转为大写
+upcase-word (M-u)     ;; 整个单词转为大写
+downcase-word (M-l)   ;; 整个单词转为小写（注意，这里是 META － l(* 小写字母 L)）
+#+end_src
+
+* buffer 列表
+按 'd' 键，标记buffer删除。之后按 'x' 键，执行删除。可以关闭一个buffer。
+* C-/ 撤销功能，类似普遍的C-z
+
+* 单行注释
+M-; 可以自动在行的后面添加注释标志。  
+lisp里面是 ;;   C/C++ 里面是 /**/
+
+* M-m :移动到当前行第一个非空字符
+
+* 括号跳转
+在emacs中，当光标在某个括号 "{ ( [" 任何一个括号的时候， 可以使用按键 C-M-n   C-M-p来跳转到对应的括号
+C-M-n : 跳转到对应的括号， 向前
+C-M-p : 跳转到对应的括号， 向后
+* 函数跳转
+C-M-a : 光标定位到当前函数头
+C-M-e : 光标定位到当前函数尾
+* 设置Mark
+设置mark是为了从设置mark的地方选中某些行。
+set-mark-command     对应快捷键   C-@
+* 代码折叠
+这里说的是emacs自带的HideShow mode.
+进入HideShow mode： M-x hs-minor-mode（幸亏有tab键。。要不这么长的命令=。=）
+主要的功能：
+-  C-c @ C-M-s 显示所有的代码
+-  C-c @ C-M-h 折叠所有的代码
+-  C-c @ C-s 显示当前代码区
+-  C-c @ C-h 折叠当前代码区
+-  C-c @ C-c 折叠/显示当前代码区
+* 批量替换字符串
+1. find-dired 来指定一个希望替换的目录。
+1. find-dired 之后，可以指定参数来确定需要替换的文件类型。 类似 -name "*.cpp"
+1. 之后，emacs会根据上两步的命令来生成一个文件列表。
+1. 可以在这个列表里，用‘m’来标记需要进行字符串替换的文件。
+1. 用 M-x dired-do-query-replace-regexp 命令来进行替换。
+
+* org-mode
+- TAB	 	折叠列表项
+- M-RET	 	插入项
+- M-S-RET	 	插入带复选框的项
+- M-S-UP/DOWN	 	移动列表项
+- M-LEFT/RIGHT	 	升/降级列表项，不包括子项
+- M-S-LEFT/RIGTH	 	升/降级列表项，包括子项
+- C-c C-c	 	改变复选框状态
+- C-c -	 	更换列表标记（循环切换
+
+
+ 
+| 快捷键         | 命令 | 说明                      |
+|                |      |                           |
+| TAB            |      | 折叠列表项                |
+| M-RET          |      | 插入项                    |
+| M-S-RET        |      | 插入带复选框的项          |
+| M-S-UP/DOWN    |      | 移动列表项                |
+| M-LEFT/RIGHT   |      | 升/降级列表项，不包括子项 |
+| M-S-LEFT/RIGTH |      | 升/降级列表项，包括子项   |
+| C-c C-c        |      | 改变复选框状态            |
+| C-c -          |      | 更换列表标记（循环切换）  |
+* emacs ascii Table
+#+BEGIN_SRC emacs-lisp
+M-x man RET ascii RET
+打开ascii table
+
+#+END_SRC
+* emacs 使用代理
+http_proxy=http://127.0.0.1:8000 emacs (-nw)
+
+
+* 有一個關於快捷鍵的說明
+[[http://www.emacs.uniyar.ac.ru/doc/em24h/emacs200.htm][Key Sequences and Keymaps]]
+
+主要是下面這個說明
+Yoxxxu can't use the major mode keymaps right away. The only keymaps that are immediately available in Emacs are those mentioned in the "Key Sequences and Keymaps" section earlier this hour, which were part of the global-map. Remember that global-map was always present and defined.
+
+The major mode's keymap does not exist until the major mode has been loaded and it has defined and initialized the keymap. If you have vanilla Emacs and you try to access c++-mode-map, Emacs rings a bell and tells you that "Symbol's value as variable is void: c++-mode-map."
+
+
+#+BEGIN_SRC emacs-lisp
+
+;; See if C-c C-c binding is defined in c++-mode-map 
+(lookup-key c++-mode-map "\C-c\C-c")  ;; --> Signals error 
+;;The right moment to access a mode's keymap is when the mode gets turned on. At that point, mode initializes itself and runs a MODE-hook for user customizations. C++ mode runs c++-mode-hook, text mode runs text-mode-hook, and so on. The following is a solution to handle mode's keybinding settings in separate functions:
+
+(add-hook 'c++-mode-hook 'my-c++-mode-hook) 
+ 
+(defun my-c++-mode-hook () 
+   (define-key c++-mode-map [(f4)] 'c-indent-function)) 
+This Lisp code says that call function my-c++-mode-hook is used when C++ mode is turned on, and key f4 defines the run command c-indent-function.
+#+END_SRC
+
+* C-h l : Display last few input keystrokes and the commands run.

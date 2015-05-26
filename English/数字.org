@@ -1,0 +1,45 @@
+#+TITLE: 英语数字
+
+
+
+* 数字
+
+| 原               | 序数                   |
+|------------------+------------------------|
+| one              | first   （不规则）     |
+| two              | second                 |
+| three            | third                  |
+| four             | fourth                 |
+| five             | fifth  （与原数不同）  |
+| six              | sixth                  |
+| seven            | seventh                |
+| eight            | eighth                 |
+| nine             | ninth （去掉了e）      |
+| ten              | tenth                  |
+| eleven           | eleventh               |
+| twelve           | twelfth    （不规则）  |
+| thirteen         | thirteenth  （不规则） |
+| fourteen         | fourteenth             |
+| fifteen          | fifteenth              |
+| sixteen          | sixteenth              |
+| seventeen        | seventeenth            |
+| eighteen         | eighteenth             |
+| nineteen         | nineteenth             |
+| twenty           | twentieth              |
+| twenty-one       | twenty-first           |
+| twenty-two       | twenty-second          |
+| twenty-three     | twenty-third           |
+| twenty-four      | twenty-fourth          |
+| twenty-five      | twenty-fifth           |
+| twenty-six       | twenty-sixth           |
+| twenty-seven     | twenty-seventh         |
+| twenty-eight     | twenty-eighth          |
+| twenty-nine      | twenty-ninth           |
+| thirty           | thirtieth              |
+| forty            | fortieth               |
+| fifty            | fiftieth               |
+| sixty            | sixtieth               |
+| seventy          | seventieth             |
+| eighty           | eightieth              |
+| ninety (这个有e) | ninetieth              |
+| hundred          | one hundredth          |

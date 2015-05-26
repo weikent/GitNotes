@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0052)http://weibo.com/aj/static/sync.html?t=1422014157027 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>sina sync page</title>
+<style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style></head>
+<body>
+<script type="text/javascript">
+    var dre = 'http://weibo.com/login?url=';
+	var reg_sina = /^http\:\/\/login\.sina\.com\.cn/i;
+	
+    var regs = {};
+    regs['baidu'] = /^http\:\/\/(.+)\.baidu\.com/i;
+    regs['yunyun'] = /^http:\/\/(.+\.)?yunyun\.com/i;
+    
+    var to_website_url = {};
+    to_website_url['baidu'] = 'http://cpro.baidu.com/cpro/ui/html/sync.htm';
+    to_website_url['yunyun'] = 'https://passport.yunyun.com/WeiboSync.php';
+
+    var getCookie = function(sKey) {
+        sKey = sKey.replace(/([\.\[\]\$])/g, '\\\$1');
+        var rep = new RegExp(sKey + '=([^;]*)?;', 'i');
+        var co = document.cookie + ';';
+        var res = co.match(rep);
+        if (res) {
+            return res[1] || "";
+        } else {
+            return '';
+        }
+    };
+    
+    var checkReferrer = function(fromURL) {
+    	fromURL = fromURL || '';
+    	var is_trust = false;
+    	for(var reg in regs){
+    		if(regs[reg].test(document.referrer)){
+    			is_trust = true;
+    		}
+    	}
+    	if(fromURL == 'sina' && !is_trust && reg_sina.test(document.referrer)){
+    		is_trust = true;
+    	}
+        return is_trust;
+    };
+    
+    var fromWebSite = function() {
+    	for(var reg in regs){
+    		if(regs[reg].test(document.referrer)){
+    			return reg;
+    		}
+    	}
+    	return '';
+    };
+
+	var suda = function(url) {
+		if(1 === (Math.random()*1000 | 0)){
+			document.body.appendChild(document.createElement('img')).src = url + '&_t=' + (+new Date());
+		}
+	};
+	
+    ;(function(){
+        if (checkReferrer('sina')) {
+            var uid = decodeURIComponent(getCookie('SUP')).match(
+                    /uid\=([0-9]+)/i);
+            uid = (uid && uid[1]) || '';
+            if (!uid) {
+                uid = getCookie('myuid') || '';
+            }
+            if (!uid && getCookie('ALF') && fromWebSite()) {
+                var thisURL = location.href;
+                //如果自动登录 会多传___ALF=1
+                location.href = dre + thisURL + (/\?/.test(thisURL)?'&':'?') + 'from=' + fromWebSite() + '&___ALF=1';
+                return;
+            }
+            if (uid) {
+            	suda('http://beacon.sina.com.cn/e.gif?h=1');//如果成功的suda
+	            var from = location.href.match(/[\&|\?]from\=([a-z]+)$/i); 
+	            from = (from && from[1]) || fromWebSite() || '';
+	            if(from && to_website_url[from]){
+	            location.href = to_website_url[from] + '?sid=' + uid + '&t='
+	                    + (new Date()).getTime();
+	            }
+            } else {
+            	suda('http://beacon.sina.com.cn/e.gif?h=0');//如果失败的suda
+            }
+        }
+    })();
+</script>
+
+
+<div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="&#21457;&#38899;"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="&#21152;&#20837;&#21333;&#35789;&#34920;"></a><a herf="#" id="haloword-remove" class="haloword-button" title="&#31227;&#20986;&#21333;&#35789;&#34920;"></a><a href="http://weibo.com/aj/static/sync.html?t=1422014157027#" id="haloword-open" class="haloword-button" title="&#26597;&#30475;&#21333;&#35789;&#35814;&#32454;&#37322;&#20041;" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="&#20851;&#38381;&#26597;&#35810;&#31383;"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>
