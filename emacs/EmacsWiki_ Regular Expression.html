@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0048)http://www.emacswiki.org/emacs/RegularExpression -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>EmacsWiki: Regular Expression</title><link rel="alternate" type="application/wiki" title="Edit this page" href="http://www.emacswiki.org/emacs?action=edit;id=RegularExpression"><link type="text/css" rel="stylesheet" href="./EmacsWiki_ Regular Expression_files/7xxUH2"><meta name="robots" content="INDEX,FOLLOW"><link rel="alternate" type="application/rss+xml" title="EmacsWiki" href="http://www.emacswiki.org/emacs?action=rss"><link rel="alternate" type="application/rss+xml" title="EmacsWiki: RegularExpression" href="http://www.emacswiki.org/emacs?action=rss;rcidonly=RegularExpression">
+<link rel="alternate" type="application/rss+xml" title="Emacs Wiki with page content" href="http://www.emacswiki.org/full.rss">
+<link rel="alternate" type="application/rss+xml" title="Emacs Wiki with page content and diff" href="http://www.emacswiki.org/full-diff.rss">
+<link rel="alternate" type="application/rss+xml" title="Emacs Wiki including minor differences" href="http://www.emacswiki.org/minor-edits.rss">
+<link rel="alternate" type="application/rss+xml" title="Changes for RegularExpression only" href="http://www.emacswiki.org/emacs?action=rss;rcidonly=RegularExpression"><meta name="viewport" content="width=device-width">
+<script type="text/javascript" src="./EmacsWiki_ Regular Expression_files/outliner.0.5.0.62-toc.js"></script>
+<script type="text/javascript">
+
+  function addOnloadEvent(fnc) {
+    if ( typeof window.addEventListener != "undefined" )
+      window.addEventListener( "load", fnc, false );
+    else if ( typeof window.attachEvent != "undefined" ) {
+      window.attachEvent( "onload", fnc );
+    }
+    else {
+      if ( window.onload != null ) {
+	var oldOnload = window.onload;
+	window.onload = function ( e ) {
+	  oldOnload( e );
+	  window[fnc]();
+	};
+      }
+      else
+	window.onload = fnc;
+    }
+  }
+
+  // https://stackoverflow.com/questions/280634/endswith-in-javascript
+  if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+      return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+  }
+
+  var initToc=function() {
+
+    var outline = HTML5Outline(document.body);
+    if (outline.sections.length == 1) {
+      outline.sections = outline.sections[0].sections;
+    }
+
+    if (outline.sections.length > 1
+	|| outline.sections.length == 1
+           && outline.sections[0].sections.length > 0) {
+
+      var toc = document.getElementById('toc');
+
+      if (!toc) {
+	var divs = document.getElementsByTagName('div');
+	for (var i = 0; i < divs.length; i++) {
+	  if (divs[i].getAttribute('class') == 'toc') {
+	    toc = divs[i];
+	    break;
+	  }
+	}
+      }
+
+      if (!toc) {
+	var h2 = document.getElementsByTagName('h2')[0];
+	if (h2) {
+	  toc = document.createElement('div');
+	  toc.setAttribute('class', 'toc');
+	  h2.parentNode.insertBefore(toc, h2);
+	}
+      }
+
+      if (toc) {
+        var html = outline.asHTML(true);
+        toc.innerHTML = html;
+
+	items = toc.getElementsByTagName('a');
+	for (var i = 0; i < items.length; i++) {
+	  while (items[i].textContent.endsWith('â')) {
+            var text = items[i].childNodes[0].nodeValue;
+	    items[i].childNodes[0].nodeValue = text.substring(0, text.length - 1);
+	  }
+	}
+      }
+    }
+  }
+
+  addOnloadEvent(initToc);
+  </script>
+<style>#haloword-pron { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -34px; }#haloword-pron:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -34px; }#haloword-open { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -17px; }#haloword-open:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -17px; }#haloword-close { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px 0; }#haloword-close:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px 0; }#haloword-add { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -51px; }#haloword-add:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -51px; }#haloword-remove { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -94px -68px; }#haloword-remove:hover { background: url(chrome-extension://bhkcehpnnlgncpnefpanachijmhikocj/img/icon.svg) -111px -68px; }</style></head><body class="http://www.emacswiki.org/emacs"><div class="header"><a class="logo" href="http://www.emacswiki.org/emacs/SiteMap"><img alt="[Home]" src="./EmacsWiki_ Regular Expression_files/emacs_logo.png" class="logo"></a><div class="menu"><span class="gotobar bar"><a href="http://www.emacswiki.org/emacs/SiteMap" class="local">SiteMap</a> <a class="local" href="http://www.emacswiki.org/emacs/Search">Search</a> <a href="http://www.emacswiki.org/emacs/ElispArea" class="local">ElispArea</a> <a href="http://www.emacswiki.org/emacs/HowTo" class="local">HowTo</a> <a class="local" href="http://www.emacswiki.org/emacs/Glossary">Glossary</a> <a href="http://www.emacswiki.org/emacs/RecentChanges" class="local">RecentChanges</a> <a class="local" href="http://www.emacswiki.org/emacs/News">News</a> <a class="local" href="http://www.emacswiki.org/emacs/Problems">Problems</a> <a class="local" href="http://www.emacswiki.org/emacs/Suggestions">Suggestions</a> </span><form method="get" action="http://www.emacswiki.org/emacs" enctype="multipart/form-data" accept-charset="utf-8" class="search"><p><label for="search">Search:</label> <input type="text" name="search" size="20" accesskey="f" id="search"> <label for="searchlang">Language:</label> <input type="text" name="lang" size="10" id="searchlang"> <input type="submit" name="dosearch" value="Go!"></p></form></div><h1><a href="http://www.emacswiki.org/emacs?search=%22RegularExpression%22" rel="nofollow" title="Click to search for references to this page"><span style="padding-right: 0.5ex;">Regular</span><span style="padding-right: 0.5ex;">Expression</span></a></h1></div><div class="wrapper"><div class="content browse"><p>  A <strong><a href="http://www.emacswiki.org/emacs?search=%22regular+expression%22" name="regular_expression" title="Click to search for references to this permanent anchor" rel="nofollow" class="definition">regular expression</a></strong> (abbreviated “<strong><a href="http://www.emacswiki.org/emacs?search=%22regexp%22" name="regexp" title="Click to search for references to this permanent anchor" rel="nofollow" class="definition">regexp</a></strong>” or sometimes just “re”) is a search-string with <em>wildcards</em> – and more. It is a <em>pattern</em> that is <em>matched</em> against the text to be searched. See <a class="manual" href="http://www.emacswiki.org/info-ref?find=Regexps">Regexps</a>. Examples:</p><pre>    <span class="string">"alex"</span></pre><p>A plain string is a regular expression that matches the string exactly. The above regular expression matches “alex”.</p><pre>    <span class="string">"alexa?"</span></pre><p>Some characters have special meanings in a regular expression. The question mark, for example, says that the preceding expression (the character “a” in this case) may or may not be present. The above regular expression matches “alex” or “alexa”. S Regexps are important to Emacs users in many ways, including these: </p><ul><li>We search with them interactively. Try <code>‘C-M-s’</code> (command <code>isearch-forward-regexp</code>).</li><li>Emacs code uses them to parse text. We use regexps all the time, without knowing it, when we use Emacs.</li></ul><p><a name="RegexpSyntax" class="anchor"></a> </p><div class="toc"><ol><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc1">Regular Expression Syntax</a></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc2">Idiosyncrasies of Emacs Regular Expressions</a></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc3">Some Regexp Examples</a></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc4">Some Emacs Commands that Use Regular Expressions</a></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc5">Tools for Constructing Regexps</a></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc6">Study and Practice</a><ol><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc7">Use Icicles to Learn about Regexps</a></li></ol></li><li><a href="http://www.emacswiki.org/emacs/RegularExpression#toc8">Questions</a></li></ol></div><h2 id="toc1">Regular Expression Syntax</h2><p>Here is the syntax used by Emacs for regular expressions. Any character matches itself, except for the list below.</p><p>The following characters are special : <code> . * + ? ^ $ \ [ </code></p><p>Between brackets <code>[]</code>, the following are special : <code> ] - ^ </code></p><p>Many characters are special when they follow a backslash – see below.</p><pre>  .        any character (but newline)
+  *        previous character or group, repeated 0 or more time
+  +        previous character or group, repeated 1 or more time
+  ?        previous character or group, repeated 0 or 1 time  
+  ^        start of line
+  $        end of line
+  [...]    any character between brackets
+  [<span class="negation">^</span>..]    any character not in the brackets
+  [a-z]    any character between a and z
+  \        prevents interpretation of following special char
+  \|       or
+  \w       word constituent
+  \b       word boundary
+  \sc      character with c syntax (e.g. \s- for whitespace char)
+  \( \)    start\end of group
+  \&lt; \&gt;    start\end of word
+  \_&lt; \_&gt;  start\end of symbol
+  \` \'    start\end of buffer\string
+  \1       string matched by the first group
+  \n       string matched by the nth group
+  \{3\}    previous character or group, repeated 3 times
+  \{3,\}   previous character or group, repeated 3 or more times
+  \{3,6\}  previous character or group, repeated 3 to 6 times
+  \=       match succeeds if it is located at point</pre><p><code>*?</code>, <code>+?</code>, and <code>??</code> are non-greedy versions of <code>*</code>, <code>+</code>, and <code>?</code> – see <a href="http://www.emacswiki.org/emacs/NonGreedyRegexp" class="local">NonGreedyRegexp</a>. Also, <code>\W</code>, <code>\B</code>, and <code>\Sc</code> match any character that does not match  <code>\w</code>, <code>\b</code>, and <code>\sc</code>.</p><p>Characters are organized by category. Use <code>C-u C-x =</code> to display the category of the character under the cursor.</p><pre>  \ca      ascii character
+  \Ca      non-ascii character (newline included)
+  \cl      latin character
+  \cg      greek character</pre><p>Here are some <a href="http://www.emacswiki.org/info-ref?find=Syntax%20Descriptors" class="manual">syntax classes</a> that can be used between brackets, e.g. <code>[[:upper:]\|[:digit:]\.]</code>.</p><pre>  [<span class="builtin">:digit</span>:]  a digit, same as [0-9]
+  [<span class="builtin">:alpha</span>:]  a letter (an alphabetic character)
+  [<span class="builtin">:alnum</span>:]  a letter or adigit (an alphanumeric character ()
+  [<span class="builtin">:upper</span>:]  a letter in uppercase
+  [<span class="builtin">:space</span>:]  a whitespace character, as defined by the syntax table
+  [<span class="builtin">:xdigit</span>:] an hexadecimal digit
+  [<span class="builtin">:cntrl</span>:]  a control character
+  [<span class="builtin">:ascii</span>:]  an ascii character</pre><p>Syntax classes:</p><pre>  \s-   whitespace character        \s/   character quote character
+  \sw   word constituent            \s$   paired delimiter         
+  \s_   symbol constituent          \s'   expression prefix        
+  \s.   punctuation character       \s&lt;   comment starter          
+  \s(   open delimiter character    \s&gt;   comment ender            
+  \s)   close delimiter character   \s!   generic comment delimiter
+  \s"   string quote character      \s|   generic string delimiter 
+  \s\   escape character            </pre><p>You can see the current <a class="manual" href="http://www.emacswiki.org/info-ref?find=Syntax%20Tables">syntax table</a> by typing <code>C-h s</code>. The syntax table depends on the current mode. As expected, letters a..z are listed as word constituents in text-mode. Other word constituents in this mode include A..Z, 0..9, $, %, currency units, accented letters, kanjis. See <a href="http://www.emacswiki.org/emacs/EmacsSyntaxTable" class="local">EmacsSyntaxTable</a> for details.</p><p><a name="RegexpsInEmacs" class="anchor"></a> </p><h2 id="toc2">Idiosyncrasies of Emacs Regular Expressions</h2><ul><li>In an interactive search, a space character stands for one or more whitespace characters (tabs are whitespace characters). You can use <code>M-s SPC</code> while searching or replacing to toggle between this behavior and treating spaces as literal spaces. Or put the following in your <a class="local" href="http://www.emacswiki.org/emacs/InitFile">InitFile</a> to override this behaviour.</li></ul><pre>                 (setq search-whitespace-regexp nil)</pre><ul><li><code>[^</code> … <code>]</code> matches all characters not in the list, even newlines. Put a newline in the list if you want it not to be matched. You can enter a newline character using <code>‘C-o’</code>, <code>‘C-q C-j’</code>, or <code>‘C-q 012 RET’</code>. Note also that  <code>\s-</code> matches space, tab, newline and carriage return. This can be handy in a <code>[^</code> … <code>]</code> construct.</li><li>Default case handling for replacing commands executes case conversion. This means that both upper and lower case match in the  regexp, whereas the case in the replacement string is chosen according to the match syntax. Try for example replacing  <code>john</code> by <code>harry</code> below. Case conversion can be toggled on/off by typing <code>‘M-c’</code> in the minibuffer during search. You can also set the variable <code>case-fold-search</code> to <code>nil</code> to disable case conversion; see <a class="local" href="http://www.emacswiki.org/emacs/CaseFoldSearch">CaseFoldSearch</a> for more details. In the following example, only the last line would then be replaced.</li></ul><pre>                           John  =&gt;  Harry
+                           JOHN  =&gt;  HARRY
+                           john  =&gt;  harry
+ </pre><ul><li>Backslashes must be double-quoted when  used in Lisp code. Regular expressions are often specified using strings in <a class="local" href="http://www.emacswiki.org/emacs/EmacsLisp">EmacsLisp</a>. Some abbreviations are available: <code>\n</code> for newline, <code>\t</code> for tab, <code>\b</code> for backspace, <code>\u3501</code> for character with unicode value 3501, and so on. Backslashes must be entered as <code>\\</code>. Here are two ways to replace the decimal point by a comma (e.g. <code>1.5 -&gt; 1,5</code>), first by an interactive command, second by executing Lisp code (type <code>C-x C-e</code> after the expression to get it executed).</li></ul><pre>           M-x replace-regexp RET \([0-9]+\)\. RET \1, RET
+          (<span class="keyword elisp">while</span> (re-search-forward <span class="string">"\\([0-9]+\\)\\."</span> nil t)
+                        (replace-match <span class="string">"\\1,"</span>))</pre><p><a class="anchor" name="EmacsRegexpExamples"></a> </p><h2 id="toc3">Some Regexp Examples</h2><pre> [-+[<span class="builtin">:digit</span>:]]                     digit or + or - sign
+ \(\+\|-\)?[0-9]+\(\.[0-9]+\)?     decimal number (-2 or 1.5 but not .2 or 1.)
+ \(\w+\) +\1\&gt;                     two consecutive, identical words
+ \&lt;[[<span class="builtin">:upper</span>:]]\w*                  word starting with an uppercase letter
+  +$                               trailing whitespaces (note the starting SPC)
+ \w\{20,\}                         word with 20 letters or more
+ \w+phony\&gt;                        word ending by phony
+ \(19\|20\)[0-9]\{2\}              year 1900-2099
+ ^.\{6,\}                          at least 6 symbols
+ ^[a-zA-Z0-9_]\{3,16\}$            decent string for a user name
+ &lt;tag[<span class="negation">^</span>&gt; C-q C-j ]*&gt;\(.*?\)&lt;/tag&gt;  html tag</pre><p><a name="RegexpCommands" class="anchor"></a> </p><h2 id="toc4">Some Emacs Commands that Use Regular Expressions</h2><pre> C-M-s                   incremental forward search matching regexp
+ C-M-r                   incremental backward search matching regexp 
+ replace-regexp          replace string matching regexp
+ query-replace-regexp    same, but query before each replacement
+ align-regexp            align, using strings matching regexp as delimiters
+ highlight-regexp        highlight strings matching regexp
+ occur                   show lines containing a match
+ multi-occur             show lines in all buffers containing a match
+ how-many                count the number of strings matching regexp
+ keep-lines              delete all lines except those containing matches
+ flush-lines             delete lines containing matches
+ grep                    call unix grep command and put result in a buffer
+ lgrep                   user-friendly interface to the grep command
+ rgrep                   recursive grep
+ dired-do-copy-regexp    copy files with names matching regexp
+ dired-do-rename-regexp  rename files matching regexp 
+ find-grep-dired         display files containing matches for regexp with Dired</pre><p>Note that <code>list-matching-lines</code> is an alias for  <code>occur</code> and <code>delete-matching-lines</code> is an alias for  <code>flush-lines</code>. The command <code>highlight-regexp</code> is bound to <code>C-x w h</code>. Also <code>query-replace-regexp</code> is bound by default to <code>C-M-%</code>, although some people prefer using an alias, like  <code>M-x qrr</code>. Put the following in your <a class="local" href="http://www.emacswiki.org/emacs/InitFile">InitFile</a> to create such alias.</p><pre>   (<span class="keyword">defalias</span> '<span class="function">qrr</span> 'query-replace-regexp)</pre><p>See also: <a href="http://www.emacswiki.org/emacs/IncrementalSearch" class="local">IncrementalSearch</a>, <a href="http://www.emacswiki.org/emacs/ReplaceRegexp" class="local">ReplaceRegexp</a>, <a class="local" href="http://www.emacswiki.org/emacs/AlignCommands">AlignCommands</a>, <a class="local" href="http://www.emacswiki.org/emacs/OccurBuffer">OccurBuffer</a>, <a href="http://www.emacswiki.org/emacs/DiredPower" class="local">DiredPower</a></p><p><a name="ToolsForConstructingRegexps" class="anchor"></a> </p><h2 id="toc5">Tools for Constructing Regexps</h2><ul><li>Command <code>‘re-builder’</code> constructs a regular expression. You enter the regexp in a  small window at the bottom of the frame. The first 200 matches in the <a href="http://www.emacswiki.org/emacs/buffer" class="local">buffer</a> are highlighted, so you can see if the regexp does what you want. Use Lisp syntax, which means doubling backslashes and using <code>\\\\</code> to match a literal backslash.</li><li>Macro <code>‘rx’</code> provides user-friendly syntax for  regular expressions. For example, <code>(rx (one-or-more blank) line-end)</code> returns the regexp string <code>"\\(?:[[:blank:]]+$\\)"</code>. See <a href="http://www.emacswiki.org/emacs/rx" class="local">rx</a>.</li><li><a href="http://www.emacswiki.org/emacs/SymbolicRegexp" class="local">SymbolicRegexp</a> is similar in aim to <code>‘rx’</code>.</li></ul><p><a name="LearningRegexps" class="anchor"></a> </p><h2 id="toc6">Study and Practice</h2><ul><li>Read about regexps in the <a href="http://www.emacswiki.org/info-ref?find=Regexps" class="manual">Elisp manual</a>. See also <a href="http://www.emacswiki.org/emacs/RegexpReferences" class="local">RegexpReferences</a>. Study <a href="http://www.emacswiki.org/emacs/EmacsLisp" class="local">EmacsLisp</a> code that uses regexps.</li><li>Regexp searching (<code>‘C-M-s’</code>) is a great way to learn about regexps – see <a href="http://www.emacswiki.org/emacs/IncrementalSearch#RegexpSearches" class="local anchor">Regexp Searches</a>. Change your regexp on the fly and see immediately what difference the change makes.</li><li>Some examples of use (see also <a class="local" href="http://www.emacswiki.org/emacs/ReplaceRegexp">ReplaceRegexp</a> and <a class="local" href="http://www.emacswiki.org/emacs/EmacsCrashRegexp">EmacsCrashRegexp</a>):<ul><li>Search for trailing whitespace: <code>C-M-s SPC+$</code></li><li>Highlight all trailing whitespace: <code>M-x highlight-regexp RET SPC+$ RET RET</code></li><li>Delete trailing whitespace: <code>M-x replace-regexp RET SPC+$ RET RET</code> (same as <code>‘M-x delete-trailing-whitespace’</code>)</li><li>Search for open delimiters: <code>C-M-s \s( </code></li><li>Search for duplicated words (works across lines): <code>C-M-s \(\&lt;\w+\&gt;\)\s-+\1</code></li><li>Count number of words in <a href="http://www.emacswiki.org/emacs/buffer" class="local">buffer</a>: <code>M-x how-many RET \&lt; RET</code></li><li>Align words beginning with an uppercase letter followed by a lowercase letter: <code>M-: (setq case-fold-search nil) RET</code> then <code>M-x align-regexp RET \&lt;[[:upper:]][[:lower:]] RET</code></li><li>Replace word <code>foo</code> by <code>bar</code> (won’t replace <code>fool</code> by <code>barl</code>): <code>M-x replace-regexp RET \&lt;foo\&gt; RET bar</code></li><li>Keep only the first two words on each line: <code>M-x replace-regexp RET ^\(\W*\w+\W+\w+\).* RET \1 RET</code></li><li>Suppress <a href="http://www.emacswiki.org/emacs/line" class="local">line</a>s beginning with <code>;;</code>: <code>M-x flush-lines RET ^;; RET</code></li><li>Remove the text after the first <code>;</code> on each line: <code>M-x replace-regexp RET \([^;]*\);.* RET \1 RET</code></li><li>Keep only lines that contain an email address: <code>M-x keep-lines RET \w+\(\.\w+\)?@\(\w\|\.\)+ RET</code></li><li>Keep only one instance of consecutive empty lines: <code>M-x replace-regexp RET ^C-q C-j\{2,\} RET C-q C-j RET</code></li><li>Keep words or letters in uppercase, one per line: <code>M-x replace-regexp RET [^[:upper:]]+ RET C-o RET</code></li><li>List lines beginning with <code>Chapter</code> or <code>Section</code>: <code>M-x occur RET ^\(Chapter\|Section\) RET</code></li><li>List lines with more than 80 characters: <code>M-x occur RET ^.\{81,\} RET</code></li></ul></li></ul><p><a class="anchor" name="RegexpsInIcicles"></a> </p><h3 id="toc7">Use Icicles to Learn about Regexps</h3><p><a class="local" href="http://www.emacswiki.org/emacs/Icicles">Icicles</a> provides these interactive ways to learn about regexps:</p><ul><li><strong>`<code>C-`</code></strong>’ (<code>‘icicle-search’</code>) shows you regexp matches, as does <code>‘C-M-s’</code>, but it can also show you (that is, highlight) regexp <em>subgroup</em> matches. Showing matched subgroups is very helpful for learning. There are two ways that you can use this Icicles feature:<ul><li>You can seach for a regexp, but limit the search context, used for further searching, to a particular subgroup match. For example, you can search for and highlight Lisp argument lists, by using a regexp subgroup that matches lists, placing that subgroup after <code>‘defun’</code>: <strong><code>(defun [^(]*\(([^(]*)\)</code></strong>, that is, <code>defun</code>, followed by non-`<code>(</code>’ character(s), followed by <strong>`<code>(</code></strong>’, possibly followed by non-`<code>)</code>’ character(s), followed by <strong>`<code>)</code></strong>’.</li><li>You can search for a regexp without limiting the search context to a subgroup match. In this case, <strong>Icicles</strong> highlights each subgroup match in a different color. Here’s an example, showing how each subgroup of the complex regexp <code>(</code><strong><code>\(</code></strong><code>[-a-z*]+</code><strong><code>\)</code></strong><code> *</code><strong><code>\(</code></strong><code>(</code><strong><code>\(</code></strong><code>([-a-z]+ *</code><strong><code>\(</code></strong><code>[^)]*</code><strong><code>\)</code></strong><code>)</code><strong><code>\)</code></strong><code>)</code><strong><code>\)</code></strong><code>.*</code> is matched:</li></ul></li></ul><dl class="quote"><dt></dt><dd><a class="image" href="http://www.emacswiki.org/emacs/IciclesSearchContextLevelsScreenshot"><img class="upload" src="./EmacsWiki_ Regular Expression_files/IciclesSearchContextLevelsScreenshot.png" alt="IciclesSearchContextLevelsScreenshot"></a></dd></dl><ul><li>`<code>C-`</code>’ also helps you learn by letting you use two simple regexps (search within a search) as an alternative to coming up with a single, complex regexp to do the same job. And, as with incremental search, you can change the second regexp on the fly to see immediately what difference the change makes. See <a class="local" href="http://www.emacswiki.org/emacs/Icicles_-_Search_Commands%2c_Overview">Icicles - Search Commands, Overview</a></li><li><code>‘S-TAB’</code> during <a class="local" href="http://www.emacswiki.org/emacs/minibuffer">minibuffer</a> input shows you all matches for your input string, which can be a regexp. So, just type a regexp whenever the minibuffer is active for <a href="http://www.emacswiki.org/emacs/completion" class="local">completion</a> and hit <code>‘S-TAB’</code> to see what the regexp matches. Try this with <a href="http://www.emacswiki.org/emacs/command" class="local">command</a> input (<code>‘M-x’</code>), <a href="http://www.emacswiki.org/emacs/buffer" class="local">buffer</a> switching (<code>‘C-x b’</code>), file visiting (<code>‘C-x f’</code>), help (<code>‘C-h f’</code>, <code>‘C-h v’</code>), and so on. Almost any time you type input in the minibuffer, you can type a regexp and use <code>‘S-TAB’</code> to see what it matches (and then choose one of the matching candidates to input, if you want).</li></ul><h2 id="toc8">Questions</h2><div class="color one level0"><p> Does Emacs support lookahead/lookbehind? </p><dl class="quote"><dt></dt><dd><i>No, Emacs does not support Perl-style lookahead/lookbehind expressions.</i></dd></dl></div><div class="color two level0"><p> Does Emacs support possessive quantifiers such as <code>?+</code>, <code>*+</code>, <code>++</code> ?</p></div><div class="color one level0"><p> The escape sequence \c<i>C</i> represents any character of category “<i>C</i>”, and according to Emacs documentation invoked by “M-x describe-categories”, \c6 ought to match any digit. Yet the ASCII digits 0-9 are not matched by \c6. Is this an error, or just something on the to-do list? </p></div><hr><p><a class="local" href="http://www.emacswiki.org/emacs/CategoryRegexp">CategoryRegexp</a> <a href="http://www.emacswiki.org/emacs/CategoryGlossary" class="local">CategoryGlossary</a></p></div><div class="wrapper close"></div></div><div class="footer"><hr><span class="translation bar"><br> <a href="http://www.emacswiki.org/emacs-es/Expresi%C3%B3n_Regular" class="translation es">Español</a> <a href="http://www.emacswiki.org/emacs-ja/regular_expression" class="translation ja">日本語</a> <a href="http://www.emacswiki.org/emacs?action=translate;id=RegularExpression;missing=de_fr_it_ko_pt_ru_se_uk_zh" rel="nofollow" class="translation new">Add Translation</a></span><div class="edit bar"><a href="http://www.emacswiki.org/emacs/Comments_on_RegularExpression" accesskey="c" class="comment local edit">Talk</a> <a href="http://www.emacswiki.org/emacs?action=edit;id=RegularExpression" rel="nofollow" title="Click to edit this page" accesskey="e" class="edit">Edit this page</a> <a href="http://www.emacswiki.org/emacs?action=history;id=RegularExpression" rel="nofollow" class="history">View other revisions</a> <a href="http://www.emacswiki.org/emacs?action=admin;id=RegularExpression" class="admin" rel="nofollow">Administration</a></div><div class="time">Last edited 2015-06-13 15:05 UTC by <a class="author" title="180.183.43.117" href="http://www.emacswiki.org/emacs/Jonny_5">Jonny 5</a> <a rel="nofollow" class="diff" href="http://www.emacswiki.org/emacs?action=browse;diff=2;id=RegularExpression">(diff)</a></div><div style="float:right; margin-left:1ex;">
+<!-- Creative Commons License -->
+<a class="licence" href="http://creativecommons.org/licenses/GPL/2.0/"><img alt="CC-GNU GPL" style="border:none" src="./EmacsWiki_ Regular Expression_files/cc-GPL-a.png"></a>
+<!-- /Creative Commons License -->
+</div>
+
+<!--
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+  <dc:type rdf:resource="http://purl.org/dc/dcmitype/Software" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+   <requires rdf:resource="http://web.resource.org/cc/ShareAlike" />
+   <requires rdf:resource="http://web.resource.org/cc/SourceCode" />
+</License>
+</rdf:RDF>
+-->
+
+<p class="legal">
+This work is licensed to you under version 2 of the
+<a href="http://www.gnu.org/">GNU</a> <a href="http://www.emacswiki.org/GPL">General Public License</a>.
+Alternatively, you may choose to receive this work under any other
+license that grants the right to use, copy, modify, and/or distribute
+the work, as long as that license imposes the restriction that
+derivative works have to grant the same rights and impose the same
+restriction. For example, you may choose to receive this work under
+the
+<a href="http://www.gnu.org/">GNU</a>
+<a href="http://www.emacswiki.org/FDL">Free Documentation License</a>, the
+<a href="http://creativecommons.org/">CreativeCommons</a>
+<a href="http://creativecommons.org/licenses/sa/1.0/">ShareAlike</a>
+License, the XEmacs manual license, or
+<a href="http://www.emacswiki.org/OLD">similar licenses</a>.
+</p>
+</div>
+
+
+<div id="haloword-lookup" class="ui-widget-content ui-draggable"><div id="haloword-title"><span id="haloword-word"></span><a herf="#" id="haloword-pron" class="haloword-button" title="发音"></a><audio id="haloword-audio"></audio><div id="haloword-control-container"><a herf="#" id="haloword-add" class="haloword-button" title="加入单词表"></a><a herf="#" id="haloword-remove" class="haloword-button" title="移出单词表"></a><a href="http://www.emacswiki.org/emacs/RegularExpression#" id="haloword-open" class="haloword-button" title="查看单词详细释义" target="_blank"></a><a herf="#" id="haloword-close" class="haloword-button" title="关闭查询窗"></a></div><br style="clear: both;"></div><div id="haloword-content"></div></div></body></html>
